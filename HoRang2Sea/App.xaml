@@ -1,0 +1,45 @@
+﻿<Application x:Class="HoRang2Sea.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/SciChart.Examples.ExternalDependencies;component/Themes/Navy.xaml"/>
+                <ResourceDictionary Source="/SciChart.Examples.ExternalDependencies;component/Resources/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="ExampleResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="CheckBox" BasedOn="{StaticResource ToolbarPopupCheckBoxStyle}"/>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource ToolbarPopupComboBoxStyle}"/>
+            <Style TargetType="RadioButton" BasedOn="{StaticResource ToolbarPopupRadioButtonStyle}"/>
+        
+
+
+        <dx:DXSplashScreenService x:Key="SplashScreenService">
+            <dx:DXSplashScreenService.ViewTemplate>
+                <DataTemplate>
+                        <StackPanel Width="960" Height="540" Orientation="Vertical">
+
+                            <!--
+                            <MediaElement LoadedBehavior="Play" Visibility="Visible" Stretch="UniformToFill" Source="SplashMovie.mp4" Volume="0">
+                            </MediaElement>
+-->
+                           
+                            <StackPanel.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/HoRang2Sea;component/Resource/Splash.png" Stretch="Uniform"/>
+                            </StackPanel.Background>
+                            
+                            
+                        </StackPanel>
+                    </DataTemplate>
+            </dx:DXSplashScreenService.ViewTemplate>
+        </dx:DXSplashScreenService>
+
+        </ResourceDictionary>
+
+
+    </Application.Resources>
+</Application>

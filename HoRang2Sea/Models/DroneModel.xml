@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Northwind" >
+  <Tables>
+    <TableDefinition Name="Drive" PositionX="1850" PositionY="350">
+      <Columns>
+        <ColumnDefinition TableName="Drive" Name="DriveMode" Init = "0" min = "0" max = "150" digit ="5"/>
+      </Columns>
+    </TableDefinition>
+    <TableDefinition Name="Stack" PositionX="650" PositionY="550" >
+      <Columns>
+        <ColumnDefinition TableName="Stack" Name="Ambient temperature" Init = "298.15" min = "243.15" max = "303.15" digit ="5" unit="K"/>
+        <ColumnDefinition TableName="Stack" Name="Channel length" Init = "0.583" min = "0.2" max = "1" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Operating Temperature" Init = "343.15" min = "323.15" max = "353.15" digit ="5" unit="K"/>
+        <ColumnDefinition TableName="Stack" Name="Cell length" Init = "0.195" min = "0.001" max = "0.4" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Cell width" Init = "0.195" min = "0.001" max = "0.4"	digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Membrane thickness" Init = "0.0025" min = "0.001" max = "0.01" digit ="2" unit="cm"/>
+		<ColumnDefinition TableName="Stack" Name="Catalyst thickness" Init = "0.000042" min = "0.00001" max = "0.0001" digit ="2" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="GDL thickness" Init = "0.0002" min = "0.0001" max = "0.0005" digit ="2" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Bipolar plates thickness" Init = "0.003" min = "0.001" max = "0.01" digit ="2" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Depth of gas channel" Init = "0.001" min = "0.0005" max = "0.0015" digit ="2" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Width of gas channel" Init = "0.001" min = "0.0005" max = "0.0015" digit ="2" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Channel pitch" Init = "0.002" min = "0.0001" max = "0.003" digit ="2" unit="m"/>
+		<ColumnDefinition TableName="Stack" Name="Channel thickness" Init = "0.001" min = "0.0005" max = "0.002" digit ="2" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Number of channel" Init = "32" min = "1" max = "100" digit ="2" unit="-"/>
+        <ColumnDefinition TableName="Stack" Name="Active area" Init = "100" min = "100" max = "1600" digit ="3" unit="cm^2"/>
+        <ColumnDefinition TableName="Stack" Name="Number of cell" Init = "48" min = "1" max = "1000" digit ="3" unit="-"/>
+        <ColumnDefinition TableName="Stack" Name="Anode stoichiometry" Init = "1.5" min = "0.5" max = "3" digit ="2" unit="-"/>
+        <ColumnDefinition TableName="Stack" Name="Cathode stoichiometry" Init = "30" min = "30" max = "30" digit ="2" unit="-"/>
+		<ColumnDefinition TableName="Stack" Name="Imax" Init = "90" min = "90" max = "90" digit ="2" unit="A"/>
+		<ColumnDefinition TableName="Stack" Name="T_int" Init = "298.15" min = "298.15" max = "298.15" digit ="2" unit="K"/>
+		<ColumnDefinition TableName="Stack" Name="T_set" Init = "313.15" min = "313.15" max = "313.15" digit ="2" unit="K"/>
+		<ColumnDefinition TableName="Stack" Name="m_stack" Init = "2.55" min = "2.55" max = "2.55" digit ="2" unit="kg"/>
+		<ColumnDefinition TableName="Stack" Name="m_fan" Init = "0.15" min = "0.15" max = "0.15" digit ="2" unit="kg"/>
+		<ColumnDefinition TableName="Stack" Name="Num_stack" Init = "6" min = "6" max = "6" digit ="2" unit="-"/>
+      </Columns>
+    </TableDefinition>
+	
+    <TableDefinition Name="Blower" PositionX="-450" PositionY="100">
+      <Columns>
+        <ColumnDefinition TableName="Blower" Name="Inducer tip inlet diameter" Init = "0.0415" min = "0.037" max = "0.045" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Hub inlet diameter" Init = "0.0165" min = "0.0145" max = "0.0181" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller inlet width" Init = "0.0145" min = "0.013" max = "0.016" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller inlet tip diameter" Init = "0.0173" min = "243.15" max = "303.15" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Roughness" Init = "0.00005" min = "0.000045" max = "0.000055" digit ="2" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Blade inlet angle" Init = "28" min = "25" max = "31" digit ="3" unit="deg"/>
+        <ColumnDefinition TableName="Blower" Name="Blade exit angle" Init = "40" min = "36" max = "44" digit ="3" unit="deg"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet stagnation sonic velocity" Init = "345" min = "345" max = "345" digit ="3" unit="m/s"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet pressure" Init = "101325" min = "90000" max = "110000" digit ="6" unit="Pa"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet temperature" Init = "298.15" min = "268" max = "328" digit ="5" unit="K"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet relative humidity" Init = "0.5" min = "0.45" max = "0.55" digit ="3" unit="-"/>
+        <ColumnDefinition TableName="Blower" Name="Alpha2b" Init = "90" min = "80" max = "90" digit ="3" unit="-"/>
+        <ColumnDefinition TableName="Blower" Name="Length of compressor" Init = "0.11" min = "0.1" max = "0.12" digit ="3" unit="m"/>
+		<ColumnDefinition TableName="Blower" Name="Plenum volume" Init = "0.0037" min = "0.0033" max = "0.0041" digit ="3" unit="m^3"/>
+        <ColumnDefinition TableName="Blower" Name="Diffuser inlet diameter" Init = "0.11" min = "0.1" max = "0.12" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller outlet tip diameter" Init = "0.078" min = "0.07" max = "0.086" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller outlet width" Init = "0.007" min = "0.006" max = "0.008" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Number of impeller blades" Init = "6" min = "3" max = "10" digit ="1" unit="-"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller inlet length" Init = "0.06" min = "0.05" max = "0.07" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Valve opening coefficient" Init = "0.0006" min = "0.0005" max = "0.0007" digit ="2" unit="-"/>
+      </Columns>
+    </TableDefinition>
+	
+    <TableDefinition Name="Air Humidifier" PositionX="450" PositionY="100">
+      <Columns>
+        <ColumnDefinition TableName="Air Humidifier" Name="Manifold inlet diameter" Init = "0.0508" min = "0.045" max = "0.056" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Shell diameter" Init = "0.2488" min = "0.2239" max = "0.2737" digit ="4" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Wall thickness" Init = "0.002" min = "0.001" max = "0.003" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Manifold length" Init = "0.099" min = "0.09" max = "0.11" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Membrane inner diameter" Init = "0.0009" min = "0.0008" max = "0.001" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Membrane thickness" Init = "0.0001" min = "0.00009" max = "0.000011" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Humidifier membrane in cathode" Init = "13000" min = "11000" max = "15000" digit ="5" unit="-"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Membrane length" Init = "0.254" min = "0.23" max = "0.28" digit ="3" unit="m"/>
+      </Columns>
+    </TableDefinition>
+	
+	<TableDefinition Name="Hydrogen Humidifier" PositionX="200" PositionY="500">
+	</TableDefinition>
+	
+    <TableDefinition Name="Ejector" PositionX="-250" PositionY="500">
+      <Columns>
+        <ColumnDefinition TableName="Ejector" Name="Throat diameter" Init = "0.0021" min = "0.001" max = "0.003" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Ejector" Name="Mixing chamber diameter" Init = "0.008" min = "0.005" max = "0.01" digit ="3" unit="m"/>
+      </Columns>
+    </TableDefinition>
+	
+    <TableDefinition Name="Pump" PositionX="550" PositionY="1400">
+      <Columns>
+        <ColumnDefinition TableName="Pump" Name="Impeller inlet diameter" Init = "0.033" min = "0.029" max = "0.036" digit ="3" unit="m" />
+        <ColumnDefinition TableName="Pump" Name="Impeller outlet diameter" Init = "0.0585" min = "0.0526" max = "0.0644" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Pump" Name="Blade inlet height" Init = "0.01" min = "0.009" max = "0.011" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Pump" Name="Blade outlet height" Init = "0.0075" min = "0.0067" max = "0.008" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Pump" Name="Blade inlet angle" Init = "20" min = "15" max = "25" digit ="3" unit="deg"/>
+		<ColumnDefinition TableName="Pump" Name="Blade outlet angle" Init = "25" min = "20" max = "30" digit ="3" unit="deg"/>
+        <ColumnDefinition TableName="Pump" Name="Blade numbers" Init = "7" min = "5" max = "10" digit ="1" unit="-"/>
+        <ColumnDefinition TableName="Pump" Name="Impeller roughness" Init = "0.000045" min = "0.00004" max = "0.00005" digit ="3" unit="-"/>
+        <ColumnDefinition TableName="Pump" Name="Impeller volute diameter" Init = "0.2647" min = "0.2382" max = "0.2912" digit ="4" unit="m"/>
+      </Columns>
+    </TableDefinition>
+	<TableDefinition Name="Valve" PositionX="100" PositionY="1750">
+	</TableDefinition>
+	
+    <TableDefinition Name="Induction motor" PositionX="1200" PositionY="950">
+      <Columns>
+        <ColumnDefinition TableName="Induction motor" Name="Stator resistance Rs" Init = "0.048" min = "0.043" max = "0.052" digit ="4" unit="ohm"/>
+        <ColumnDefinition TableName="Induction motor" Name="Stator inductance Ls" Init = "0.000685" min = "0.00062" max = "0.000753" digit ="4" unit="H"/>
+        <ColumnDefinition TableName="Induction motor" Name="Rotor resistance Rr" Init = "0.0483" min = "0.0434" max = "0.0531" digit ="4" unit="ohm"/>
+        <ColumnDefinition TableName="Induction motor" Name="Rotor inductance Lr" Init = "0.000675" min = "0.000608" max = "0.000742" digit ="4" unit="H"/>
+        <ColumnDefinition TableName="Induction motor" Name="Mutual inductance Lm" Init = "0.0006" min = "0.00054" max = "0.00066" digit ="4" unit="H"/>
+        <ColumnDefinition TableName="Induction motor" Name="Moment of intertia Jm" Init = "0.5445" min = "0.5" max = "0.6" digit ="4" unit="kg.m^2/rad"/>
+        <ColumnDefinition TableName="Induction motor" Name="Damping coefficient B" Init = "0.7585" min = "0.683" max = "0.834" digit ="4" unit="N.m.s/rad"/>
+        <ColumnDefinition TableName="Induction motor" Name="Induction motor pole P" Init = "2" min = "2" max = "8" digit ="1" unit="-"/>
+      </Columns>
+    </TableDefinition>
+    <TableDefinition Name="Reducer" PositionX="200" PositionY="950">
+      <Columns>
+        <ColumnDefinition TableName="Reducer" Name="Reducing ratio" Init = "7.981" min = "0.5" max = "17" digit ="4" unit="-" />
+      </Columns>
+    </TableDefinition>
+    <TableDefinition Name="Inverter" PositionX="1200" PositionY="550">
+      <Columns>
+        <ColumnDefinition TableName="Inverter" Name="Inverter rated voltage" Init = "400" min = "220" max = "650" digit ="3" unit="V" />
+      </Columns>
+    </TableDefinition>
+	
+	<TableDefinition Name="Converter" PositionX="1200" PositionY="100">
+	</TableDefinition>
+	
+    <TableDefinition Name="Intercooler" PositionX="0" PositionY="100">
+      <Columns>
+        <ColumnDefinition TableName="Intercooler" Name="Inlet coolant mass flow rate" Init = "0.1" min = "0.05" max = "0.3" digit ="3" unit="kg/s"/>
+        <ColumnDefinition TableName="Intercooler" Name="Inlet relative humidity" Init = "0.5" min = "0.1" max = "0.9" digit ="3" unit="-"/>
+        <ColumnDefinition TableName="Intercooler" Name="Inlet coolant temperature" Init = "298.15" min = "293.15" max = "333.15" digit ="5" unit="K"/>
+        <ColumnDefinition TableName="Intercooler" Name="Area" Init = "1.5" min = "1" max = "2" digit ="3" unit="m^2"/>
+      </Columns>
+    </TableDefinition>
+    <TableDefinition Name="Battery" PositionX="1700" PositionY="-100">
+      <Columns>
+        <ColumnDefinition TableName="Battery" Name="Initial SOC" Init = "0.5" min = "0.05" max = "0.95" digit ="3" unit="-"/>
+        <ColumnDefinition TableName="Battery" Name="Maximum voltage" Init = "4.2" min = "3.5" max = "4.5" digit ="3" unit="V" />
+        <ColumnDefinition TableName="Battery" Name="Minimum voltage" Init = "3" min = "2.5" max = "3.5" digit ="3" unit="V"/>
+		<ColumnDefinition TableName="Battery" Name="Number of battery modules" Init = "64" min = "10" max = "100" digit ="2" unit="-"/>
+        <ColumnDefinition TableName="Battery" Name="Battery parallel mod number" Init = "1" min = "1" max = "1" digit ="1" unit="-"/>
+        <ColumnDefinition TableName="Battery" Name="SOC maximum limit" Init = "0.8" min = "0.5" max = "0.95" digit ="2" unit="-"/>
+		<ColumnDefinition TableName="Battery" Name="SOC minimum limit" Init = "0.2" min = "0.05" max = "0.5" digit ="2" unit="-"/>
+        <ColumnDefinition TableName="Battery" Name="Power bus efficiency" Init = "0.95" min = "0.8" max = "1" digit ="2" unit="-"/>
+        <ColumnDefinition TableName="Battery" Name="Battery average temperature" Init = "303.15" min = "298.15" max = "313.15" digit ="5" unit="K"/>
+		<ColumnDefinition TableName="Battery" Name="Motor minimum voltage" Init = "192" min = "10" max = "400" digit ="3" unit="V"/>
+		<ColumnDefinition TableName="Battery" Name="Ambient" Init = "25" min = "10" max = "400" digit ="3" unit="C"/>
+      </Columns>
+    </TableDefinition>
+	<TableDefinition Name="Radiator" PositionX="-300" PositionY="1400">
+      <Columns>
+        <ColumnDefinition TableName="Radiator" Name="Core width" Init = "0.72" min = "0.65" max = "0.8" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Core height" Init = "0.66215" min = "0.59594" max = "0.72837" digit ="5" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Core depth" Init = "0.0544" min = "0.049" max = "0.06" digit ="3" unit="m"/>
+		<ColumnDefinition TableName="Radiator" Name="Tube depth" Init = "0.0136" min = "0.0122" max = "0.015" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Tube height" Init = "0.0015" min = "0.00135" max = "0.00165" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Tube thickness" Init = "0.00024" min = "0.000216" max = "0.000264" digit ="3" unit="m"/>
+		<ColumnDefinition TableName="Radiator" Name="Fin pitch" Init = "0.00111" min = "0.001" max = "0.00122" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Fin thickness" Init = "0.00006" min = "0.000054" max = "0.000066" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Fin depth" Init = "0.0136" min = "0.0123" max = "0.015" digit ="3" unit="m"/>
+		<ColumnDefinition TableName="Radiator" Name="Fin length" Init = "0.0055" min = "0.005" max = "0.006" digit ="3" unit="m"/>
+		<ColumnDefinition TableName="Radiator" Name="Louver length" Init = "0.005" min = "0.0045" max = "0.055" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Louver pitch" Init = "0.0009" min = "0.0008" max = "0.001" digit ="3" unit="m"/>
+        <ColumnDefinition TableName="Radiator" Name="Louver height" Init = "0.00032" min = "0.000284" max = "0.000347" digit ="3" unit="m"/>
+		<ColumnDefinition TableName="Radiator" Name="Louver angle" Init = "25" min = "20" max = "30" digit ="3" unit="degC"/>
+    </Columns>
+	</TableDefinition>
+	
+	  <TableDefinition Name="Fan" PositionX="-400" PositionY="1850">
+	</TableDefinition>
+	
+	<TableDefinition Name="Vehicle Specification" PositionX="1200" PositionY="550">
+      <Columns>
+        <ColumnDefinition TableName="Vehicle Specification" Name="Vehicle mass" Init = "2000" min = "1000" max = "9000" digit ="4" unit="-" />
+		<ColumnDefinition TableName="Vehicle Specification" Name="Tire radius" Init = "0.2159" min = "0.2" max = "1" digit ="4" unit="-" />
+		<ColumnDefinition TableName="Vehicle Specification" Name="Rolling resistance coefficient" Init = "0.02" min = "0" max = "1" digit ="3" unit="-" />
+		<ColumnDefinition TableName="Vehicle Specification" Name="Drag coefficient" Init = "0.02" min = "0" max = "1" digit ="3" unit="-" />
+		<ColumnDefinition TableName="Vehicle Specification" Name="Load mass" Init = "0" min = "0" max = "500" digit ="3" unit="-" />
+		<ColumnDefinition TableName="Vehicle Specification" Name="Slope angle" Init = "0" min = "1" max = "100" digit ="1" unit="-" />
+      </Columns>
+    </TableDefinition>
+	
+	<TableDefinition Name="H2 Tank" PositionX="1200" PositionY="800">
+      <Columns>
+        <ColumnDefinition TableName="H2 Tank" Name="Tank length" Init = "50.3" min = "1000" max = "9000" digit ="4" unit="cm" />
+		<ColumnDefinition TableName="H2 Tank" Name="Tank Outer Diamter" Init = "15.7" min = "0.2" max = "1" digit ="4" unit="cm" />
+		<ColumnDefinition TableName="H2 Tank" Name="Tank Liner Thickness" Init = "15.7" min = "0" max = "1" digit ="3" unit="cm" />
+		<ColumnDefinition TableName="H2 Tank" Name="Tank Laminate Thickness" Init = "15.7" min = "0" max = "1" digit ="3" unit="cm" />
+		<ColumnDefinition TableName="H2 Tank" Name="Tank Volume" Init = "6.8" min = "0" max = "500" digit ="3" unit="L" />
+		<ColumnDefinition TableName="H2 Tank" Name="M Tank Initial" Init = "2.9" min = "1" max = "100" digit ="1" unit="kg" />
+		<ColumnDefinition TableName="H2 Tank" Name="VH2 Tank Initial" Init = "6.5" min = "1" max = "100" digit ="1" unit="L" />
+		<ColumnDefinition TableName="H2 Tank" Name="PH2 Tank Initial" Init = "300" min = "1" max = "100" digit ="1" unit="bar" />
+		<ColumnDefinition TableName="H2 Tank" Name="MH2 Tank Initial" Init = "0.546" min = "1" max = "100" digit ="1" unit="kg" />
+      </Columns>
+    </TableDefinition>
+	
+	<TableDefinition Name="Thrust Motor" PositionX="1200" PositionY="1200">
+    </TableDefinition>
+	
+	
+  </Tables>
+  
+
+  <Connections>
+    <ConnectionDefinition From="Blower" To="Intercooler" FromRelation="One" ToRelation="One" />
+	<ConnectionDefinition From="Intercooler" To="Air Humidifier" FromRelation="One" ToRelation="One" />
+	<ConnectionDefinition From="Air Humidifier" To="Stack" FromRelation="One" ToRelation="One" />
+	<ConnectionDefinition From="Stack" To="Air Humidifier" FromRelation="One" ToRelation="One" />
+    <ConnectionDefinition From="Stack" To="Inverter" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Stack" To="Reducer" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Reducer" To="Ejector" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Hydrogen Humidifier" To="Stack" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Ejector" To="Hydrogen Humidifier" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Pump" To="Stack" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Radiator" To="Pump" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Valve" To="Pump" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Valve" To="Fan" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Inverter" To="Motor" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Converter" To="Inverter" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Inverter" To="Induction motor" FromRelation="One" ToRelation="One"/>
+	<ConnectionDefinition From="Battery" To="Converter" FromRelation="One" ToRelation="One"/>
+  </Connections>
+</Database>

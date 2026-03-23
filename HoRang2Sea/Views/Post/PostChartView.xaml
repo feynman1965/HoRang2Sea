@@ -1,0 +1,102 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoRang2Sea.Views"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" x:Class="HoRang2Sea.Views.PostChartView"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="ChartPropertyDialogTemplate">
+            <local:ChartPropertyView/>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DialogService x:Name="ChartPropertyDialogService" ViewTemplate="{StaticResource ChartPropertyDialogTemplate}">
+            <dx:DialogService.DialogStyle>
+                <Style TargetType="Window">
+                    <Setter Property="Width" Value="600" />
+                    <Setter Property="MaxWidth" Value="1000" />
+                    <Setter Property="WindowStyle" Value="ToolWindow" />
+                </Style>
+            </dx:DialogService.DialogStyle>
+        </dx:DialogService>
+    </dxmvvm:Interaction.Behaviors>
+
+
+    <dxb:BarManager>
+        <dxb:BarManager.Items>
+            <dxb:BarButtonItem Name="bChartProperties" CategoryName="Solution" Glyph="{dx:DXImage 'SvgImages/DiagramIcons/PropertiesPanel.svg'}" Hint="Chart Property" Command="{Binding OnChartPropertyCommand}" />
+        </dxb:BarManager.Items>
+
+        <dxb:BarManager.Bars>
+            <dxb:Bar Caption="Chart" x:Name="Chart" UseWholeRow="True" AllowQuickCustomization="False" ShowDragWidget="False">
+                <dxb:Bar.DockInfo>
+                    <dxb:BarDockInfo ContainerName="ChartBar" />
+                </dxb:Bar.DockInfo>
+                <dxb:Bar.ItemLinks>
+                    <dxb:BarButtonItemLink BarItemName="bChartProperties"/>
+                </dxb:Bar.ItemLinks>
+            </dxb:Bar>
+        </dxb:BarManager.Bars>
+        
+        <Grid>
+            <!--<Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition />
+            </Grid.RowDefinitions>-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--
+            <dxb:BarContainerControl x:Name="ChartBar" Width="35" HorizontalAlignment="Left" Margin="0,5,0,0" Grid.Row="0"/>
+!-->
+
+            <StackPanel Orientation="Vertical">
+                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Properties" Command="{Binding OnChartPropertyCommand}" Width="21" Height="21">
+                    <ext:ToolbarIcon Width="13" Kind="ViewDashboardOutline" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                </Button>
+            </StackPanel>
+
+
+            <s:SciChartSurface x:Name="sciChart" Grid.Column="1"
+                                   RenderableSeries="{s:SeriesBinding RenderableSeries}"
+                                   YAxes="{s:AxesBinding YAxes}"
+                                   XAxes="{s:AxesBinding XAxes}"
+                                   s:VisualXcceleratorEngine.IsEnabled="True"
+                                   ChartTitle="Monitor Chart" Margin="0,10,0,10"
+                                   Background="White" >
+
+                <s:SciChartSurface.ChartModifier>
+                    <s:ModifierGroup>
+                        <s:RubberBandXyZoomModifier ExecuteOn="MouseLeftButton"
+                                                 RubberBandFill="#33FFFFFF" RubberBandStroke="#AAFFFFFF"
+                                                 RubberBandStrokeDashArray="2 2"/>
+                        <s:ZoomPanModifier ExecuteOn="MouseRightButton" ClipModeX="None" />
+                        <s:XAxisDragModifier DragMode="Pan"/>
+                        <s:MouseWheelZoomModifier/>
+                        <s:ZoomExtentsModifier ExecuteOn="MouseDoubleClick" />
+                        <s:LegendModifier ShowLegend="True" Orientation="Horizontal"
+                                       VerticalAlignment="Bottom"                                     
+                                       HorizontalAlignment="Center"
+                                       LegendPlacement="Inside" />
+                        <s:RolloverModifier ExecuteOn="MouseMove" ShowTooltipOn="MouseHover"/>
+                    </s:ModifierGroup>
+                </s:SciChartSurface.ChartModifier>
+            </s:SciChartSurface>
+
+
+        </Grid>
+    </dxb:BarManager>
+</UserControl>

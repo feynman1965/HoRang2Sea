@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoRang2Sea", "HoRang2Sea\HoRang2Sea.csproj", "{C7C1C080-7BBA-40A7-B341-EB484F2A9539}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Debug|x64.ActiveCfg = Debug|x64
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Debug|x64.Build.0 = Debug|x64
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Release|x64.ActiveCfg = Release|x64
+		{C7C1C080-7BBA-40A7-B341-EB484F2A9539}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DCA6EAC3-E896-4C3C-9444-E7FB9F07E6F5}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="HoRang2Sea.Views.PostGaugeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoRang2Sea.Views"
+             xmlns:dxga="http://schemas.devexpress.com/winfx/2008/xaml/gauges"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+              xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <DataTemplate x:Key="GaugePropertyDialogTemplate">
+            <local:GaugePropertyView/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DialogService x:Name="ChartPropertyDialogService" ViewTemplate="{StaticResource GaugePropertyDialogTemplate}">
+            <dx:DialogService.DialogStyle>
+                <Style TargetType="Window">
+                    <Setter Property="Width" Value="600" />
+                    <Setter Property="MaxWidth" Value="1000" />
+                    <Setter Property="WindowStyle" Value="ToolWindow" />
+                </Style>
+            </dx:DialogService.DialogStyle>
+        </dx:DialogService>
+    </dxmvvm:Interaction.Behaviors>
+
+    <dxb:BarManager>
+        <dxb:BarManager.Items>
+            <dxb:BarButtonItem Name="bGaugeProperties" CategoryName="Solution" Glyph="{dx:DXImage 'SvgImages/DiagramIcons/PropertiesPanel.svg'}" Hint="Gauge Property" Command="{Binding OnGaugePropertyCommand}" />
+        </dxb:BarManager.Items>
+
+        <dxb:BarManager.Bars>
+            <dxb:Bar Caption="Gauge" x:Name="Gauge" UseWholeRow="True" AllowQuickCustomization="False" ShowDragWidget="False">
+                <dxb:Bar.DockInfo>
+                    <dxb:BarDockInfo ContainerName="GaugeBar" />
+                </dxb:Bar.DockInfo>
+                <dxb:Bar.ItemLinks>
+                    <dxb:BarButtonItemLink BarItemName="bGaugeProperties"/>
+                </dxb:Bar.ItemLinks>
+            </dxb:Bar>
+        </dxb:BarManager.Bars>
+
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Color="#FF14181f" Offset="1" />
+                    <GradientStop Color="#FF2d323f" Offset="0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <dxb:BarContainerControl x:Name="GaugeBar" Width="35" HorizontalAlignment="Left" Margin="0,5,0,0" Grid.Row="0"/>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <dxga:CircularGaugeControl  Width="320" >
+                    <dxga:CircularGaugeControl.Model>
+                        <dxga:CircularProgressiveModel />
+                    </dxga:CircularGaugeControl.Model>
+                    <dxga:ArcScale StartValue="{Binding StartValue}" EndValue="{Binding EndValue}">
+                        <dxga:ArcScale.Layers>
+                            <dxga:ArcScaleLayer />
+                        </dxga:ArcScale.Layers>
+                        <dxga:ArcScale.Needles>
+                            <dxga:ArcScaleNeedle x:Name="pressureNeedle" Value="{Binding Value}" />
+                        </dxga:ArcScale.Needles>
+                        
+                        <dxga:ArcScale.CustomElements>
+                            <dxga:ScaleCustomElement HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,70,0,0" FontSize="14">
+                                <TextBlock Text="{Binding Unit}" />
+                            </dxga:ScaleCustomElement>
+                        </dxga:ArcScale.CustomElements>
+                    </dxga:ArcScale>
+                </dxga:CircularGaugeControl>
+
+                <TextBlock Text="{Binding Name}"  Margin="0,10,0,0" HorizontalAlignment="Center" FontSize="18" Foreground="White"/>
+            </StackPanel>
+
+        </Grid>
+    </dxb:BarManager>
+</UserControl>

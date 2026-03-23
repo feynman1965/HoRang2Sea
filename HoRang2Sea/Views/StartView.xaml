@@ -1,0 +1,287 @@
+﻿<UserControl x:Class="HoRang2Sea.Views.StartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoRang2Sea.Views" 
+             xmlns:gif="http://wpfanimatedgif.codeplex.com" 
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" 
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+                 xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <!--<Style TargetType="local:TileGroupHeader">
+            -->
+        <!-- Value="#90FFFFFF" -->
+        <!--
+            <Setter Property="Foreground" Value="Red"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="local:TileGroupHeader">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                            </VisualStateManager.VisualStateGroups>
+                            <dx:DXContentPresenter Name="content" />
+                            -->
+        <!-- Foreground="#E3FFFFFF" -->
+        <!--
+                            <TextBox Name="EditorElement" Background="#19FFFFFF" Foreground="Red" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+    </UserControl.Resources>
+    <DockPanel>
+        <dxr:RibbonControl DockPanel.Dock="Top" x:Name="paintRibbon"
+                                   AllowCustomization="False"
+                                   Visibility="Visible"
+                                   Grid.Row="0"
+                                   ShowApplicationButton="False"
+                                   RibbonHeaderVisibility="Collapsed"
+                           PageCategoryAlignment="Default"
+                           RibbonTitleBarVisibility="Visible"
+                           RibbonStyle="Office2019"
+                           ToolbarShowMode="Default"
+                           IsSimplified="True">
+
+            <dxr:RibbonControl.ToolbarItems>
+                <dxr:RibbonSpacingSelectorItemLink BarItemName="spacingSelector" />
+            </dxr:RibbonControl.ToolbarItems>
+
+            <dxr:RibbonPage Caption="Start">
+                <dxr:RibbonPageGroup Caption="Tutorials">
+
+                    <dxb:BarButtonItem 
+                                       Content="About"
+                                       Glyph="{dx:DXImage 'SvgImages/Outlook Inspired/About.svg'}"
+                                       RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem 
+                           Content="HoRang2 Page"
+                           Glyph="{dx:DXImage 'SvgImages/Icon Builder/Actions_Home.svg'}"
+                           RibbonStyle="SmallWithText"
+                           ItemClick="BarButtonItem_Click_Horang2"/>
+                    <dxb:BarButtonItem 
+                           Content="Profile Download Page"
+                           Glyph="{dx:DXImage 'SvgImages/Icon Builder/Actions_Home.svg'}"
+                           RibbonStyle="SmallWithText" 
+                           ItemClick="BarButtonItem_Click_Profile"/>
+                    <dxb:BarButtonItem 
+                                       Content="Manual"
+                                       Glyph="{dx:DXImage 'SvgImages/RichEdit/DocumentStatistics.svg'}"
+                                       RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem 
+                                       Content="HELP"
+                                       Glyph="{dx:DXImage 'SvgImages/DiagramIcons/BindingEditorHelpIcon.svg'}"
+                                       RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem 
+                                       Content="Contact us"
+                                       Glyph="{dx:DXImage 'SvgImages/Business Objects/BO_Contact.svg'}"
+                                       RibbonStyle="SmallWithText" />
+                </dxr:RibbonPageGroup>
+            </dxr:RibbonPage>
+        </dxr:RibbonControl>
+        <Grid >
+
+
+
+
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.7*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <MediaElement Name="myMediaElement" Volume="0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="2" LoadedBehavior="Play" Visibility="Visible" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <MediaElement.Triggers>
+                    <EventTrigger RoutedEvent="MediaElement.Loaded">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <MediaTimeline Source="StartMovie.mp4" Storyboard.TargetName="myMediaElement" RepeatBehavior="Forever" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </MediaElement.Triggers>
+            </MediaElement>
+            <Image Source="/Resource/startpage.png" Grid.RowSpan="3"  HorizontalAlignment="Stretch" VerticalAlignment="Top"   Stretch="None" />
+            <Image Grid.ColumnSpan="3" Source="/Resource/path153647-3.png" Margin="60 100 0 0" HorizontalAlignment="Left" VerticalAlignment="top" Width="150" MinHeight="100" Stretch="Uniform"/>
+
+            <StackPanel Grid.RowSpan="3" VerticalAlignment="Bottom" Margin="0 0 0 150">
+                <Image Source="{iconPacks:CodiconsImage Kind=Account,Brush=White}" Opacity="0.7"  HorizontalAlignment="Center" VerticalAlignment="top"  Width="25">
+                    <!--<Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Width" Value="20"/>
+                        <Setter Property="Height" Value="20"/>
+                    </Style>
+                </Image.Style>-->
+                </Image>
+                <Label Content="Account" HorizontalAlignment="Center" Foreground="LightGray" FontSize="14"/>
+                <Label Content="  Login  |  New ID" HorizontalAlignment="Center" Foreground="LightGray" FontSize="12"/>
+            </StackPanel>
+
+            <!--
+            
+            <StackPanel Grid.Row="0" Grid.Column="2" >
+                <Label Content="      Start Page    " HorizontalAlignment="Right" Margin="0 50 0 0" Foreground="#ff777777" FontSize="30" FontWeight="Light"/>
+            </StackPanel>
+            <StackPanel  Grid.Row="0" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom"  Margin="100 0 0 50">
+            <dx:SimpleButton Height="40" Width="auto" Background="#22ffffff" BorderBrush="Transparent" Focusable="False">
+                <StackPanel Orientation="Horizontal">
+                <Image Source="{dx:DXImage 'SvgImages/Dashboards/InsertTreeView.svg'}" Width="23"/>
+                <Label Content="New project" HorizontalAlignment="Center" Foreground="#ff777777" FontSize="18" FontWeight="Light" Margin="20 0 0 0"/>
+                </StackPanel>
+            </dx:SimpleButton>
+            <dx:SimpleButton Height="40" Width="auto" Background="#22ffffff" BorderBrush="Transparent" Margin="50 0 0 0 " Focusable="False">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{dx:DXImage 'SvgImages/Actions/Open2.svg'}" Width="23"/>
+                    <Label Content="Load project" HorizontalAlignment="Center" Foreground="#ff777777" FontSize="18" FontWeight="Light" Margin="20 0 0 0"/>
+
+                </StackPanel>
+
+            </dx:SimpleButton>
+        </StackPanel>
+            -->
+            <Label  Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="3" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Margin="30 10" Content="  HELP  |  Contact us"  Foreground="Gray" FontSize="16"/>
+
+            <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2"  Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10 30">
+                <Image  Source="/Resource/path153647-3.png" Margin="20 20"  Width="30" Stretch="Uniform"/>
+                <dx:DXImage  Source="{iconPacks:PicolIconsImage Kind=Agent,Brush=Gray}" Margin="0 20"  Width="20" Stretch="Uniform"/>
+                <dx:DXImage  Source="{iconPacks:MaterialImage Kind=AirFilter,Brush=Gainsboro}" Margin="0 20"  Width="20" Stretch="Uniform"/>
+                <dx:DXImage  Source="{iconPacks:MaterialImage Kind=BabyFaceOutline,Brush=LimeGreen}" Margin="0 20"  Width="25" Stretch="Uniform"/>
+            </StackPanel>
+
+
+            <!--<Image Source="/Resource/MainText.png" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="600" Height="150" VerticalAlignment="Top" Stretch="Uniform" Margin="200 80 0 0"/>-->
+            <!--<Image Source="/Resource/MainImage.png" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Margin="230 130 20 0" />-->
+
+            <!--<dxlc:Tile Header="" Width="Auto" Height="450" Background="Transparent" FontSize="15" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Margin="0,0,0,30" >
+                <dxlc:TileLayoutControl.GroupHeader>
+                    <Label Foreground="Black" HorizontalAlignment="Right">What is Fuel cell?</Label>
+                </dxlc:TileLayoutControl.GroupHeader>
+                -->
+            <!--
+                    <dx:DXImage gif:ImageBehavior.AnimatedSource="/Resource/Fuelcell.gif"  Margin="2" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />           
+
+                    <MediaElement LoadedBehavior="Play" Visibility="Visible" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" Source="SplashMovie.mp4">
+                    </MediaElement
+                    -->
+            <!--
+
+                <MediaElement Name="myMediaElement2" LoadedBehavior="Play" Visibility="Visible" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <MediaElement.Triggers>
+                        <EventTrigger RoutedEvent="MediaElement.Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <MediaTimeline Source="SplashMovie.mp4" Storyboard.TargetName="myMediaElement" RepeatBehavior="Forever" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </MediaElement.Triggers>
+                </MediaElement>
+            </dxlc:Tile>-->
+
+            <dxlc:TileLayoutControl x:Name="layoutItems" Background="{x:Null}"  ItemSpace="10" LayerSpace="80"
+                                Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" Orientation="Horizontal" AnimateScrolling="False" Visibility="Visible">
+                <dxlc:TileLayoutControl.Resources>
+                    <Style TargetType="dxlc:Tile">
+                        <Style.Triggers>
+                            <Trigger Property="Size" Value="ExtraLarge">
+                                <Setter Property="Width" Value="500"/>
+                                <Setter Property="Height" Value="470"/>
+                            </Trigger>
+                            <Trigger Property="Size" Value="Large">
+                                <Setter Property="Width" Value="490"/>
+                                <Setter Property="Height" Value="310"/>
+                            </Trigger>
+                            <Trigger Property="Size" Value="ExtraSmall">
+                                <Setter Property="Width" Value="240"/>
+                                <Setter Property="Height" Value="230"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="MaximizedContentTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" Margin="16">
+                                        <TextBlock Text="{Binding}" FontFamily="Segoe UI Light" FontSize="48" />
+                                        <TextBlock FontSize="14" TextWrapping="Wrap">
+                                        You can define an alternative content template when Tile is maximized using the MaximizedContentTemplate property.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                    </Style>
+                    <SolidColorBrush x:Key="color2" Color="#FFDA8515" />
+                    <SolidColorBrush x:Key="color3" Color="#FF54AF0E" />
+                </dxlc:TileLayoutControl.Resources>
+
+
+                <!--
+                <dxlc:Tile Size="ExtraSmall" Background="DarkSlateBlue" >
+                    <Grid>
+                        <dx:DXImage gif:ImageBehavior.AnimatedSource="/Resource/Fuelcell.png"  Margin="2" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Label Content="Fuel cell components" Foreground="DarkSlateBlue"  HorizontalAlignment="Right" FontSize="15" Margin="10 0"/>
+                    </Grid>
+                </dxlc:Tile>
+                 -->
+
+                <dxlc:Tile Size="Large"  Grid.Column="1" Grid.RowSpan="2" Background="Transparent" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left"
+                       ContentChangeInterval="00:00:03" AnimateContentChange="True" dxlc:FlowLayoutControl.IsFlowBreak="True" Click="Tile_Click_1" Margin="0,0,0,0">
+
+                    <dxlc:TileLayoutControl.GroupHeader>
+                        <Label Foreground="Black" HorizontalAlignment="Right">News</Label>
+                    </dxlc:TileLayoutControl.GroupHeader>
+                    <dxlc:Tile.ContentSource>
+                        <dx:FrameworkElements>
+                            <dx:DXImage Margin="2" Source="/Resource/Renault-Scenic-Vision-Concept-car-28.png" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <dx:DXImage Margin="2" Source="/Resource/Renault-Scenic-Vision-Concept-car-29.png" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </dx:FrameworkElements>
+                    </dxlc:Tile.ContentSource>
+                </dxlc:Tile>
+
+
+
+
+                <dxlc:Tile  Header="" Size="Small" Background="#995577ff" FontSize="15" dxlc:FlowLayoutControl.IsFlowBreak="True">
+                    <dxlc:TileLayoutControl.GroupHeader>
+                        <Label Foreground="Black">Tutorials</Label>
+                    </dxlc:TileLayoutControl.GroupHeader>
+                    <Grid>
+                        <Label Content="Tutorial1 FishingBoat" Foreground="White"/>
+                        <dx:DXImage Source="/Resource/Vehiclesflat/56-FishingBoat.svg" Width="40" Margin="0 -60 0 0"/>
+                        
+                    </Grid>
+                </dxlc:Tile>
+
+                <dxlc:Tile Content="Tutorial2" Header="" Size="Small" Background="#665577ff" FontSize="15"/>
+                <dxlc:Tile Content="Tutorial3" Header="" Size="Small" Background="#665577ff" FontSize="15"/>
+                <dxlc:Tile Content="Tutorial4" Header="" Size="Small" Background="#66ddddff" FontSize="15"/>
+
+                <!--
+                <dxlc:Tile Content="Tutorial5" Header="" Size="Small" Background="#ffaaaaff" FontSize="15"/>
+                <dxlc:Tile Content="Tutorial6" Header="" Size="Small" Background="#66ddddff" FontSize="15"/>
+                -->
+
+
+            </dxlc:TileLayoutControl>
+
+
+
+        </Grid>
+    </DockPanel>
+
+</UserControl>

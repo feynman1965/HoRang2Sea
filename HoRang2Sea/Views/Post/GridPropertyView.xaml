@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="HoRang2Sea.Views.GridPropertyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoRang2Sea.Views" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0"
+               Content="Global Items" Foreground="Gray" FontSize="14"/>
+        <Label Grid.Column="1" Grid.Row="0"
+               Content="This Items" Foreground="Gray" FontSize="14"/>
+
+        <!-- DevExpress TextEdit 사용 -->
+        <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5" Height="25"
+                      Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                      NullText="Search Global Items..." />
+
+        <dxe:ListBoxEdit ItemsSource="{Binding FilteredGridGlobalItems}" Grid.Column="0" Grid.Row="2" Margin="5"
+                         dx:ListBoxDragDropBehavior.AllowDragDrop="True"
+                         dx:ListBoxDragDropBehavior.DragRecordOver="OnDragRecordOver" />
+
+        <dxe:ListBoxEdit ItemsSource="{Binding GridItems}" Grid.Column="1" Grid.Row="2" Margin="5"
+                         dx:ListBoxDragDropBehavior.AllowDragDrop="True"
+                         dx:ListBoxDragDropBehavior.DragRecordOver="OnDragRecordOver" />
+    </Grid>
+</UserControl>

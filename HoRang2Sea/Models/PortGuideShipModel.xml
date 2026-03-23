@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Northwind" >
+  <Tables>
+    <TableDefinition Name="PortGuideShipProfile" PositionX="1850" PositionY="650">
+      <Columns>
+        <ColumnDefinition TableName="PortGuideShipProfile" Name="Propellerpitch" Init = "10" min = "10" max = "17" digit ="1" unit="inch"/>
+        <ColumnDefinition TableName="PortGuideShipProfile" Name="Slip" Init = "0" min = "0" max = "100" digit ="1" unit="%"/>
+        
+      </Columns>
+    </TableDefinition>
+    <TableDefinition Name="Stack" PositionX="650" PositionY="700" >
+      <Columns>
+        <ColumnDefinition TableName="Stack" Name="Ambient Temperature" Init="298.15" min="243.15" max="303.15" digit="2" unit="K"/>
+        <ColumnDefinition TableName="Stack" Name="Stack Channel Length" Init="0.583" min="0.200" max="1.000" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Stack Initial Temperature" Init="343.15" min="323.15" max="353.15" digit="2" unit="K"/>
+        <ColumnDefinition TableName="Stack" Name="Length Of Cell" Init="0.195" min="0.001" max="0.400" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Width Of Cell" Init="0.195" min="0.001" max="0.400" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Membrane Thickness Of Cell" Init="0.0025" min="0.0010" max="0.0100" digit="4" unit="cm"/>
+        <ColumnDefinition TableName="Stack" Name="Catalyst Thickness Of Cell" Init="0.000042" min="0.000010" max="0.000100" digit="6" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Gdl Thickness Of Cell" Init="0.0002" min="0.0001" max="0.0005" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Bipolar Plates Thickness Of Cell" Init="0.003" min="0.001" max="0.010" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Gas Channel Depth Of Cell" Init="0.0010" min="0.0005" max="0.0015" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Gas Channel Width Of Cell" Init="0.0010" min="0.0005" max="0.0015" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Channel Pitch Of Cell" Init="0.0020" min="0.0001" max="0.0030" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Channel Thickness Of Cell" Init="0.0010" min="0.0005" max="0.0020" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Channel Number Of Cell" Init="32" min="1" max="100" digit="0" unit="-"/>
+        <ColumnDefinition TableName="Stack" Name="Active Area Of Cell" Init="380" min="100" max="1600" digit="0" unit="cm2"/>
+        <ColumnDefinition TableName="Stack" Name="Number Of Cell" Init="404" min="1" max="1000" digit="0" unit="-"/>
+        <ColumnDefinition TableName="Stack" Name="Anode Stoichiometry" Init="1.5" min="0.5" max="3.0" digit="1" unit="-"/>
+        <ColumnDefinition TableName="Stack" Name="Cathode Stoichiometry" Init="2.5" min="0.5" max="3.0" digit="1" unit="-"/>
+      </Columns>
+    </TableDefinition>
+
+    <TableDefinition Name="Blower" PositionX="-450" PositionY="100">
+      <Columns>
+        <ColumnDefinition TableName="Blower" Name="Inducer Tip Inlet Diameter" Init="0.0415" min="0.0370" max="0.0450" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Hub Inlet Diameter" Init="0.0165" min="0.0145" max="0.0181" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller Inlet Width" Init="0.0145" min="0.0130" max="0.0160" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller Inlet Tip Diameter" Init="0.0173" min="0.0155" max="0.0200" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Roughness" Init="0.000050" min="0.000045" max="0.000055" digit="6" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Blade Inlet Angle" Init="28" min="25" max="31" digit="0" unit="deg"/>
+        <ColumnDefinition TableName="Blower" Name="Blade Exit Angle" Init="40" min="36" max="44" digit="0" unit="deg"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet Stagnation Sonic Velocity" Init="345" min="345" max="345" digit="0" unit="m/s"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet Pressure" Init="101325" min="90000" max="110000" digit="0" unit="Pa"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet Temperature" Init="298.15" min="268.00" max="328.00" digit="2" unit="K"/>
+        <ColumnDefinition TableName="Blower" Name="Inlet Relative Humidity" Init="0.50" min="0.45" max="0.55" digit="2" unit="-"/>
+        <ColumnDefinition TableName="Blower" Name="Alpha2B" Init="90" min="80" max="90" digit="0" unit=""/>
+        <ColumnDefinition TableName="Blower" Name="Length Of Compressor" Init="0.11" min="0.10" max="0.12" digit="2" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Plenum Volume" Init="0.0037" min="0.0033" max="0.0041" digit="4" unit="m3"/>
+        <ColumnDefinition TableName="Blower" Name="Diffuser Inlet Diameter" Init="0.11" min="0.10" max="0.12" digit="2" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller Outlet Tip Diameter" Init="0.078" min="0.070" max="0.086" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller Outlet Width" Init="0.007" min="0.006" max="0.008" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Number Of Impeller Blades" Init="6" min="3" max="10" digit="0" unit="-"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller Inlet Length" Init="0.06" min="0.05" max="0.07" digit="2" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Valve Opening Coefficient" Init="0.0006" min="0.0005" max="0.0007" digit="4" unit="-"/>
+      </Columns>
+    </TableDefinition>
+
+    <TableDefinition Name="Air Humidifier" PositionX="450" PositionY="100">
+      <Columns>
+        <ColumnDefinition TableName="Air Humidifier" Name="Air Humidifier Manifold Inlet Diameter" Init="0.0508" min="0.0450" max="0.0560" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Air Humidifier Shell Diameter" Init="0.2488" min="0.2239" max="0.2737" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Air Humidifier Wall Thickness" Init="0.002" min="0.001" max="0.003" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Air Humidifier Manifold Length" Init="0.099" min="0.090" max="0.110" digit="3" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Air Humidifier Membrane Inner Diameter" Init="0.0009" min="0.0008" max="0.0010" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Air Humidifier Membrane Thickness" Init="0.00010" min="0.00009" max="0.00011" digit="5" unit="m"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Number Of Humidifier Membrane In Cathode" Init="13000" min="11000" max="15000" digit="0" unit="-"/>
+        <ColumnDefinition TableName="Air Humidifier" Name="Air Humidifier Membrane Length" Init="0.254" min="0.230" max="0.280" digit="3" unit="m"/>
+      </Columns>
+    </TableDefinition>
+
+    <TableDefinition Name="Hydrogen Humidifier" PositionX="200" PositionY="500">
+      <COlumns>
+      </COlumns>
+    </TableDefinition>
+
+    <TableDefinition Name="Fresh Water Pump" PositionX="550" PositionY="1400">
+      <Columns>
+        <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Efficiency" Init="0.8" min="0.0" max="1.0" digit="1" unit=""/>
+        <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Inlet Pressure" Init="1.0" min="1.0" max="1.5" digit="1" unit="bar"/>
+        <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Outlet Pressure" Init="2.9" min="2.0" max="3.0" digit="1" unit="bar"/>
+        <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Maximum Flow Rate" Init="48" min="40" max="60" digit="0" unit="kg/s"/>
+      </Columns>
+    </TableDefinition>
+    <TableDefinition Name="Sea Water Pump" PositionX="-300" PositionY="1400">
+      <Columns>
+        <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Efficiency" Init="0.61" min="0.00" max="1.00" digit="2" unit=""/>
+        <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Inlet Pressure" Init="1.0" min="1.0" max="1.5" digit="1" unit="bar"/>
+        <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Outlet Pressure" Init="2.9" min="2.0" max="3.0" digit="1" unit="bar"/>
+        <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Maximum Flow Rate" Init="48" min="40" max="60" digit="0" unit="kg/s"/>
+        <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Temperature" Init="25" min="25" max="50" digit="0" unit="℃"/>
+      </Columns>
+    </TableDefinition>
+
+    <TableDefinition Name="Valve" PositionX="100" PositionY="1750">
+    </TableDefinition>
+
+    <TableDefinition Name="Heat Exchanger" PositionX="-500" PositionY="500">
+      <Columns>
+        <ColumnDefinition TableName="Heat Exchanger" Name="Heat Exchanger Active Area" Init="55" min="0" max="80" digit="0" unit="m2"/>
+        <ColumnDefinition TableName="Heat Exchanger" Name="Heat Exchanger Overall Heat Transfer Coefficient" Init="2100" min="1900" max="2200" digit="0" unit="W/m2K"/>
+        <ColumnDefinition TableName="Heat Exchanger" Name="Heat Exchanger Temperature Setting" Init="65" min="60" max="80" digit="0" unit="℃"/>
+      </Columns>
+    </TableDefinition>
+    
+    <TableDefinition Name="Induction Motor" PositionX="2300" PositionY="100">
+      <Columns>
+      </Columns>
+    </TableDefinition>
+
+
+
+    <TableDefinition Name="Converter" PositionX="1800" PositionY="100">
+    </TableDefinition>
+
+    <TableDefinition Name="Intercooler" PositionX="0" PositionY="100">
+      <Columns>
+        <ColumnDefinition TableName="Intercooler" Name="Intercooler Inlet Coolant Mass Flow Rate" Init="0.10" min="0.05" max="0.30" digit="2" unit="kg/s"/>
+        <ColumnDefinition TableName="Intercooler" Name="Intercooler Inlet Relative Humidity" Init="0.5" min="0.1" max="0.9" digit="1" unit="-"/>
+        <ColumnDefinition TableName="Intercooler" Name="Intercooler Inlet Coolant Temperature" Init="298.15" min="293.15" max="333.15" digit="2" unit="K"/>
+        <ColumnDefinition TableName="Intercooler" Name="Intercooler Area" Init="1.5" min="1.0" max="2.0" digit="1" unit="m2"/>
+      </Columns>
+    </TableDefinition>
+    <TableDefinition Name="Battery" PositionX="1300" PositionY="550">
+      <Columns>
+      </Columns>
+    </TableDefinition>
+
+  </Tables>
+
+
+  <Connections>
+    <ConnectionDefinition From="Blower" To="Intercooler" FromRelation="One" ToRelation="One" />
+    <ConnectionDefinition From="Intercooler" To="Air Humidifier" FromRelation="One" ToRelation="One" />
+    <ConnectionDefinition From="Air Humidifier" To="Stack" FromRelation="One" ToRelation="One" />
+    <ConnectionDefinition From="Stack" To="Air Humidifier" FromRelation="One" ToRelation="One" />
+    <ConnectionDefinition From="Stack" To="Battery" FromRelation="One" ToRelation="One" />
+
+    <ConnectionDefinition From="Hydrogen Humidifier" To="Stack" FromRelation="One" ToRelation="One"/>
+    <ConnectionDefinition From="Heat Exchanger" To="Hydrogen Humidifier" FromRelation="One" ToRelation="One"/>
+    <ConnectionDefinition From="Fresh Water Pump" To="Stack" FromRelation="One" ToRelation="One"/>
+    <ConnectionDefinition From="Sea Water Pump" To="Fresh Water Pump" FromRelation="One" ToRelation="One"/>
+    <ConnectionDefinition From="Valve" To="Fresh Water Pump" FromRelation="One" ToRelation="One"/>
+
+
+    <ConnectionDefinition From="Converter" To="Induction Motor" FromRelation="One" ToRelation="One"/>
+    <ConnectionDefinition From="Battery" To="Converter" FromRelation="One" ToRelation="One"/>
+  </Connections>
+</Database>

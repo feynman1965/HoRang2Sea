@@ -1,0 +1,235 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <LangVersion>9</LangVersion>
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Resource\NexoModel\**" />
+    <EmbeddedResource Remove="Resource\NexoModel\**" />
+    <None Remove="Resource\NexoModel\**" />
+    <Page Remove="Resource\NexoModel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resource\Air HumidifierDetail.svg" />
+    <None Remove="Resource\Detail\Air HumidifierDetail.svg" />
+    <None Remove="Resource\Detail\BatteryDetail.svg" />
+    <None Remove="Resource\Detail\EjectorDetail.svg" />
+    <None Remove="Resource\Detail\IntercoolerDetail.svg" />
+    <None Remove="Resource\Detail\RadiatorDetail.svg" />
+    <None Remove="Resource\Detail\ReducerDetail.svg" />
+    <None Remove="Resource\Detail\ValveDetail.svg" />
+    <None Remove="Resource\EjectorDetail.svg" />
+    <None Remove="Resource\Fuelcell.gif" />
+    <None Remove="Resource\Fuelcell.png" />
+    <None Remove="Resource\hydrogen.png" />
+    <None Remove="Resource\id.svg" />
+    <None Remove="Resource\MainImage.png" />
+    <None Remove="Resource\MainText.png" />
+    
+    
+    <None Remove="Resource\ModelImage\Air Humidifier.svg" />
+    <None Remove="Resource\ModelImage\Battery.svg" />
+    <None Remove="Resource\ModelImage\Blower.svg" />
+    <None Remove="Resource\ModelImage\Converter.svg" />
+    <None Remove="Resource\ModelImage\Driver.svg" />
+    <None Remove="Resource\ModelImage\Ejector.svg" />
+    <None Remove="Resource\ModelImage\Fan.svg" />
+    <None Remove="Resource\ModelImage\heater %285%29.svg" />
+    <None Remove="Resource\ModelImage\hydrogen %282%29.svg" />
+    <None Remove="Resource\ModelImage\Hydrogen Humidifier.svg" />
+    <None Remove="Resource\ModelImage\Induction motor.svg" />
+    <None Remove="Resource\ModelImage\Intercooler.svg" />
+    <None Remove="Resource\ModelImage\Inverter.svg" />
+    <None Remove="Resource\ModelImage\pipe-tool.svg" />
+    <None Remove="Resource\ModelImage\Pump.svg" />
+    <None Remove="Resource\ModelImage\Radiator.svg" />
+    <None Remove="Resource\ModelImage\Reducer.svg" />
+    <None Remove="Resource\ModelImage\Stack.svg" />
+    <None Remove="Resource\ModelImage\Valve.svg" />
+
+
+    <None Remove="Resource\ModelImage\DCConverter.svg" />  
+    <None Remove="Resource\ModelImage\H2 Tank.svg" />  
+    <None Remove="Resource\ModelImage\Thrust Motor.svg" />  
+    
+    
+    <None Remove="Resource\path153647-3.png" />
+    <None Remove="Resource\property.svg" />
+    <None Remove="Resource\Radiator.png" />
+    <None Remove="Resource\RadiatorDetail.png" />
+    <None Remove="Resource\RadiatorDetail.svg" />
+    <None Remove="Resource\Renault-Scenic-Vision-Concept-car-28.png" />
+    <None Remove="Resource\Renault-Scenic-Vision-Concept-car-29.png" />
+    <None Remove="Resource\Splash.png" />
+    <None Remove="Resource\SplashMovie.mp4" />
+    <None Remove="Resource\startpage.png" />
+    <None Remove="Resource\tigerh2.svg" />
+    <None Remove="Resource\tigerh2icon.svg" />
+    
+    <None Remove="Resource\Vehiclesflat\3-suv.svg" /> 
+    
+    <None Remove="Resource\Vehiclesflat\55-TrainingShip.svg" /> 
+    <None Remove="Resource\Vehiclesflat\56-FishingBoat.svg" /> 
+    <None Remove="Resource\Vehiclesflat\57-PortGuideShip.svg" />
+
+
+    <None Remove="Resource\ModelImage\Heat Exchanger.svg" />
+    <None Remove="Resource\ModelImage\Sea Water Pump.svg" />
+    <None Remove="Resource\ModelImage\Fresh Water Pump.svg" />
+  
+    <None Remove="Resource\ModelImage\FishingBoatProfile.svg" />  
+    <None Remove="Resource\ModelImage\PortGuideShipProfile.svg" />
+    <None Remove="Resource\ModelImage\TrainingShipProfile.svg" />
+
+
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\Detail\Air HumidifierDetail.svg" />
+    <Resource Include="Resource\Detail\BatteryDetail.svg" />
+    <Resource Include="Resource\Detail\EjectorDetail.svg" />
+    <Resource Include="Resource\Detail\IntercoolerDetail.svg" />
+    <Resource Include="Resource\Detail\RadiatorDetail.svg" />
+    <Resource Include="Resource\Detail\ReducerDetail.svg" />
+    <Resource Include="Resource\Detail\ValveDetail.svg" />
+    <Resource Include="Resource\Fuelcell.png" />
+    <Resource Include="Resource\MainImage.png" />
+    <Resource Include="Resource\MainText.png" />
+    <Resource Include="Resource\ModelImage\Air Humidifier.svg" />
+    <Resource Include="Resource\ModelImage\Battery.svg" />
+    <Resource Include="Resource\ModelImage\Blower.svg" />
+    <Resource Include="Resource\ModelImage\Converter.svg" />
+    <Resource Include="Resource\ModelImage\Driver.svg" />
+    <Resource Include="Resource\ModelImage\Ejector.svg" />
+    <Resource Include="Resource\ModelImage\Fan.svg" />
+    <Resource Include="Resource\ModelImage\heater (5).svg" />
+    <Resource Include="Resource\ModelImage\hydrogen (2).svg" />
+    <Resource Include="Resource\ModelImage\Hydrogen Humidifier.svg" />
+    <Resource Include="Resource\ModelImage\Induction motor.svg" />
+    <Resource Include="Resource\ModelImage\Intercooler.svg" />
+    <Resource Include="Resource\ModelImage\Inverter.svg" />
+    <Resource Include="Resource\ModelImage\pipe-tool.svg" />
+    <Resource Include="Resource\ModelImage\Pump.svg" />
+    <Resource Include="Resource\ModelImage\Radiator.svg" />
+    <Resource Include="Resource\ModelImage\Reducer.svg" />
+
+    <Resource Include="Resource\ModelImage\Stack.svg" />
+    <Resource Include="Resource\ModelImage\Valve.svg" />
+    
+    <Resource Include="Resource\ModelImage\DCConverter.svg" />  
+    <Resource Include="Resource\ModelImage\H2 Tank.svg" />  
+    <Resource Include="Resource\ModelImage\Thrust Motor.svg" />  
+
+    
+    <Resource Include="Resource\Splash.png" />
+    
+    <Resource Include="Resource\Vehiclesflat\3-suv.svg" /> 
+    <Resource Include="Resource\Vehiclesflat\55-TrainingShip.svg" /> 
+    <Resource Include="Resource\Vehiclesflat\56-FishingBoat.svg" /> 
+    <Resource Include="Resource\Vehiclesflat\57-PortGuideShip.svg" />
+
+    <Resource Include="Resource\ModelImage\Heat Exchanger.svg" />
+    <Resource Include="Resource\ModelImage\Fresh Water Pump.svg" />
+    <Resource Include="Resource\ModelImage\Sea Water Pump.svg" />
+    
+    <Resource Include="Resource\ModelImage\FishingBoatProfile.svg" />  
+    <Resource Include="Resource\ModelImage\PortGuideShipProfile.svg" />
+    <Resource Include="Resource\ModelImage\TrainingShipProfile.svg" />
+  
+  
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\id.svg" />
+    <Resource Include="Resource\property.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\Fuelcell.gif" />
+    <Resource Include="Resource\path153647-3.png" />
+    <Resource Include="Resource\Renault-Scenic-Vision-Concept-car-28.png" />
+    <Resource Include="Resource\Renault-Scenic-Vision-Concept-car-29.png" />
+    <Resource Include="Resource\startpage.png" />
+    <Resource Include="Resource\tigerh2.svg" />
+    <Resource Include="Resource\tigerh2icon.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Wpf" Version="22.2.4" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="22.2.*-*" />
+    <PackageReference Include="DevExpress.Wpf.Themes.All" Version="22.2.*-*" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.2.18" />
+    <PackageReference Include="SciChart" Version="7.0.1.27055" />
+    <PackageReference Include="SciChart.DirectX" Version="7.0.1.27055" />
+    <PackageReference Include="SciChart.DrawingTools" Version="7.0.1.27055" />
+    <PackageReference Include="SciChart.ExternalDependencies" Version="7.0.1.27055" />
+    <PackageReference Include="SimpleInjector" Version="5.4.1" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MWArray">
+      <HintPath>..\..\..\..\..\Program Files\MATLAB\MATLAB Runtime\v912\toolbox\dotnetbuilder\bin\win64\v4.0\MWArray.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Models\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+	<Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
+			<Analyzer Remove="@(Analyzer)" />
+			<Analyzer Include="@(FilteredAnalyzer)" />
+		</ItemGroup>
+	</Target>
+</Project>
