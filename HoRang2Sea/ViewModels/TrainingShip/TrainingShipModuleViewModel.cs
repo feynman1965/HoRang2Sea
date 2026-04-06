@@ -347,7 +347,8 @@ namespace HoRang2Sea.ViewModels
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-                Title = "Select a Profile Text File"
+                Title = "Select a Profile Text File",
+                InitialDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultProfiles")
             };
 
             if (openFileDialog.ShowDialog() == true)
