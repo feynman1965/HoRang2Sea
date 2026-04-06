@@ -295,6 +295,7 @@ namespace HoRang2Sea.Models
                         }
                     }
 
+                    CheckNaN(outputValues, TrainingShipMWOuts.Select(o => o.Name).ToList(), Step);
                     RecordStep(Step, outputValues);
 
                     if (Step % 100 == 0)

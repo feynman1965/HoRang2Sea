@@ -104,48 +104,27 @@
                             <TextBlock Text="Tutorials" FontSize="14" FontWeight="SemiBold" Foreground="#444444" Margin="0,0,0,8"/>
                             <WrapPanel>
                                 <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
-                                        Tag="M-Segment" MouseLeftButtonUp="Tutorial_Click">
+                                        Tag="Fishing Boat" MouseLeftButtonUp="Tutorial_Click">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/4-minivan.svg" Width="24" Height="24"/>
-                                        <TextBlock Text="M-Segment" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        <dx:DXImage Source="/Resource/Vehiclesflat/38-fishing-boat.svg" Width="24" Height="24"/>
+                                        <TextBlock Text="Fishing Boat" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
-                                        Tag="City Bus" MouseLeftButtonUp="Tutorial_Click">
+                                        Tag="Port Guide Ship" MouseLeftButtonUp="Tutorial_Click">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/5-bus.svg" Width="24" Height="24"/>
-                                        <TextBlock Text="City Bus" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        <dx:DXImage Source="/Resource/Vehiclesflat/37-liner.svg" Width="24" Height="24"/>
+                                        <TextBlock Text="Port Guide Ship" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
-                                        Tag="Heavy Duty Truck" MouseLeftButtonUp="Tutorial_Click">
+                                        Tag="Training Ship" MouseLeftButtonUp="Tutorial_Click">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/11-truck.svg" Width="24" Height="24"/>
-                                        <TextBlock Text="Truck" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        <dx:DXImage Source="/Resource/Vehiclesflat/36-tanker.svg" Width="24" Height="24"/>
+                                        <TextBlock Text="Training Ship" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
-                                        Tag="14ton Construction" MouseLeftButtonUp="Tutorial_Click">
-                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/15-excavator.svg" Width="24" Height="24"/>
-                                        <TextBlock Text="Construction" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                    </StackPanel>
-                                </Border>
-                                <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
-                                        Tag="Forklift" MouseLeftButtonUp="Tutorial_Click">
-                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/46-forklift.svg" Width="24" Height="24"/>
-                                        <TextBlock Text="Forklift" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                    </StackPanel>
-                                </Border>
-                                <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
-                                        Tag="Tractor" MouseLeftButtonUp="Tutorial_Click">
-                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/14-tractor-.svg" Width="24" Height="24"/>
-                                        <TextBlock Text="Tractor" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                    </StackPanel>
-                                </Border>
-                            </WrapPanel>
+                                </WrapPanel>
                         </StackPanel>
 
                         <!-- News + links -->

@@ -300,6 +300,7 @@ namespace HoRang2Sea.Models
                         }
                     }
 
+                    CheckNaN(outputValues, FishingBoatMWOuts.Select(o => o.Name).ToList(), Step);
                     RecordStep(Step, outputValues);
 
                     // UI 업데이트 (GUI 멈춤 방지: 100스텝마다)
