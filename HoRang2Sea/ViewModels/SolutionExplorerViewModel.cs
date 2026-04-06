@@ -10,7 +10,7 @@ namespace HoRang2Sea.ViewModels
         {
             Solution = App.Container.GetInstance<Solution>();
             DisplayName = "Solution Explorer";
-            Glyph = Common.CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Dashboards/AutoExpand.svg");
+            Glyph = Common.CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/AutoExpand.svg");
         }
 
         public event EventHandler<SolutionItemOpeningEventArgs> ItemOpening;

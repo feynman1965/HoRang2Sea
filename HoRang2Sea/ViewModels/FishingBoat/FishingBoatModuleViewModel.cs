@@ -72,6 +72,7 @@ namespace HoRang2Sea.ViewModels
         // ----------- txt 관련----------
 
         private double[] _uploadedVelocityLines; //파일 라인 저장
+        private string _lastDriveModePath;
         public ICommand UploadVelocityCommand { get; private set; }
 
         public ICommand RemoveTextCommand { get; private set; }
@@ -421,6 +422,7 @@ namespace HoRang2Sea.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
+                _lastDriveModePath = openFileDialog.FileName;
                 _uploadedVelocityLines = null;
                 _uploadedVelocityLines = File.ReadAllLines(openFileDialog.FileName)
                              .Select(line =>
@@ -1079,10 +1081,95 @@ namespace HoRang2Sea.ViewModels
 
         public void OnClickSaveButton()
         {
-            using (var stream = new StreamWriter(@"Test.xml"))
+            var dialog = new Microsoft.Win32.SaveFileDialog
             {
-                var serializer = new XmlSerializer(typeof(DatabaseDefinition));
-                serializer.Serialize(stream, Database);
+                Filter = "Vehicle Config (*.hr2v)|*.hr2v|All files (*.*)|*.*",
+                DefaultExt = ".hr2v",
+                FileName = "FishingBoat_Config",
+                InitialDirectory = VehicleSaveData.GetDefaultDir("FishingBoat")
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var saveData = new VehicleSaveData
+                    {
+                        VehicleType = "FishingBoat",
+                        DesignLayout = DesignLayout,
+                        ControlLayout = ControlLayout,
+                        DriveModePath = _lastDriveModePath,
+                        DatabaseXml = VehicleSaveData.SerializeDatabase(Database)
+                    };
+                    saveData.Save(dialog.FileName);
+                    VehicleSaveData.RememberDir("FishingBoat", dialog.FileName);
+                    System.Windows.MessageBox.Show("저장 완료", "Save", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"저장 실패: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                }
+            }
+        }
+
+        public void OnClickLoadButton()
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Vehicle Config (*.hr2v)|*.hr2v|All files (*.*)|*.*",
+                DefaultExt = ".hr2v",
+                InitialDirectory = VehicleSaveData.GetDefaultDir("FishingBoat")
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var saveData = VehicleSaveData.Load(dialog.FileName);
+                    Database = VehicleSaveData.DeserializeDatabase(saveData.DatabaseXml) ?? Database;
+                    DesignLayout = saveData.DesignLayout;
+                    ControlLayout = saveData.ControlLayout;
+                    if (!string.IsNullOrEmpty(saveData.DriveModePath) && File.Exists(saveData.DriveModePath))
+                    {
+                        _lastDriveModePath = saveData.DriveModePath;
+                        _uploadedVelocityLines = File.ReadAllLines(saveData.DriveModePath)
+                            .Select(line =>
+                            {
+                                var tokens = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                                if (tokens.Length > 0 && double.TryParse(tokens[^1], out double value))
+                                    return value;
+                                return 0.0;
+                            })
+                            .ToArray();
+                        UpdateVelocityLineDataSeries();
+                    }
+                    UpdateLayoutVisibility();
+                    System.Windows.MessageBox.Show("불러오기 완료", "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"불러오기 실패: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                }
+            }
+        }
+
+        public void OnExportCsvButton()
+        {
+            if (BaseMWModel is GenericPortDllModel model && model.HasRecordedData)
+            {
+                var dialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                    DefaultExt = ".csv",
+                    FileName = "FishingBoat_Result"
+                };
+                if (dialog.ShowDialog() == true)
+                {
+                    model.ExportToCsv(dialog.FileName);
+                    System.Windows.MessageBox.Show("CSV 저장 완료", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("저장할 데이터가 없습니다. 시뮬레이션을 먼저 실행하세요.", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
             }
         }
 

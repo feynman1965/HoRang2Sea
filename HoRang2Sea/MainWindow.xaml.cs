@@ -24,7 +24,16 @@ namespace HoRang2Sea
         public MainWindow()
         {
             InitializeComponent();
+            Closing += MainWindow_Closing;
         }
 
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                Environment.Exit(0);
+            }
+            catch { }
+        }
     }
 }

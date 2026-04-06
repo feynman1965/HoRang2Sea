@@ -203,26 +203,26 @@ namespace HoRang2Sea.ViewModels
 
             CommandViewModel newCommand = new CommandViewModel("New") { IsSubItem = true };
 
-            newFile = new CommandViewModel("New File", fileExecutedCommand) { Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Dashboards/New.svg")/*Images.File*/, KeyGesture = new KeyGesture(Key.N, ModifierKeys.Control) };
+            newFile = new CommandViewModel("New File", fileExecutedCommand) { Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/New.svg")/*Images.File*/, KeyGesture = new KeyGesture(Key.N, ModifierKeys.Control) };
             newCommand.Commands = new List<CommandViewModel>() { newFile };
 
             CommandViewModel openCommand = new CommandViewModel("Open") { IsSubItem = true, };
             openProject = new CommandViewModel("Project/Solution...", new DelegateCommand(LoadProject))
             {
-                Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Actions/Open2.svg")/*Images.OpenSolution*/,
+                Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Actions/Open2.svg")/*Images.OpenSolution*/,
                 IsEnabled = true,
                 KeyGesture = new KeyGesture(Key.O, ModifierKeys.Control | ModifierKeys.Shift),
             };
             openFile = new CommandViewModel("Open File", fileOpenCommand)
             {
-                Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Actions/Open.svg")/*Images.OpenFile*/,
+                Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Actions/Open.svg")/*Images.OpenFile*/,
                 KeyGesture = new KeyGesture(Key.O, ModifierKeys.Control)
             };
             openCommand.Commands = new List<CommandViewModel>() { openProject/*, openFile*/ };
 
             CommandViewModel closeFile = new CommandViewModel("Close");
-            CommandViewModel closeSolution = new CommandViewModel("Close Solution") { Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/XAF/Action_CloseAllWindows.svg")/*Images.CloseSolution*/ };
-            save = new CommandViewModel("Save", new DelegateCommand(SaveProject)) { Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/DiagramIcons/save.svg"), KeyGesture = new KeyGesture(Key.S, ModifierKeys.Control) };
+            CommandViewModel closeSolution = new CommandViewModel("Close Solution") { Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/XAF/Action_CloseAllWindows.svg")/*Images.CloseSolution*/ };
+            save = new CommandViewModel("Save", new DelegateCommand(SaveProject)) { Glyph = CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/DiagramIcons/save.svg"), KeyGesture = new KeyGesture(Key.S, ModifierKeys.Control) };
 
             return new List<CommandViewModel>() { newCommand, openCommand, GetSeparator(), closeFile, closeSolution, GetSeparator(), save };
         }
@@ -441,14 +441,14 @@ namespace HoRang2Sea.ViewModels
             var solution = App.Container.GetInstance<Solution>();
             var newitem = solution.NewFishingBoatProject();
             OpenItem(newitem);
-            BackstageViewService.Close();
+            BackstageViewService?.Close();
         }
         public async void CreatePortGuideShipDocument(string Name)
         {
             var solution = App.Container.GetInstance<Solution>();
             var newitem = solution.NewPortGuideShipProject();
             OpenItem(newitem);
-            BackstageViewService.Close();
+            BackstageViewService?.Close();
         }
 
         public async void CreateTrainingSHipDocument(string Name)
@@ -456,7 +456,7 @@ namespace HoRang2Sea.ViewModels
             var solution = App.Container.GetInstance<Solution>();
             var newitem = solution.NewTrainingShipProject();
             OpenItem(newitem);
-            BackstageViewService.Close();
+            BackstageViewService?.Close();
         }
 
 

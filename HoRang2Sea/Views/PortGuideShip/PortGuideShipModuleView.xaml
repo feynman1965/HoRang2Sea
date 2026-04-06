@@ -183,12 +183,28 @@
                                        Command="{Binding UploadVelocityCommand}" 
                                        Hint=""
                                        RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bRemoveText"     
+                    <dxb:BarButtonItem Name="bExportCsv"
+                                       Content="Export CSV"
+                                       Glyph="{iconPacks:IoniconsImage Kind=DownloadiOS,Brush=Green}"
+                                       Command="{Binding OnExportCsvButtonCommand}"
+                                       Hint="Export simulation results to CSV"
+                                       RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Name="bRemoveText"
                                        Content="Remove Text (to default)"
                                        Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=SkyBlue}"
                                        Command="{Binding RemoveTextCommand}"
                                        RibbonStyle="SmallWithText" />
-                    
+                    <dxb:BarButtonItem Name="bSaveVehicle"
+                                       Content="Save Config"
+                                       Glyph="{iconPacks:IoniconsImage Kind=SaveiOS,Brush=DarkGreen}"
+                                       Command="{Binding OnClickSaveButtonCommand}"
+                                       RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Name="bLoadVehicle"
+                                       Content="Load Config"
+                                       Glyph="{iconPacks:IoniconsImage Kind=FolderiOS,Brush=DarkOrange}"
+                                       Command="{Binding OnClickLoadButtonCommand}"
+                                       RibbonStyle="SmallWithText" />
+
                 </dxr:RibbonPageGroup>                   
 
                 <dxr:RibbonPageGroup Caption="Player" ShowCaptionButton="False" SmallGlyph="{iconPacks:FontistoImage Kind=Equalizer}">

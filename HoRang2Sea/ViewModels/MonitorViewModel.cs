@@ -27,7 +27,7 @@ namespace HoRang2Sea.ViewModels
         public MonitorViewModel()
         {
             DisplayName = "Monitor";
-            Glyph = Common.CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Icon Builder/Electronics_DesktopWindows.svg");
+            Glyph = Common.CommonFunction.GetGlyphFromUri("pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Icon Builder/Electronics_DesktopWindows.svg");
             BindingOperations.EnableCollectionSynchronization(DataModels, _lock);
             ReadSetup("TaskMonitor.setting.json");
             ConnetStatus = false;

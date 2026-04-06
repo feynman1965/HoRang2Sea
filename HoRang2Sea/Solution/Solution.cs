@@ -1,6 +1,5 @@
 ﻿using DevExpress.Mvvm;
 using DevExpress.Mvvm.POCO;
-using DevExpress.Pdf.Native.BouncyCastle.Utilities.IO;
 using DevExpress.Utils.Serializing;
 using DevExpress.XtraCharts;
 using HoRang2Sea.Models;
@@ -40,10 +39,10 @@ namespace HoRang2Sea
             {
                 ItemName = string.Format("FishingBoat Project {0}", FishingBoatID++);
             }
-            SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.FishingBoat);
+            SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.FishingBoat);
             Items.Add(item);  //타입추가하기.
 
-            SolutionItem Griditem = SolutionItem.Create(ItemName + "_Monitor", "pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
+            SolutionItem Griditem = SolutionItem.Create(ItemName + "_Monitor", "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
             Griditem.mymodel.BaseMWModel = item.mymodel.BaseMWModel = new FishingBoatMW();
             item.Items.Add(Griditem);
             return item;
@@ -55,10 +54,10 @@ namespace HoRang2Sea
             {
                 ItemName = string.Format("PortGuideShip Project {0}", PortGuideShipID++);
             }
-            SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.PortGuideShip);
+            SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.PortGuideShip);
             Items.Add(item);  //타입추가하기.
 
-            SolutionItem Griditem = SolutionItem.Create(ItemName + "_Monitor", "pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
+            SolutionItem Griditem = SolutionItem.Create(ItemName + "_Monitor", "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
 
             Griditem.mymodel.BaseMWModel = item.mymodel.BaseMWModel = new PortGuideShipMW();
             item.Items.Add(Griditem);
@@ -71,10 +70,10 @@ namespace HoRang2Sea
             {
                 ItemName = string.Format("TrainingShip Project {0}", TrainingShipID++);
             }
-            SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.TrainingShip);
+            SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.TrainingShip);
             Items.Add(item);  //타입추가하기.
 
-            SolutionItem Griditem = SolutionItem.Create(ItemName + "_Monitor", "pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
+            SolutionItem Griditem = SolutionItem.Create(ItemName + "_Monitor", "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
 
             Griditem.mymodel.BaseMWModel = item.mymodel.BaseMWModel = new TrainingShipMW();
             item.Items.Add(Griditem);
@@ -92,7 +91,7 @@ namespace HoRang2Sea
              {
                  ItemName = string.Format("New Item {0}", NewID++);
              }
-             SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
+             SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Icon Builder/Actions_Table.svg", SolutionType.GRID);
              Items.Add(item);  //타입추가하기.
          }*/
         public void Save()

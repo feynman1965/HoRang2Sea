@@ -34,7 +34,7 @@
             </Style>
 
             <ControlTemplate x:Key="HomeControlPaneTemplate" TargetType="{x:Type ContentControl}">
-                <Grid Margin="40,0,40,0">
+                <Grid Margin="30,0,30,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -42,65 +42,58 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Style="{StaticResource PageHeaderStyle}" Text="Home" />
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Button   Style="{StaticResource BackstageContentButtonStyle}" Padding="54,17,54,8" Command="{Binding CreateBlankDocumentCommand}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="auto"/>
 
-                            </Grid.RowDefinitions>
-                            <!--<Border Background="White" BorderThickness="1" BorderBrush="LightGray" Width="70" Height="90" />-->
-                                <dx:DXImage Source="{iconPacks:FontAwesomeImage Kind=SaveSolid,Brush=PowderBlue}" Width="35" />
-                                <dx:DXImage Source="{iconPacks:FontAwesomeImage Kind=SaveRegular,Brush=Gray}" Width="35"/>
-                            <TextBlock Grid.Row="1" Text="Save" FontWeight="Bold" Margin="0,8" HorizontalAlignment="Center" />
-                        </Grid>
-                    </Button>
-                    <Button  Style="{StaticResource BackstageContentButtonStyle}" Padding="54,17,54,8" Command="{Binding CreateBlankDocumentCommand}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="auto"/>
+                    <TextBlock Text="Home" FontSize="32" FontFamily="Segoe UI Light" Margin="0,12,0,16"/>
 
-                            </Grid.RowDefinitions>
-                                <!--<Border Background="White" BorderThickness="1" BorderBrush="LightGray" Width="70" Height="90" />-->
-                            <dx:DXImage Source="{iconPacks:EvaIconsImage Kind=File,Brush=PowderBlue}" Width="25" Margin="-10 0 0 0"/>
-                            <dx:DXImage Source="{iconPacks:FontistoImage Kind=Import,Brush=Gray}" Width="35"/>
-                            <TextBlock Grid.Row="1" Text="Load" FontWeight="Bold" Margin="0,8" HorizontalAlignment="Center" />
-                        </Grid>
-                    </Button>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Command="{Binding LoadProjectCommand}" Cursor="Hand" Margin="0,0,12,0"
+                                Background="Transparent" BorderThickness="0" Padding="0">
+                            <Border BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="6" Padding="20,14" Background="White">
+                                <StackPanel Orientation="Horizontal">
+                                    <dx:DXImage Source="{dx:DXImage SvgImages/Actions/Open2.svg}" Width="22" Height="22" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Load Project" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="#333333"/>
+                                </StackPanel>
+                            </Border>
+                        </Button>
+                        <Button Command="{Binding SaveProjectCommand}" Cursor="Hand" Margin="0,0,12,0"
+                                Background="Transparent" BorderThickness="0" Padding="0">
+                            <Border BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="6" Padding="20,14" Background="White">
+                                <StackPanel Orientation="Horizontal">
+                                    <dx:DXImage Source="{dx:DXImage SvgImages/DiagramIcons/save.svg}" Width="22" Height="22" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Save Project" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="#333333"/>
+                                </StackPanel>
+                            </Border>
+                        </Button>
                     </StackPanel>
-                    <Separator Grid.Row="2" Margin="0,10" />
-                    <ContentControl Grid.Row="3" Content="Recent Documents" SnapsToDevicePixels="True" Focusable="False" IsTabStop="False" FocusVisualStyle="{x:Null}" Margin="0,10,0,16" FontSize="16" FontWeight="SemiBold"/>
-                    <dxg:GridControl Grid.Row="4" ItemsSource="{Binding RecentDocuments}" ShowBorder="False" Style="{StaticResource TransparentGridStyle}">
-                        <dxg:GridControl.Columns>
-                            <dxg:GridColumn FieldName="Image" Width="60" ImageAlignment="Center" UnboundType="Object" ReadOnly="True" AllowResizing="False" Image="{dx:DXImage SvgImages/Outlook Inspired/New.svg}" >
-                                <dxg:GridColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <dx:DXImage Source="{dx:DXImage SvgImages/Export/ExportToRTF.svg}" Stretch="None" />
-                                    </DataTemplate>
-                                </dxg:GridColumn.CellTemplate>
-                            </dxg:GridColumn>
-                            <dxg:GridColumn FieldName="Name" Width="3*" UnboundType="string" UnboundExpression="[Caption] + ';' + [Description]" AllowResizing="False">
-                                <dxg:GridColumn.CellDisplayTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Margin="0,0">
-                                            <TextBlock Text="{Binding RowData.Row.Caption}" Margin="0,2,0,0" FontSize="18"/>
-                                            <TextBlock Text="{Binding RowData.Row.Description}" Margin="0,2"/>
+
+                    <Separator Grid.Row="2" Margin="0,10" Background="#EEEEEE"/>
+
+                    <TextBlock Grid.Row="3" Text="Recent Projects" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,10" Foreground="#444444"/>
+
+                    <ItemsControl Grid.Row="4" ItemsSource="{Binding RecentDocuments}" Margin="0,0,0,10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,2" Padding="12,10" CornerRadius="4" Background="White" BorderThickness="1" BorderBrush="#EEEEEE" Cursor="Hand">
+                                    <dxmvvm:Interaction.Behaviors>
+                                        <dxmvvm:EventToCommand EventName="MouseLeftButtonUp" Command="{Binding DataContext.OpenRecentDocumentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                                    </dxmvvm:Interaction.Behaviors>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <dx:DXImage Source="{dx:DXImage SvgImages/Actions/Open2.svg}" Width="18" Height="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Caption}" FontSize="14" FontWeight="SemiBold" Foreground="#222222"/>
+                                            <TextBlock Text="{Binding Description}" FontSize="11" Foreground="#999999" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
                                         </StackPanel>
-                                    </DataTemplate>
-                                </dxg:GridColumn.CellDisplayTemplate>
-                            </dxg:GridColumn>
-                            <dxg:GridColumn FieldName="DateModified" Width="*" Header="Date modified">
-                                <dxg:GridColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Value}" FontSize="12" VerticalAlignment="Center"/>
-                                    </DataTemplate>
-                                </dxg:GridColumn.CellTemplate>
-                            </dxg:GridColumn>
-                        </dxg:GridControl.Columns>
-                    </dxg:GridControl>
+                                        <TextBlock Grid.Column="2" Text="{Binding DateModified, StringFormat={}{0:yyyy-MM-dd HH:mm}}" FontSize="11" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </ControlTemplate>
             

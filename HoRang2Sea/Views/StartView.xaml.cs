@@ -30,19 +30,34 @@ namespace HoRang2Sea.Views
 
         private void Tile_Click_1(object sender, EventArgs e)
         {
-            var ps = new ProcessStartInfo("https://hydrogen.or.kr/")
+            string url = "https://hydrogen.or.kr/";
+            Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
+        }
+
+        private void Tutorial_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement fe && fe.Tag is string vehicleName)
             {
-                UseShellExecute = true,
-                Verb = "open"
-            };
-            Process.Start(ps);
+                try
+                {
+                    var mainVm = App.Container.GetInstance<HoRang2Sea.ViewModels.MainViewModel>();
+                    mainVm.CreatDocument(vehicleName);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Tutorial click error: {ex.Message}");
+                }
+            }
+        }
 
-
-            //Process.Start("https://hydrogen.or.kr/");
+        private void FuelCell_Click(object sender, MouseButtonEventArgs e)
+        {
+            string url = "https://hydrogen.or.kr/";
+            Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
         }
         private void BarButtonItem_Click_Horang2(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
-
+            
             string url = "https://Horang2.kr";
 
             // 기본 브라우저에서 링크 열기

@@ -12,7 +12,7 @@ namespace HoRang2Sea.ViewModels
         public OutputViewModel()
         {
             DisplayName = "Output";
-            Glyph = CommonFunction.GetGlyphFromUri(" pack://application:,,,/DevExpress.Images.v22.2;component/SvgImages/Icon Builder/Actions_Window.svg");
+            Glyph = CommonFunction.GetGlyphFromUri(" pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Icon Builder/Actions_Window.svg");
             Text = @"1>------ Build started: Project: VisualStudioInspiredUIDemo, Configuration: Debug Any CPU ------
 1>  DockingDemo -> C:\VisualStudioInspiredUIDemo.exe
 ========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========";
