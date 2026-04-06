@@ -296,7 +296,7 @@ namespace HoRang2Sea.Models
                         }
                     }
 
-                    CheckNaN(outputValues, PortGuideShipMWOuts.Select(o => o.Name).ToList(), Step);
+                    if (CheckNaN(outputValues, PortGuideShipMWOuts.Select(o => o.Name).ToList(), Step)) { Step = 0; break; }
                     RecordStep(Step, outputValues);
 
                     if (Step % 100 == 0)
@@ -392,15 +392,10 @@ namespace HoRang2Sea.Models
                 mv.Status = "PortGuideShip Running";
             }
 
-            for (int i = 0; i < PortGuideShipMWInputs.Count; i++)
+            // Set all input values from defaults (TXT)
+            foreach (var kvp in _defaultInputValues)
             {
-                if (InputPortMap.TryGetValue(i, out int port))
-                {
-                    double val = PortGuideShipMWInputs[i].Value;
-                    if (val == 0.0 && _defaultInputValues.TryGetValue(port, out double initVal))
-                        val = initVal;
-                    SetInputPort(port, val);
-                }
+                SetInputPort(kvp.Key, kvp.Value);
             }
         }
     }

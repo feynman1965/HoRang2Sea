@@ -884,31 +884,34 @@ namespace HoRang2Sea.ViewModels
                 PortGuideShipMW.SetDriveModes(_uploadedVelocityLines);
 
                 Debug.WriteLine($"PortGuideShip input list length : {PortGuideShipMWInputs.Count}");
-                int i = 0;
                 foreach (var Table in Database.Tables)
                 {
                     foreach (var Column in Table.Columns)
                     {
-                        if (i >= PortGuideShipMWInputs.Count)
-                        {
-                            PortGuideShipMWInputs.Add(new PortGuideShipMWDataModel(Column.Name));
-                        }
+                        string colName = Column.Name?.ToLower() ?? "";
+                        if (colName.Contains("working_rpm") || colName.Contains("working_torque") || colName.Contains("torque_profile") || colName.Contains("rpm_profile"))
+                            continue;
+
                         double result = 0;
-                        if (Double.TryParse(Column.Init, out result) == false)
-                        {
-                            break;
-                        }
+                        if (!Double.TryParse(Column.Init, out result))
+                            continue;
 
                         double adjustedValue = result;
-
-                        // Min/Max 파싱
                         if (Double.TryParse(Column.Min, out double minVal) && Double.TryParse(Column.Max, out double maxVal))
                         {
                             adjustedValue = GetLayoutAdjustedValue(result, minVal, maxVal, Column.Name);
                         }
 
-                        PortGuideShipMWInputs[i].Value = adjustedValue;
-                        i++;
+                        string xmlNorm = Column.Name.ToLower().Replace(" ", "").Replace("_", "");
+                        for (int j = 0; j < PortGuideShipMWInputs.Count; j++)
+                        {
+                            string mwNorm = PortGuideShipMWInputs[j].Name.ToLower().Replace("fcs_", "").Replace("_", "");
+                            if (xmlNorm == mwNorm || xmlNorm.Contains(mwNorm) || mwNorm.Contains(xmlNorm))
+                            {
+                                PortGuideShipMWInputs[j].Value = adjustedValue;
+                                break;
+                            }
+                        }
                     }
                 }
                 PortGuideShipMW.PortGuideShipMWInputs = PortGuideShipMWInputs;

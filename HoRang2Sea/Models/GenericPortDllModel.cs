@@ -70,6 +70,7 @@ namespace HoRang2Sea.Models
 
         #region NaN Detection
         private bool _nanWarningShown = false;
+        public bool NaNDetected { get; private set; } = false;
 
         protected bool CheckNaN(double[] outputValues, List<string> outputNames, int step)
         {
@@ -79,11 +80,13 @@ namespace HoRang2Sea.Models
                 if (double.IsNaN(outputValues[i]) || double.IsInfinity(outputValues[i]))
                 {
                     _nanWarningShown = true;
+                    NaNDetected = true;
                     string varName = (i < outputNames.Count) ? outputNames[i] : $"Out[{i}]";
-                    System.Windows.Application.Current?.Dispatcher.BeginInvoke(new Action(() =>
+                    System.Windows.Application.Current?.Dispatcher.Invoke(new Action(() =>
                     {
                         System.Windows.MessageBox.Show(
-                            $"Step {step}에서 '{varName}' 출력이 NaN/Inf입니다.\n\n입력 변수 설정을 확인하세요.\n(파라미터 값이 해당 모델에 맞지 않을 수 있습니다)",
+                            System.Windows.Application.Current.MainWindow,
+                            $"Step {step}에서 '{varName}' 출력이 NaN/Inf입니다.\n\n입력 변수 설정을 확인하세요.\n(파라미터 값이 해당 모델에 맞지 않을 수 있습니다)\n\n시뮬레이션을 중지합니다.",
                             "입력 변수 경고",
                             System.Windows.MessageBoxButton.OK,
                             System.Windows.MessageBoxImage.Warning);
@@ -94,7 +97,11 @@ namespace HoRang2Sea.Models
             return false;
         }
 
-        protected void ResetNaNWarning() => _nanWarningShown = false;
+        protected void ResetNaNWarning()
+        {
+            _nanWarningShown = false;
+            NaNDetected = false;
+        }
         #endregion
 
         #region Kernel32 Imports

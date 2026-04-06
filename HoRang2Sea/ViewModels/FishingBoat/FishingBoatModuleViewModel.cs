@@ -946,31 +946,34 @@ namespace HoRang2Sea.ViewModels
                 FishingBoatMW.SetDriveModes(_uploadedVelocityLines);
 
                 Debug.WriteLine($"FishingBoat input list length : {FishingBoatMWInputs.Count}");
-                int i = 0;
                 foreach (var Table in Database.Tables)
                 {
                     foreach (var Column in Table.Columns)
                     {
-                        if (i >= FishingBoatMWInputs.Count)
-                        {
-                            FishingBoatMWInputs.Add(new FishingBoatMWDataModel(Column.Name));
-                        }
+                        string colName = Column.Name?.ToLower() ?? "";
+                        if (colName.Contains("working_rpm") || colName.Contains("working_torque") || colName.Contains("torque_profile") || colName.Contains("rpm_profile"))
+                            continue;
+
                         double result = 0;
-                        if (Double.TryParse(Column.Init, out result) == false)
-                        {
-                            break;
-                        }
+                        if (!Double.TryParse(Column.Init, out result))
+                            continue;
 
                         double adjustedValue = result;
-
-                        // Min/Max 파싱
                         if (Double.TryParse(Column.Min, out double minVal) && Double.TryParse(Column.Max, out double maxVal))
                         {
                             adjustedValue = GetLayoutAdjustedValue(result, minVal, maxVal, Column.Name);
                         }
 
-                        FishingBoatMWInputs[i].Value = adjustedValue;
-                        i++;
+                        string xmlNorm = Column.Name.ToLower().Replace(" ", "").Replace("_", "");
+                        for (int j = 0; j < FishingBoatMWInputs.Count; j++)
+                        {
+                            string mwNorm = FishingBoatMWInputs[j].Name.ToLower().Replace("fcs_", "").Replace("_", "");
+                            if (xmlNorm == mwNorm || xmlNorm.Contains(mwNorm) || mwNorm.Contains(xmlNorm))
+                            {
+                                FishingBoatMWInputs[j].Value = adjustedValue;
+                                break;
+                            }
+                        }
                     }
                 }
                 FishingBoatMW.FishingBoatMWInputs = FishingBoatMWInputs;

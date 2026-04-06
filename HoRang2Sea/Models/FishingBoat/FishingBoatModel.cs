@@ -300,7 +300,7 @@ namespace HoRang2Sea.Models
                         }
                     }
 
-                    CheckNaN(outputValues, FishingBoatMWOuts.Select(o => o.Name).ToList(), Step);
+                    if (CheckNaN(outputValues, FishingBoatMWOuts.Select(o => o.Name).ToList(), Step)) { Step = 0; break; }
                     RecordStep(Step, outputValues);
 
                     // UI 업데이트 (GUI 멈춤 방지: 100스텝마다)
@@ -398,17 +398,10 @@ namespace HoRang2Sea.Models
                 mv.Status = "FishingBoat Running";
             }
 
-            // Set all input values from the input list using port mapping
-            for (int i = 0; i < FishingBoatMWInputs.Count; i++)
+            // Set all input values from defaults (TXT)
+            foreach (var kvp in _defaultInputValues)
             {
-                if (InputPortMap.TryGetValue(i, out int port))
-                {
-                    double val = FishingBoatMWInputs[i].Value;
-                    // Use initial value if input is 0 and we have a default
-                    if (val == 0.0 && _defaultInputValues.TryGetValue(port, out double initVal))
-                        val = initVal;
-                    SetInputPort(port, val);
-                }
+                SetInputPort(kvp.Key, kvp.Value);
             }
         }
     }
