@@ -817,7 +817,7 @@ namespace HoRang2Sea.ViewModels
         {
             //string projectpath = System.IO.Directory.GetParent(System.Environment.CurrentDirectory).Parent.FullName;
             //string path = projectpath + @"\Models\" + fileName;
-            string path = System.IO.Directory.GetCurrentDirectory() + @"\Models\" + fileName;
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"Models\" + fileName;
             return File.OpenRead(path);
         }
 

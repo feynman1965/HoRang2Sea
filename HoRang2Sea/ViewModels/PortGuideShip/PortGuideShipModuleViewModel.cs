@@ -755,7 +755,7 @@ namespace HoRang2Sea.ViewModels
         public Stream GetDataStream(string fileName)
         {
 
-            string path = System.IO.Directory.GetCurrentDirectory() + @"\Models\" + fileName;
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"Models\" + fileName;
             return File.OpenRead(path);
         }
 
