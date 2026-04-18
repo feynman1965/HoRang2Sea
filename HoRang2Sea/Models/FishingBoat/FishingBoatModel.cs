@@ -403,6 +403,20 @@ namespace HoRang2Sea.Models
             {
                 SetInputPort(kvp.Key, kvp.Value);
             }
+
+            // Override mode/layout ports from MWInputs (GUI-selected values)
+            for (int i = 0; i < FishingBoatMWInputs.Count; i++)
+            {
+                if (InputPortMap.TryGetValue(i, out int port))
+                {
+                    string name = FishingBoatMWInputs[i].Name.ToLower();
+                    if (name.Contains("mode") || name.Contains("layout") || name.Contains("design") || name.Contains("control"))
+                    {
+                        double val = FishingBoatMWInputs[i].Value;
+                        if (val != 0.0) SetInputPort(port, val);
+                    }
+                }
+            }
         }
     }
 }
