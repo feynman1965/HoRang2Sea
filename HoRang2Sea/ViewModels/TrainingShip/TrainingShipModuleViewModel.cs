@@ -1059,6 +1059,7 @@ namespace HoRang2Sea.ViewModels
                 {
                     var saveData = VehicleSaveData.Load(dialog.FileName);
                     Database = VehicleSaveData.DeserializeDatabase(saveData.DatabaseXml) ?? Database;
+                    RaisePropertyChanged(nameof(Database));
                     DesignLayout = saveData.DesignLayout;
                     ControlLayout = saveData.ControlLayout;
                     if (!string.IsNullOrEmpty(saveData.DriveModePath) && File.Exists(saveData.DriveModePath))
