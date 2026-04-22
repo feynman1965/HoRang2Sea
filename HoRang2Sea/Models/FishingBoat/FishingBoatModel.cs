@@ -269,7 +269,7 @@ namespace HoRang2Sea.Models
             try
             {
                 Debug.WriteLine("FishingBoat 모델 시작");
-                int Maxiterations = _driveModes != null ? Math.Min(_driveModes.Length, 5000000) : 100000;
+                int Maxiterations = _driveModes != null ? _driveModes.Length : 100000;
                 WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, manualEvent };
 
                 // Start CSV recording
