@@ -274,20 +274,31 @@ namespace HoRang2Sea.ViewModels
         public void SaveProject()
         {
             SaveFileDialog dialog = new SaveFileDialog() { Filter = filter };
-            dialog.ShowDialog();
+            var result = dialog.ShowDialog();
 
-            if (!string.IsNullOrEmpty(dialog.FileName))
+            if (result.HasValue && result.Value && !string.IsNullOrEmpty(dialog.FileName))
             {
                 string filename = dialog.FileName;
-                //solution
-                var solution = App.Container.GetInstance<Solution>();
-                //
-                foreach (var DVM in Workspaces.OfType<DocumentViewModel>())
+                try
                 {
-                    DVM.UpdateToModel();
+                    var solution = App.Container.GetInstance<Solution>();
+                    foreach (var DVM in Workspaces.OfType<DocumentViewModel>())
+                    {
+                        DVM.UpdateToModel();
+                    }
+                    solution.SaveFile(filename);
+                    try { SaveLoadLayoutService?.SaveLayout(Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + ".xml")); } catch { }
+                    BackstageViewService?.Close();
+
+                    if (System.IO.File.Exists(filename))
+                        MessageBox.Show("프로젝트 저장 완료\n" + filename, "Save Project", MessageBoxButton.OK, MessageBoxImage.Information);
+                    else
+                        MessageBox.Show("프로젝트 파일 생성에 실패했습니다.", "Save Project", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-                solution.SaveFile(filename);
-                SaveLoadLayoutService.SaveLayout(Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + ".xml"));
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"프로젝트 저장 실패: {ex.Message}", "Save Project", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

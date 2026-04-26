@@ -50,6 +50,20 @@ namespace HoRang2Sea.Models
 
         public void ExportToCsv(string filePath)
         {
+            ExportToCsv(filePath, 1, -1, -1);
+        }
+
+        /// <summary>
+        /// Export with sampling and time range.
+        /// </summary>
+        /// <param name="filePath">출력 파일</param>
+        /// <param name="stepInterval">N step마다 1번 저장 (1=전체, 10=10step마다, ...)</param>
+        /// <param name="startStep">시작 step (-1=전체 시작)</param>
+        /// <param name="endStep">종료 step (-1=전체 끝)</param>
+        public void ExportToCsv(string filePath, int stepInterval, int startStep, int endStep)
+        {
+            if (stepInterval < 1) stepInterval = 1;
+
             List<double[]> snapshot;
             List<string> headers;
             lock (_csvLock)
@@ -60,11 +74,20 @@ namespace HoRang2Sea.Models
 
             var sb = new StringBuilder();
             sb.AppendLine(string.Join(",", headers));
-            foreach (var row in snapshot)
+            for (int i = 0; i < snapshot.Count; i++)
             {
-                sb.AppendLine(string.Join(",", row.Select(v => v.ToString("G", CultureInfo.InvariantCulture))));
+                int step = (int)snapshot[i][0];
+                if (startStep >= 0 && step < startStep) continue;
+                if (endStep >= 0 && step > endStep) break;
+                if ((step - (startStep < 0 ? 0 : startStep)) % stepInterval != 0) continue;
+                sb.AppendLine(string.Join(",", snapshot[i].Select(v => v.ToString("G", CultureInfo.InvariantCulture))));
             }
             File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
+        }
+
+        public int RecordedStepCount
+        {
+            get { lock (_csvLock) { return _csvResults.Count; } }
         }
         #endregion
 

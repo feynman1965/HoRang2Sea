@@ -1,4 +1,4 @@
-﻿using DevExpress.ClipboardSource.SpreadsheetML;
+using DevExpress.ClipboardSource.SpreadsheetML;
 using DevExpress.Data.Filtering;
 using DevExpress.Diagram.Core;
 using DevExpress.Mvvm;
@@ -1058,8 +1058,23 @@ namespace HoRang2Sea.ViewModels
                 try
                 {
                     var saveData = VehicleSaveData.Load(dialog.FileName);
-                    Database = VehicleSaveData.DeserializeDatabase(saveData.DatabaseXml) ?? Database;
-                    RaisePropertyChanged(nameof(Database));
+                    {
+                        var loadedDb = VehicleSaveData.DeserializeDatabase(saveData.DatabaseXml);
+                        if (loadedDb != null && Database != null)
+                        {
+                            foreach (var loadedTable in loadedDb.Tables)
+                            {
+                                var existingTable = Database.Tables.FirstOrDefault(t => t.Name == loadedTable.Name);
+                                if (existingTable == null) continue;
+                                foreach (var loadedCol in loadedTable.Columns)
+                                {
+                                    var existingCol = existingTable.Columns.FirstOrDefault(c => c.Name == loadedCol.Name);
+                                    if (existingCol != null) existingCol.Init = loadedCol.Init;
+                                }
+                            }
+                            RaisePropertyChanged(nameof(Database));
+                        }
+                    }
                     DesignLayout = saveData.DesignLayout;
                     ControlLayout = saveData.ControlLayout;
                     if (!string.IsNullOrEmpty(saveData.DriveModePath) && File.Exists(saveData.DriveModePath))
@@ -1098,7 +1113,12 @@ namespace HoRang2Sea.ViewModels
                 };
                 if (dialog.ShowDialog() == true)
                 {
-                    model.ExportToCsv(dialog.FileName);
+                    var optsDlg = new HoRang2Sea.Views.CsvExportOptionsDialog(model.RecordedStepCount)
+                    {
+                        Owner = System.Windows.Application.Current?.MainWindow
+                    };
+                    if (optsDlg.ShowDialog() != true) return;
+                    model.ExportToCsv(dialog.FileName, optsDlg.StepInterval, optsDlg.StartStep, optsDlg.EndStep);
                     System.Windows.MessageBox.Show("CSV 저장 완료", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
             }
