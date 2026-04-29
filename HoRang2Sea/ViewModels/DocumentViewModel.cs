@@ -34,9 +34,7 @@ namespace HoRang2Sea.ViewModels
         public virtual void UDPConnect() { }
         public virtual void UDPDisConnect() { }
         public SolutionItem solutionItem { get; set; }
-        public string Description { get; protected set; }
         public string FilePath { get; protected set; } = "";
-        public string Footer { get; protected set; }
         protected override string WorkspaceName { get { return "DocumentHost"; } }
         public bool OpenFile()
         {

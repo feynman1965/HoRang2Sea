@@ -112,6 +112,8 @@ namespace HoRang2Sea.ViewModels
 
         public virtual IBackstageViewService BackstageViewService { get { return null; } }
 
+        public ICommand BackstageOpenedCommand { get; } = new DelegateCommand(() => { });
+
         //public PropertyViewModel PropertyViewModel { get; private set; }
         //public MonitorViewModel MonitorViewModel { get; private set; }
         public ObservableCollection<WorkspaceViewModel> Workspaces

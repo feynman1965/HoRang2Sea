@@ -19,6 +19,9 @@ namespace HoRang2Sea.ViewModels
             set { _targetName = value; }
         }
 
+        public virtual string Description { get; protected set; } = string.Empty;
+        public virtual string Footer { get; protected set; } = string.Empty;
+
         public virtual void OpenItemByPath(string path) { }
 
         public virtual void OpenItemByItem(SolutionItem item) { }
