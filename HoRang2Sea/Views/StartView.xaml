@@ -106,21 +106,21 @@
                                 <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
                                         Tag="Fishing Boat" MouseLeftButtonUp="Tutorial_Click">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/38-fishing-boat.svg" Width="24" Height="24"/>
+                                        <dx:DXImage Source="/Resource/Vehiclesflat/56-FishingBoat.svg" Width="24" Height="24"/>
                                         <TextBlock Text="Fishing Boat" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
                                         Tag="Port Guide Ship" MouseLeftButtonUp="Tutorial_Click">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/37-liner.svg" Width="24" Height="24"/>
+                                        <dx:DXImage Source="/Resource/Vehiclesflat/57-PortGuideShip.svg" Width="24" Height="24"/>
                                         <TextBlock Text="Port Guide Ship" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Width="110" Height="58" CornerRadius="5" Background="#5566AA" Margin="0,0,6,6" Cursor="Hand"
                                         Tag="Training Ship" MouseLeftButtonUp="Tutorial_Click">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <dx:DXImage Source="/Resource/Vehiclesflat/36-tanker.svg" Width="24" Height="24"/>
+                                        <dx:DXImage Source="/Resource/Vehiclesflat/55-TrainingShip.svg" Width="24" Height="24"/>
                                         <TextBlock Text="Training Ship" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
