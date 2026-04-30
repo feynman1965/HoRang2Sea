@@ -125,6 +125,14 @@
       </Columns>
     </TableDefinition>
 
+    <TableDefinition Name="Layout" PositionX="2400" PositionY="700">
+      <Columns>
+        <ColumnDefinition TableName="Layout" Name="Mode" Init = "1" min = "0" max = "10" digit ="2" unit="-"/>
+        <ColumnDefinition TableName="Layout" Name="Design_Layout" Init = "0" min = "0" max = "1" digit ="1" unit="-"/>
+        <ColumnDefinition TableName="Layout" Name="Control_Layout" Init = "0" min = "0" max = "1" digit ="1" unit="-"/>
+      </Columns>
+    </TableDefinition>
+
   </Tables>
 
 

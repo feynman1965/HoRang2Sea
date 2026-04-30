@@ -748,7 +748,24 @@ namespace HoRang2Sea.ViewModels
             using (var stream = GetDataStream(@"PortGuideShipModel.xml"))
             {
                 var serializer = new XmlSerializer(typeof(DatabaseDefinition));
-                return (DatabaseDefinition)serializer.Deserialize(stream);
+                var database = (DatabaseDefinition)serializer.Deserialize(stream);
+
+                if (database != null && database.Tables != null)
+                {
+                    var layoutTable = database.Tables.FirstOrDefault(t => t.Name == "Layout");
+                    if (layoutTable != null && layoutTable.Columns != null)
+                    {
+                        foreach (var column in layoutTable.Columns)
+                        {
+                            if (column.Name == "Mode" || column.Name == "Design_Layout" || column.Name == "Control_Layout")
+                            {
+                                column.IsVisible = false;
+                            }
+                        }
+                    }
+                }
+
+                return database;
             }
         }
 
@@ -1236,5 +1253,17 @@ namespace HoRang2Sea.ViewModels
             dialog.ShowDialog();
         }
 
+        private void SyncLayoutToDatabase()
+        {
+            if (Database == null || Database.Tables == null) return;
+            var layoutTable = Database.Tables.FirstOrDefault(t => t.Name == "Layout");
+            if (layoutTable == null) return;
+            var modeCol = layoutTable.Columns.FirstOrDefault(c => c.Name == "Mode");
+            var designCol = layoutTable.Columns.FirstOrDefault(c => c.Name == "Design_Layout");
+            var controlCol = layoutTable.Columns.FirstOrDefault(c => c.Name == "Control_Layout");
+            if (modeCol != null) modeCol.Init = "1";
+            if (designCol != null) designCol.Init = DesignLayout.ToString();
+            if (controlCol != null) controlCol.Init = ControlLayout.ToString();
+        }
     }
 }
