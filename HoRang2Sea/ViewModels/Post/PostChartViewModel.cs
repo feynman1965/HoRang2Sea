@@ -295,9 +295,9 @@ namespace HoRang2Sea.ViewModels
                 AutoRange = AutoRange.Always,
                 Id = XAxis,
                 AxisAlignment = AxisAlignment.Bottom,
-                AxisTitle = XAxis,
+                AxisTitle = "Time [sec]",
                 DrawMajorBands = false,
-                TextFormatting = "0.00#",
+                TextFormatting = "0.00",
                 VisibleRange = new DoubleRange(0, 1000),
                 BorderBrush = new SolidColorBrush(Colors.CadetBlue)
             };
@@ -311,10 +311,11 @@ namespace HoRang2Sea.ViewModels
                 var yNumAxis = new NumericAxisViewModel
                 {
                     AutoRange = AutoRange.Always,
-                    AxisTitle = YAxis,
+                    AxisAlignment = AxisAlignment.Left,
+                    AxisTitle = Chartitem,
                     DrawMajorBands = true,
                     BorderThickness = ythick,
-                    TextFormatting = "0.0#",
+                    TextFormatting = "0.000",
                     Id = YAxis,
                 };
                 YAxes.Add(yNumAxis);
