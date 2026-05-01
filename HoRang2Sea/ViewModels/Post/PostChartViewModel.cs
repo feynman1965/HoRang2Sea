@@ -305,6 +305,14 @@ namespace HoRang2Sea.ViewModels
 
             Thickness ythick = new Thickness(0, 0, 1, 0);
 
+            Color[] fixedPalette = new Color[]
+            {
+                Color.FromRgb(31, 119, 180),   // Blue
+                Color.FromRgb(214, 39, 40),    // Red
+                Color.FromRgb(44, 160, 44),    // Green
+                Color.FromRgb(255, 127, 14)    // Orange
+            };
+            int colorIdx = 0;
             foreach (var Chartitem in ChartYItems.Distinct())
             {
                 string YAxis = Chartitem + "Y";
@@ -326,19 +334,19 @@ namespace HoRang2Sea.ViewModels
                 // FifoCapacity 제거: 데이터가 0부터 쌓이도록 함 (롤링 윈도우 비활성화)
                 lineData.Add(newLineData);
 
-                Random random = new Random();
-                Color randomColor = Color.FromArgb(255, Convert.ToByte(random.Next(256)), Convert.ToByte(random.Next(256)), Convert.ToByte(random.Next(256)));
+                Color seriesColor = fixedPalette[colorIdx % fixedPalette.Length];
 
                 var newRenderableSeries = new LineRenderableSeriesViewModel
                 {
                     StrokeThickness = 3,
-                    Stroke = randomColor,
+                    Stroke = seriesColor,
                     DataSeries = newLineData,
                     YAxisId = YAxis,
                     XAxisId = XAxis,
                 };
 
                 RenderableSeries.Add(newRenderableSeries);
+                colorIdx++;
             }
         }
 

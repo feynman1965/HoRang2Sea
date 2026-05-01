@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HoRang2Sea.Views.FishingBoatModuleView"
+<UserControl x:Class="HoRang2Sea.Views.FishingBoatModuleView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -265,7 +265,7 @@
 
                 <dxr:RibbonPageGroup Caption="Panels" ShowCaptionButton="False">
                     <dxb:BarCheckItem Name="chkVelocityProfile"
-                       Content="Velocity Profile"
+                       Content="Profile"
                        Glyph="{dx:DXImage 'SvgImages/Chart/LineChart.svg'}"
                        IsChecked="{Binding IsVelocityProfileVisible, Mode=TwoWay}"
                        RibbonStyle="SmallWithText" />
@@ -399,7 +399,7 @@
                         </dxdiag:DiagramControl>
                     </dxdo:DocumentPanel>
                     <dxdo:DocumentPanel x:Name="velocityProfilePanel"
-                        Caption="Velocity Profile"
+                        Caption="Profile"
                         Loaded="VelocityProfilePanel_Loaded"
                         Visibility="{Binding IsVelocityProfileVisible, Converter={StaticResource BoolToVisConverter}}">
                         <!-- Content will be added via code-behind -->

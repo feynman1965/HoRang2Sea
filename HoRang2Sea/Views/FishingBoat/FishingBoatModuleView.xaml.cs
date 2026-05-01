@@ -1,4 +1,4 @@
-﻿using DevExpress.Data.Filtering;
+using DevExpress.Data.Filtering;
 using DevExpress.Data.Filtering.Helpers;
 using DevExpress.Diagram.Core;
 using DevExpress.Xpf.Core;
@@ -117,13 +117,20 @@ namespace HoRang2Sea.Views
                 {
                     lineSeries.DataSeries = viewModel.VelocityLineDataSeries;
 
-                    // 데이터에 따라 x축 범위 설정
-                    if (viewModel.VelocityLineDataSeries.Count > 0)
+                    // 데이터에 따라 x축/y축 범위 자동 설정
+                    // X축: 데이터 길이 × 0.001 (1줄 = 1ms = 0.001sec)
+                    int len = viewModel.VelocityLineDataSeries.Count;
+                    if (len > 0)
                     {
-                        double minX = viewModel.VelocityLineDataSeries.XValues.First() - 10;
-                        double maxX = viewModel.VelocityLineDataSeries.XValues.Last() + 10;
-                        xAxis.VisibleRange = new DoubleRange(minX, maxX);
+                        xAxis.VisibleRange = new DoubleRange(0, len * 0.001);
                     }
+                    // Y축: data max × 1.1 (10% 여유)
+                    double dataMax = 0;
+                    foreach (var v in viewModel.VelocityLineDataSeries.YValues)
+                    {
+                        if (v > dataMax) dataMax = v;
+                    }
+                    if (dataMax > 0) yAxis.VisibleRange = new DoubleRange(0, dataMax * 1.1);
                 }
 
                 // Renderable Series 추가

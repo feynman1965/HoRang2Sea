@@ -380,7 +380,7 @@ namespace HoRang2Sea.ViewModels
                 // 시간 축 생성 (예: 인덱스를 시간으로 사용)
                 for (int i = 0; i < _uploadedVelocityLines.Length; i++)
                 {
-                    double time = i; // 필요에 따라 시간 값을 조정하세요.
+                    double time = i * 0.001; // 1 step = 0.001 sec // 필요에 따라 시간 값을 조정하세요.
                     double velocity = _uploadedVelocityLines[i];
                     VelocityLineDataSeries.Append(time, velocity);
                 }
