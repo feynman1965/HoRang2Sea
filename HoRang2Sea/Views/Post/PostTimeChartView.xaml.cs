@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,5 +29,19 @@ namespace HoRang2Sea.Views
         {
             //UserToolbar.TargetSurface = "{Binding Source={x:Reference Name=sciChart1}}"
         }
+        private void PopOutChart_Click(object sender, RoutedEventArgs e)
+        {
+            var chartView = new PostTimeChartView { DataContext = this.DataContext };
+            var window = new Window
+            {
+                Title = "Monitor Chart - 큰 화면 (Zoom: 휠/드래그, Reset: 더블클릭)",
+                Width = 1400,
+                Height = 800,
+                Content = chartView,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+            window.Show();
+        }
+
     }
 }
