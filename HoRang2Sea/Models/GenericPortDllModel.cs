@@ -171,6 +171,19 @@ namespace HoRang2Sea.Models
             _hDll = LoadLibrary(dllFileName);
             if (_hDll == IntPtr.Zero)
             {
+                // Fallback: ModelDLLs/ 하위 폴더에서 시도 (작업 디렉터리에 없을 때)
+                var subPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ModelDLLs", dllFileName);
+                if (System.IO.File.Exists(subPath))
+                {
+                    _hDll = LoadLibrary(subPath);
+                    if (_hDll != IntPtr.Zero)
+                    {
+                        Debug.WriteLine($"DLL LoadLibrary 완료 (ModelDLLs/): {subPath} -> {_hDll}");
+                    }
+                }
+            }
+            if (_hDll == IntPtr.Zero)
+            {
                 Debug.WriteLine($"DLL LoadLibrary 실패: {dllFileName} (Error: {Marshal.GetLastWin32Error()})");
                 return false;
             }
