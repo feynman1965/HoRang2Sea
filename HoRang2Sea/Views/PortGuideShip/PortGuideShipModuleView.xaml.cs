@@ -75,7 +75,7 @@ namespace HoRang2Sea.Views
 
                 var yAxis = new NumericAxis
                 {
-                    AxisTitle = "Velocity (km/h)",
+                    AxisTitle = "Profile",
                     FontSize = 14.0, // 폰트 크기 직접 설정
                     Foreground = Brushes.Black, // 전경색 설정
                     TextFormatting = "0.0",
@@ -92,7 +92,7 @@ namespace HoRang2Sea.Views
                 // 그래프 제목 추가
                 var titleAnnotation = new TextAnnotation
                 {
-                    Text = "Velocity Profile", // 그래프 제목
+                    Text = "Profile", // 그래프 제목
                     FontSize = 20,
                     Foreground = Brushes.Black,
                     HorizontalAnchorPoint = HorizontalAnchorPoint.Center,
