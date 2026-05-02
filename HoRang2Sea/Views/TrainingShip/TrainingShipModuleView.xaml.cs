@@ -42,6 +42,8 @@ namespace HoRang2Sea.Views
     /// </summary>
     public partial class TrainingShipModuleView : UserControl
     {
+        private NumericAxis _profileXAxis;
+        private NumericAxis _profileYAxis;
         TableRelationEvaluationOperator evaluationOperator;
         public TrainingShipModuleView()
         {
@@ -111,25 +113,20 @@ namespace HoRang2Sea.Views
                 };
 
                 // ViewModel에서 데이터 시리즈 가져오기
+                _profileXAxis = xAxis;
+                _profileYAxis = yAxis;
+
                 var viewModel = this.DataContext as TrainingShipModuleViewModel;
                 if (viewModel != null)
                 {
                     lineSeries.DataSeries = viewModel.VelocityLineDataSeries;
+                    RefreshProfileAxes(viewModel.VelocityLineDataSeries);
 
-                    // 데이터에 따라 x축/y축 범위 자동 설정
-                    // X축: 데이터 길이 × 0.001 (1줄 = 1ms = 0.001sec)
-                    int len = viewModel.VelocityLineDataSeries.Count;
-                    if (len > 0)
+                    // ViewModel 이벤트 구독 - 데이터 변경 시 axes 자동 갱신
+                    viewModel.ChartRefreshRequested = () =>
                     {
-                        xAxis.VisibleRange = new DoubleRange(0, len * 0.001);
-                    }
-                    // Y축: data max × 1.1 (10% 여유)
-                    double dataMax = 0;
-                    foreach (var v in viewModel.VelocityLineDataSeries.YValues)
-                    {
-                        if (v > dataMax) dataMax = v;
-                    }
-                    if (dataMax > 0) yAxis.VisibleRange = new DoubleRange(0, dataMax * 1.1);
+                        Dispatcher.BeginInvoke(new Action(() => RefreshProfileAxes(viewModel.VelocityLineDataSeries)));
+                    };
                 }
 
                 // Renderable Series 추가
@@ -144,6 +141,20 @@ namespace HoRang2Sea.Views
                 // panel의 Content로 SciChartSurface 설정
                 panel.Content = sciChartSurface;
             }
+        }
+
+        private void RefreshProfileAxes(SciChart.Charting.Model.DataSeries.IDataSeries series)
+        {
+            if (_profileXAxis == null || _profileYAxis == null || series == null) return;
+            int len = series.Count;
+            if (len > 0) _profileXAxis.VisibleRange = new DoubleRange(0, len * 0.001);
+            double dataMax = 0;
+            if (series is SciChart.Charting.Model.DataSeries.XyDataSeries<double, double> xy)
+            {
+                foreach (var v in xy.YValues)
+                    if (v > dataMax) dataMax = v;
+            }
+            if (dataMax > 0) _profileYAxis.VisibleRange = new DoubleRange(0, dataMax * 1.1);
         }
 
     }

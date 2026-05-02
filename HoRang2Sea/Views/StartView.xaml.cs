@@ -1,4 +1,4 @@
-﻿using DevExpress.Xpf.LayoutControl;
+using DevExpress.Xpf.LayoutControl;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,6 +26,20 @@ namespace HoRang2Sea.Views
         public StartView()
         {
             InitializeComponent();
+            // mp4 절대경로 설정 (작업 디렉터리 차이로 인한 영상 미표시 문제 해결)
+            this.Loaded += (s, e) =>
+            {
+                try
+                {
+                    var moviePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StartMovie.mp4");
+                    if (System.IO.File.Exists(moviePath) && myMediaElement != null)
+                    {
+                        myMediaElement.Source = new Uri(moviePath, UriKind.Absolute);
+                        myMediaElement.Play();
+                    }
+                }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"StartMovie load failed: {ex.Message}"); }
+            };
         }
 
         private void Tile_Click_1(object sender, EventArgs e)
