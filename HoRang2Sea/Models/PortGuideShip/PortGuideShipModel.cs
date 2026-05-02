@@ -317,6 +317,7 @@ namespace HoRang2Sea.Models
 
         public void Calculate()
         {
+            ResetNaNWarning(); // 새 시뮬 시작 시 NaN 플래그 리셋 (이전 시뮬 NaN 잔존 방지)
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
