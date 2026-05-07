@@ -406,15 +406,16 @@ namespace HoRang2Sea.Models
             }
 
             // Override mode/layout ports from MWInputs (GUI-selected values)
+            // Skip *_profile placeholders — filled per step in RunWithCancellation
             for (int i = 0; i < FishingBoatMWInputs.Count; i++)
             {
                 if (InputPortMap.TryGetValue(i, out int port))
                 {
                     string name = FishingBoatMWInputs[i].Name.ToLower();
+                    if (name.Contains("_profile")) continue;
                     if (name.Contains("mode") || name.Contains("layout") || name.Contains("design") || name.Contains("control"))
                     {
-                        double val = FishingBoatMWInputs[i].Value;
-                        if (val != 0.0) SetInputPort(port, val);
+                        SetInputPort(port, FishingBoatMWInputs[i].Value);
                     }
                 }
             }

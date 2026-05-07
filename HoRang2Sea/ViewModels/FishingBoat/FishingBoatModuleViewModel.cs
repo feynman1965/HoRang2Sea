@@ -35,6 +35,23 @@ namespace HoRang2Sea.ViewModels
 {
     public partial class FishingBoatModuleViewModel : DocumentViewModel
     {
+        private bool _layoutDialogOpen = false;
+
+        // 차량 선택 시 자동으로 레이아웃 다이얼로그 표시 (재진입 방지)
+        public void ShowLayoutSelectionDialog()
+        {
+            if (_layoutDialogOpen) return;
+            _layoutDialogOpen = true;
+            try { ShowLayoutSelectionDialogInternal(); }
+            finally { _layoutDialogOpen = false; }
+        }
+
+        public override void OpenItemByItem(SolutionItem item)
+        {
+            ShowLayoutSelectionDialog();
+            base.OpenItemByItem(item);
+        }
+
         public DatabaseDefinition Database { get; set; }
         public MainViewModel MainViewModel { get; set; }
         public ObservableCollection<ColumnDefinition> Data { get; set; }
@@ -1281,8 +1298,8 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
-        // 레이아웃 선택 다이얼로그 표시
-        public void ShowLayoutSelectionDialog()
+        // 레이아웃 선택 다이얼로그 표시 (실제 구현)
+        private void ShowLayoutSelectionDialogInternal()
         {
             var dialog = new System.Windows.Window
             {
