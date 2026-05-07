@@ -236,3 +236,6 @@ __pycache__/
 # DLL files
 *.dll
 *.exe
+
+# 인트로 영상은 GitHub 100MB 제한 초과로 git에는 안 올림. 프로젝트 폴더에 수동 배치.
+*.mp4
