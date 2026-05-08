@@ -219,47 +219,7 @@
                            ToolbarShowMode="Default"
                            IsSimplified="True"
                            >
-            <dxr:RibbonControl.ToolbarItems>
-                <dxr:RibbonSpacingSelectorItemLink BarItemName="spacingSelector" />
-                <dxb:BarItemLink BarItemName="bPlay" VerticalAlignment="Center"/>
-                <dxb:BarItemLink BarItemName="bPause" VerticalAlignment="Center"/>
-                <dxb:BarItemLink BarItemName="bNextStep" VerticalAlignment="Center"/>
-                <dxb:BarItemLink BarItemName="bStop" VerticalAlignment="Center"/>
-                <dxb:BarItemLink BarItemName="bRedo" VerticalAlignment="Center"/>
-                <dxb:BarItemLink BarItemName="bSetStep" VerticalAlignment="Center"/>
-                <dxb:BarItemLink BarItemName="bSave" VerticalAlignment="Center"/>
-            </dxr:RibbonControl.ToolbarItems>
             <dxr:RibbonPage Caption="Monitor">
-                <dxr:RibbonPageGroup Caption="File Operations" ShowCaptionButton="False">
-                    <dxb:BarButtonItem Name="bLoadFile"
-                           Content="Load Profile"
-                           Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=DarkBlue}"
-                           Command="{Binding UploadVelocityCommand}" 
-                           Hint=""
-                           RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bExportCsv"
-                           Content="Export CSV"
-                           Glyph="{iconPacks:IoniconsImage Kind=DownloadiOS,Brush=Green}"
-                           Command="{Binding OnExportCsvButtonCommand}"
-                           Hint="Export simulation results to CSV"
-                           RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bRemoveText"
-                           Content="Remove Text (deault)"
-                           Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=SkyBlue}"
-                           Command="{Binding RemoveTextCommand}"
-                           RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bSaveVehicle"
-                           Content="Save Config"
-                           Glyph="{iconPacks:IoniconsImage Kind=SaveiOS,Brush=DarkGreen}"
-                           Command="{Binding OnClickSaveButtonCommand}"
-                           RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bLoadVehicle"
-                           Content="Load Config"
-                           Glyph="{iconPacks:IoniconsImage Kind=FolderiOS,Brush=DarkOrange}"
-                           Command="{Binding OnClickLoadButtonCommand}"
-                           RibbonStyle="SmallWithText" />
-                </dxr:RibbonPageGroup>
-
                 <dxr:RibbonPageGroup Caption="Player" ShowCaptionButton="False" SmallGlyph="{iconPacks:FontistoImage Kind=Equalizer}">
                     <dxb:BarButtonItem Name="bPlay"
                        Content="Run"
@@ -299,6 +259,36 @@
                                        RibbonStyle="SmallWithText" />
                     !-->
 
+                </dxr:RibbonPageGroup>
+
+                <dxr:RibbonPageGroup Caption="File Operations" ShowCaptionButton="False">
+                    <dxb:BarButtonItem Name="bSaveVehicle"
+                           Content="Save Config"
+                           Glyph="{iconPacks:IoniconsImage Kind=SaveiOS,Brush=DarkGreen}"
+                           Command="{Binding OnClickSaveButtonCommand}"
+                           RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Name="bLoadVehicle"
+                           Content="Load Config"
+                           Glyph="{iconPacks:IoniconsImage Kind=FolderiOS,Brush=DarkOrange}"
+                           Command="{Binding OnClickLoadButtonCommand}"
+                           RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Name="bLoadFile"
+                           Content="Load Profile"
+                           Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=DarkBlue}"
+                           Command="{Binding UploadVelocityCommand}" 
+                           Hint=""
+                           RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Name="bExportCsv"
+                           Content="Export CSV"
+                           Glyph="{iconPacks:IoniconsImage Kind=DownloadiOS,Brush=Green}"
+                           Command="{Binding OnExportCsvButtonCommand}"
+                           Hint="Export simulation results to CSV"
+                           RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Name="bRemoveText"
+                           Content="Remove Text (deault)"
+                           Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=SkyBlue}"
+                           Command="{Binding RemoveTextCommand}"
+                           RibbonStyle="SmallWithText" />
                 </dxr:RibbonPageGroup>
 
                 <dxr:RibbonPageGroup Caption="Layout" ShowCaptionButton="False">
