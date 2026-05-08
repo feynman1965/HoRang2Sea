@@ -286,6 +286,68 @@ namespace HoRang2Sea.ViewModels
             set { if (_isXYChartVisible != value) { _isXYChartVisible = value; RaisePropertyChanged(nameof(IsXYChartVisible)); } }
         }
 
+        // ===== 입력 / 그래프 모드 segmented 토글 =====
+        private bool _isInputMode = true;
+        public bool IsInputMode
+        {
+            get => _isInputMode;
+            set
+            {
+                if (_isInputMode != value)
+                {
+                    _isInputMode = value;
+                    RaisePropertyChanged(nameof(IsInputMode));
+                    if (value && IsGraphMode) IsGraphMode = false;
+                }
+            }
+        }
+
+        private bool _isGraphMode = false;
+        public bool IsGraphMode
+        {
+            get => _isGraphMode;
+            set
+            {
+                if (_isGraphMode != value)
+                {
+                    _isGraphMode = value;
+                    RaisePropertyChanged(nameof(IsGraphMode));
+                    if (value && IsInputMode) IsInputMode = false;
+                }
+            }
+        }
+
+        // 그래프 내부 y-t / x-y 토글
+        private bool _isYTChartActive = true;
+        public bool IsYTChartActive
+        {
+            get => _isYTChartActive;
+            set
+            {
+                if (_isYTChartActive != value)
+                {
+                    _isYTChartActive = value;
+                    RaisePropertyChanged(nameof(IsYTChartActive));
+                    if (value && IsXYChartActive) IsXYChartActive = false;
+                }
+            }
+        }
+
+        private bool _isXYChartActive = false;
+        public bool IsXYChartActive
+        {
+            get => _isXYChartActive;
+            set
+            {
+                if (_isXYChartActive != value)
+                {
+                    _isXYChartActive = value;
+                    RaisePropertyChanged(nameof(IsXYChartActive));
+                    if (value && IsYTChartActive) IsYTChartActive = false;
+                }
+            }
+        }
+
         // -------- Chart ViewModels -------
         public PostGridViewModel GridViewModel { get; private set; }
         public PostTimeChartViewModel ChartViewModel { get; private set; }

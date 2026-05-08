@@ -153,6 +153,60 @@
             <local:PropertyView/>
         </DataTemplate>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+
+        <!-- Segmented Toggle Button Style -->
+        <Style x:Key="SegmentedFirstStyle" TargetType="RadioButton">
+            <Setter Property="Padding" Value="24,7"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="border" Background="White" BorderBrush="#999"
+                                BorderThickness="1,1,0,1" CornerRadius="4,0,0,4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              TextElement.Foreground="#444"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1976D2"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SegmentedLastStyle" TargetType="RadioButton" BasedOn="{StaticResource SegmentedFirstStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="border" Background="White" BorderBrush="#999"
+                                BorderThickness="1" CornerRadius="0,4,4,0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              TextElement.Foreground="#444"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1976D2"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <DockPanel>
@@ -267,7 +321,22 @@
                 </dxr:RibbonPage>
             </dxr:RibbonPageCategory>
         </dxr:RibbonControl>
-        <dxdo:DockLayoutManager FloatingMode="Desktop" ShowFloatWindowsInTaskbar="False" CloseFloatWindowsOnManagerUnloading="True">
+        <!-- ===== Segmented Mode Toggle: 입력 / 그래프 ===== -->
+        <Border DockPanel.Dock="Top" Padding="0,8" Background="#FAFAFA" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <RadioButton GroupName="ViewMode" Content="입력"
+                             IsChecked="{Binding IsInputMode, Mode=TwoWay}"
+                             Style="{StaticResource SegmentedFirstStyle}"/>
+                <RadioButton GroupName="ViewMode" Content="그래프"
+                             IsChecked="{Binding IsGraphMode, Mode=TwoWay}"
+                             Style="{StaticResource SegmentedLastStyle}"/>
+            </StackPanel>
+        </Border>
+
+        <Grid>
+        <!-- ===== Input Mode: Diagram + Velocity + Property ===== -->
+        <dxdo:DockLayoutManager FloatingMode="Desktop" ShowFloatWindowsInTaskbar="False" CloseFloatWindowsOnManagerUnloading="True"
+                                Visibility="{Binding IsInputMode, Converter={StaticResource BoolToVisConverter}}">
             <dxdo:LayoutGroup Margin="0" Orientation="Horizontal">
                 <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="*">
                     <dxdo:DocumentPanel x:Name="diagramPanel">
@@ -378,18 +447,46 @@
                         <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource PropertyTemplate}" />
                     </dxdo:LayoutPanel>
                 </dxdo:LayoutGroup>
-                <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="*" Background="White">
-                    <dxdo:DocumentPanel x:Name="gridPanel" Caption="Grid Properties" Visibility="{Binding IsGridVisible, Converter={StaticResource BoolToVisConverter}}">
-                        <local:PostGridView DataContext="{Binding GridViewModel}"/>
-                    </dxdo:DocumentPanel>
-                    <dxdo:DocumentPanel x:Name="timeChartPanel" Caption="Time Chart" Visibility="{Binding IsTimeChartVisible, Converter={StaticResource BoolToVisConverter}}">
-                        <local:PostTimeChartView DataContext="{Binding ChartViewModel}"/>
-                    </dxdo:DocumentPanel>
-                    <dxdo:DocumentPanel x:Name="xyChartPanel" Caption="XY Chart" Visibility="{Binding IsXYChartVisible, Converter={StaticResource BoolToVisConverter}}">
-                        <local:PostChartView DataContext="{Binding XYChartViewModel}"/>
-                    </dxdo:DocumentPanel>
-                </dxdo:LayoutGroup>
             </dxdo:LayoutGroup>
         </dxdo:DockLayoutManager>
+
+        <!-- ===== Graph Mode: Chart (y-t/x-y 토글) + Grid ===== -->
+        <Grid Visibility="{Binding IsGraphMode, Converter={StaticResource BoolToVisConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="320"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 차트 영역 (좌, y-t/x-y 토글 포함) -->
+            <DockPanel Grid.Column="0">
+                <Border DockPanel.Dock="Top" Padding="6,4" Background="#F8F8F8" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <RadioButton GroupName="ChartType" Content="y-t"
+                                     IsChecked="{Binding IsYTChartActive, Mode=TwoWay}"
+                                     Style="{StaticResource SegmentedFirstStyle}"
+                                     Padding="14,4" FontSize="12"/>
+                        <RadioButton GroupName="ChartType" Content="x-y"
+                                     IsChecked="{Binding IsXYChartActive, Mode=TwoWay}"
+                                     Style="{StaticResource SegmentedLastStyle}"
+                                     Padding="14,4" FontSize="12"/>
+                    </StackPanel>
+                </Border>
+                <Grid>
+                    <ContentControl Visibility="{Binding IsYTChartActive, Converter={StaticResource BoolToVisConverter}}">
+                        <local:PostTimeChartView DataContext="{Binding ChartViewModel}"/>
+                    </ContentControl>
+                    <ContentControl Visibility="{Binding IsXYChartActive, Converter={StaticResource BoolToVisConverter}}">
+                        <local:PostChartView DataContext="{Binding XYChartViewModel}"/>
+                    </ContentControl>
+                </Grid>
+            </DockPanel>
+
+            <GridSplitter Grid.Column="1" Width="3" Background="#E0E0E0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+            <!-- Grid 영역 (우, 변수값 표시) -->
+            <local:PostGridView Grid.Column="2" DataContext="{Binding GridViewModel}"/>
+        </Grid>
+        </Grid>
     </DockPanel>
 </UserControl>
