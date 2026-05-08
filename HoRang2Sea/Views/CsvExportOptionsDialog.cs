@@ -3,6 +3,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace HoRang2Sea.Views
 {
@@ -11,12 +13,16 @@ namespace HoRang2Sea.Views
     /// </summary>
     public class CsvExportOptionsDialog : Window
     {
+        private static readonly Brush SkyBlue = new SolidColorBrush(Color.FromRgb(0x4F, 0xC3, 0xF7));   // Light Sky Blue
+        private static readonly Brush SkyBlueDeep = new SolidColorBrush(Color.FromRgb(0x29, 0xB6, 0xF6));// Sky Blue
+        private static readonly Brush BorderGray = new SolidColorBrush(Color.FromRgb(0xBD, 0xBD, 0xBD));
+
         private readonly TextBox _stepIntervalBox;
         private readonly TextBox _startStepBox;
         private readonly TextBox _endStepBox;
         private readonly TextBox _stepsPerSecondBox;
-        private readonly RadioButton _modeStepRadio;
-        private readonly RadioButton _modeTimeRadio;
+        private readonly CheckBox _modeStepCheck;
+        private readonly CheckBox _modeTimeCheck;
         private readonly List<CheckBox> _varCheckBoxes = new();
 
         public int StepInterval { get; private set; } = 1;
@@ -36,13 +42,16 @@ namespace HoRang2Sea.Views
             MinWidth = 420;
             MinHeight = 520;
 
+            // Sky-blue square checkbox style 등록 (다이얼로그 내 모든 CheckBox에 적용)
+            Resources.Add(typeof(CheckBox), MakeSkyBlueCheckBoxStyle());
+
             var root = new Grid { Margin = new Thickness(15) };
-            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });   // 총 step
-            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });   // 시간 범위
-            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });   // 샘플링 방식
-            root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); // 변수 선택
-            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });   // hint
-            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });   // 버튼
+            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
             // ---- 0: 총 step ----
             var totalLabel = new TextBlock
@@ -63,32 +72,31 @@ namespace HoRang2Sea.Views
             Grid.SetRow(rangeBox, 1);
             root.Children.Add(rangeBox);
 
-            // ---- 2: 샘플링 방식 토글 ----
-            var sampleBox = new GroupBox { Header = "샘플링 방식", Margin = new Thickness(0, 0, 0, 8) };
+            // ---- 2: 샘플링 방식 (CheckBox 2개, 양자택일 보장 + 둘 다 해제 시 전체 저장) ----
+            var sampleBox = new GroupBox { Header = "샘플링 방식 (둘 다 해제 시 전체 저장)", Margin = new Thickness(0, 0, 0, 8) };
             var sampleGrid = new Grid();
             sampleGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             sampleGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            // Step 기준 라디오
-            _modeStepRadio = new RadioButton
+            // Step 기준
+            _modeStepCheck = new CheckBox
             {
                 Content = "Step 기준 — N step마다 저장",
-                IsChecked = true,
                 FontWeight = FontWeights.SemiBold,
                 Margin = new Thickness(4, 6, 4, 2)
             };
             var stepInner = MakeFormGrid();
             AddFormRow(stepInner, 0, "Step 간격 (1=전체, 10=10step)", out _stepIntervalBox, "1");
             stepInner.Margin = new Thickness(24, 0, 4, 6);
-            stepInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeStepRadio });
+            stepInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeStepCheck });
             var stepStack = new StackPanel();
-            stepStack.Children.Add(_modeStepRadio);
+            stepStack.Children.Add(_modeStepCheck);
             stepStack.Children.Add(stepInner);
             Grid.SetRow(stepStack, 0);
             sampleGrid.Children.Add(stepStack);
 
-            // 시간 기준 라디오
-            _modeTimeRadio = new RadioButton
+            // 시간 기준
+            _modeTimeCheck = new CheckBox
             {
                 Content = "시간 기준 — 1초 간격으로 저장",
                 FontWeight = FontWeights.SemiBold,
@@ -97,12 +105,16 @@ namespace HoRang2Sea.Views
             var timeInner = MakeFormGrid();
             AddFormRow(timeInner, 0, "Steps per second (DLL 보통 100)", out _stepsPerSecondBox, "100");
             timeInner.Margin = new Thickness(24, 0, 4, 6);
-            timeInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeTimeRadio });
+            timeInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeTimeCheck });
             var timeStack = new StackPanel();
-            timeStack.Children.Add(_modeTimeRadio);
+            timeStack.Children.Add(_modeTimeCheck);
             timeStack.Children.Add(timeInner);
             Grid.SetRow(timeStack, 1);
             sampleGrid.Children.Add(timeStack);
+
+            // 양자택일: 한쪽 켜면 다른쪽 자동 해제 (둘 다 해제는 허용)
+            _modeStepCheck.Checked += (s, e) => { _modeTimeCheck.IsChecked = false; };
+            _modeTimeCheck.Checked += (s, e) => { _modeStepCheck.IsChecked = false; };
 
             sampleBox.Content = sampleGrid;
             Grid.SetRow(sampleBox, 2);
@@ -128,7 +140,7 @@ namespace HoRang2Sea.Views
             var varStack = new StackPanel { Margin = new Thickness(8, 0, 8, 4) };
             if (availableHeaders != null)
             {
-                foreach (var h in availableHeaders.Skip(1)) // Step 컬럼 제외
+                foreach (var h in availableHeaders.Skip(1))
                 {
                     var cb = new CheckBox { Content = h, IsChecked = true, Margin = new Thickness(2) };
                     _varCheckBoxes.Add(cb);
@@ -176,6 +188,79 @@ namespace HoRang2Sea.Views
             root.Children.Add(btnPanel);
 
             Content = root;
+        }
+
+        // 사각형 + 하늘색 체크 표시
+        private static Style MakeSkyBlueCheckBoxStyle()
+        {
+            var style = new Style(typeof(CheckBox));
+            style.Setters.Add(new Setter(System.Windows.Controls.Control.PaddingProperty, new Thickness(6, 0, 0, 0)));
+
+            var template = new ControlTemplate(typeof(CheckBox));
+            // Root grid: [16x16 box] [content]
+            var grid = new FrameworkElementFactory(typeof(Grid));
+            grid.SetValue(FrameworkElement.SnapsToDevicePixelsProperty, true);
+            grid.SetValue(System.Windows.Controls.Control.BackgroundProperty, Brushes.Transparent);
+
+            var col0 = new FrameworkElementFactory(typeof(ColumnDefinition));
+            col0.SetValue(ColumnDefinition.WidthProperty, GridLength.Auto);
+            var col1 = new FrameworkElementFactory(typeof(ColumnDefinition));
+            col1.SetValue(ColumnDefinition.WidthProperty, new GridLength(1, GridUnitType.Star));
+            grid.AppendChild(col0);
+            grid.AppendChild(col1);
+
+            // Box (Border)
+            var border = new FrameworkElementFactory(typeof(Border), "PART_Box");
+            border.SetValue(FrameworkElement.WidthProperty, 16d);
+            border.SetValue(FrameworkElement.HeightProperty, 16d);
+            border.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
+            border.SetValue(Border.BackgroundProperty, Brushes.White);
+            border.SetValue(Border.BorderBrushProperty, BorderGray);
+            border.SetValue(Border.BorderThicknessProperty, new Thickness(1.5));
+            border.SetValue(Border.CornerRadiusProperty, new CornerRadius(2));
+
+            // 체크 표시 (Path) — 사각형 내부 V 모양 흰색 (켜졌을 때 보임)
+            var checkPath = new FrameworkElementFactory(typeof(Path), "PART_Check");
+            checkPath.SetValue(Path.DataProperty, Geometry.Parse("M 2,5 L 5.5,8.5 L 11,3"));
+            checkPath.SetValue(Shape.StrokeProperty, Brushes.White);
+            checkPath.SetValue(Shape.StrokeThicknessProperty, 2.0);
+            checkPath.SetValue(Shape.StrokeStartLineCapProperty, PenLineCap.Round);
+            checkPath.SetValue(Shape.StrokeEndLineCapProperty, PenLineCap.Round);
+            checkPath.SetValue(Shape.StrokeLineJoinProperty, PenLineJoin.Round);
+            checkPath.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+            checkPath.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
+            checkPath.SetValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+            border.AppendChild(checkPath);
+
+            grid.AppendChild(border);
+
+            // Content
+            var content = new FrameworkElementFactory(typeof(ContentPresenter));
+            content.SetValue(Grid.ColumnProperty, 1);
+            content.SetValue(FrameworkElement.MarginProperty, new Thickness(6, 0, 0, 0));
+            content.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center);
+            content.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
+            grid.AppendChild(content);
+
+            template.VisualTree = grid;
+
+            // Triggers
+            var checkedTrigger = new Trigger { Property = System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, Value = true };
+            checkedTrigger.Setters.Add(new Setter(Border.BackgroundProperty, SkyBlueDeep, "PART_Box"));
+            checkedTrigger.Setters.Add(new Setter(Border.BorderBrushProperty, SkyBlueDeep, "PART_Box"));
+            checkedTrigger.Setters.Add(new Setter(UIElement.VisibilityProperty, Visibility.Visible, "PART_Check"));
+            template.Triggers.Add(checkedTrigger);
+
+            var hoverTrigger = new Trigger { Property = UIElement.IsMouseOverProperty, Value = true };
+            hoverTrigger.Setters.Add(new Setter(Border.BorderBrushProperty, SkyBlue, "PART_Box"));
+            template.Triggers.Add(hoverTrigger);
+
+            var disabledTrigger = new Trigger { Property = UIElement.IsEnabledProperty, Value = false };
+            disabledTrigger.Setters.Add(new Setter(UIElement.OpacityProperty, 0.5));
+            template.Triggers.Add(disabledTrigger);
+
+            style.Setters.Add(new Setter(System.Windows.Controls.Control.TemplateProperty, template));
+            return style;
         }
 
         private static Grid MakeFormGrid()
@@ -227,16 +312,16 @@ namespace HoRang2Sea.Views
                 return false;
             }
 
-            if (_modeTimeRadio.IsChecked == true)
+            if (_modeTimeCheck.IsChecked == true)
             {
                 if (!int.TryParse(_stepsPerSecondBox.Text, out int sps) || sps < 1)
                 {
                     MessageBox.Show("Steps per second는 1 이상의 정수여야 합니다.", "입력 오류", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
-                interval = sps; // 1초당 1 sample
+                interval = sps;
             }
-            else
+            else if (_modeStepCheck.IsChecked == true)
             {
                 if (!string.IsNullOrWhiteSpace(_stepIntervalBox.Text) && !int.TryParse(_stepIntervalBox.Text, out interval))
                 {
@@ -245,6 +330,7 @@ namespace HoRang2Sea.Views
                 }
                 if (interval < 1) interval = 1;
             }
+            // else: 둘 다 해제 → interval = 1 (전체 저장)
 
             StepInterval = interval;
             StartStep = startStep;
