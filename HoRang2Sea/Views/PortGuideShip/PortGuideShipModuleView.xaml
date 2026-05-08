@@ -172,12 +172,12 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#1976D2"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                                <Setter TargetName="border" Property="Background" Value="#546E7A"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#546E7A"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#546E7A"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -196,12 +196,12 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#1976D2"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                                <Setter TargetName="border" Property="Background" Value="#546E7A"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#546E7A"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#1976D2"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#546E7A"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
