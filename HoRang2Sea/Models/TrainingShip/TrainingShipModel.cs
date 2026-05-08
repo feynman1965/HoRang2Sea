@@ -51,7 +51,12 @@ namespace HoRang2Sea.Models
             { 28, 29 }, { 29, 30 }, { 30, 31 }, { 31, 32 }, { 32, 33 }, { 33, 34 }, { 34, 35 }, { 35, 36 }, { 36, 37 },
             { 37, 38 }, { 38, 39 }, { 39, 40 }, { 40, 41 }, { 41, 42 }, { 42, 43 }, { 43, 44 }, { 44, 45 }, { 45, 46 },
             { 46, 47 }, { 47, 48 }, { 48, 49 }, { 49, 50 }, { 50, 51 }, { 51, 52 }, { 52, 53 }, { 53, 54 }, { 54, 55 },
-            { 55, 56 }, { 56, 57 }, { 57, 58 }, { 58, 59 }, { 59, 60 }, { 60, 61 }, { 61, 62 }, { 62, 63 }
+            { 55, 56 }, { 56, 57 }, { 57, 58 }, { 58, 59 }, { 59, 60 }, { 60, 61 }, { 61, 62 }, { 62, 63 },
+            // Layout: Mode/Design는 Sea DLL에 해당 포트 없어 silent no-op,
+            // Control_Layout만 port 65 (mode2)에 실제 매핑됨.
+            { 63, 482 }, // Mode (port 482 not in DLL — silent no-op)
+            { 64, 483 }, // Design_Layout (port 483 not in DLL — silent no-op)
+            { 65, 65 }   // Control_Layout (port 65 = mode2, profiles.json에서 활성화된 유일한 layout 포트)
         };
 
         // Output index -> port number mapping (sequential 1-55)
@@ -163,6 +168,11 @@ namespace HoRang2Sea.Models
             new("Intercooler inlet relative humidity"),
             new("Intercooler inlet coolant temperature"),
             new("Intercooler area"),
+
+            //Layout (Sea DLL은 mode2/port 65 단일 layout만 활성화. Mode/Design은 시각용)
+            new("Mode"),
+            new("Design_Layout"),
+            new("Control_Layout"),
         };
 
         public List<TrainingShipMWDataModel> TrainingShipMWOuts = new()
