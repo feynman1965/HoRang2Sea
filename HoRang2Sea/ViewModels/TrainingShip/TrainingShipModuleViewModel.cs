@@ -1213,12 +1213,12 @@ namespace HoRang2Sea.ViewModels
                 };
                 if (dialog.ShowDialog() == true)
                 {
-                    var optsDlg = new HoRang2Sea.Views.CsvExportOptionsDialog(model.RecordedStepCount)
+                    var optsDlg = new HoRang2Sea.Views.CsvExportOptionsDialog(model.RecordedStepCount, model.RecordedHeaders.ToList())
                     {
                         Owner = System.Windows.Application.Current?.MainWindow
                     };
                     if (optsDlg.ShowDialog() != true) return;
-                    model.ExportToCsv(dialog.FileName, optsDlg.StepInterval, optsDlg.StartStep, optsDlg.EndStep);
+                    model.ExportToCsv(dialog.FileName, optsDlg.StepInterval, optsDlg.StartStep, optsDlg.EndStep, optsDlg.SelectedVariables);
                     System.Windows.MessageBox.Show("CSV 저장 완료", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
             }

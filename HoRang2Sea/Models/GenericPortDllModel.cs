@@ -48,19 +48,27 @@ namespace HoRang2Sea.Models
             get { lock (_csvLock) { return _csvResults.Count > 0; } }
         }
 
+        /// <summary>기록된 변수명 헤더 목록 (Step 컬럼 포함). CsvExportOptionsDialog의 선택 UI에서 사용.</summary>
+        public IReadOnlyList<string> RecordedHeaders
+        {
+            get { lock (_csvLock) { return new List<string>(_csvHeaders); } }
+        }
+
         public void ExportToCsv(string filePath)
         {
-            ExportToCsv(filePath, 1, -1, -1);
+            ExportToCsv(filePath, 1, -1, -1, null);
+        }
+
+        public void ExportToCsv(string filePath, int stepInterval, int startStep, int endStep)
+        {
+            ExportToCsv(filePath, stepInterval, startStep, endStep, null);
         }
 
         /// <summary>
-        /// Export with sampling and time range.
+        /// Export with sampling, time range and optional variable selection.
         /// </summary>
-        /// <param name="filePath">출력 파일</param>
-        /// <param name="stepInterval">N step마다 1번 저장 (1=전체, 10=10step마다, ...)</param>
-        /// <param name="startStep">시작 step (-1=전체 시작)</param>
-        /// <param name="endStep">종료 step (-1=전체 끝)</param>
-        public void ExportToCsv(string filePath, int stepInterval, int startStep, int endStep)
+        /// <param name="selectedVarNames">저장할 변수 이름 목록. null/empty면 전체 저장. Step 컬럼은 항상 포함.</param>
+        public void ExportToCsv(string filePath, int stepInterval, int startStep, int endStep, IList<string> selectedVarNames)
         {
             if (stepInterval < 1) stepInterval = 1;
 
@@ -72,15 +80,37 @@ namespace HoRang2Sea.Models
                 headers = new List<string>(_csvHeaders);
             }
 
+            var selIndices = new List<int> { 0 };
+            var selHeaders = new List<string> { headers[0] };
+            if (selectedVarNames != null && selectedVarNames.Count > 0)
+            {
+                for (int i = 1; i < headers.Count; i++)
+                {
+                    if (selectedVarNames.Contains(headers[i]))
+                    {
+                        selIndices.Add(i);
+                        selHeaders.Add(headers[i]);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 1; i < headers.Count; i++)
+                {
+                    selIndices.Add(i);
+                    selHeaders.Add(headers[i]);
+                }
+            }
+
             var sb = new StringBuilder();
-            sb.AppendLine(string.Join(",", headers));
+            sb.AppendLine(string.Join(",", selHeaders));
             for (int i = 0; i < snapshot.Count; i++)
             {
                 int step = (int)snapshot[i][0];
                 if (startStep >= 0 && step < startStep) continue;
                 if (endStep >= 0 && step > endStep) break;
                 if ((step - (startStep < 0 ? 0 : startStep)) % stepInterval != 0) continue;
-                sb.AppendLine(string.Join(",", snapshot[i].Select(v => v.ToString("G", CultureInfo.InvariantCulture))));
+                sb.AppendLine(string.Join(",", selIndices.Select(idx => snapshot[i][idx].ToString("G", CultureInfo.InvariantCulture))));
             }
             File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
         }
