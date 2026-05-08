@@ -127,7 +127,7 @@ namespace HoRang2Sea.Models
             set
             {
                 if (SetValue(value))
-                    RaisePropertiesChanged(Init);
+                    RaisePropertiesChanged(nameof(Init));
             }
         }
         [XmlAttribute("IsVisible")]

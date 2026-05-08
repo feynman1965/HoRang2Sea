@@ -68,6 +68,8 @@ namespace HoRang2Sea.ViewModels
             IsActive = true;
             if (item.mymodel != null)
                 this.UpdateFromModel<Mymodel>(item.mymodel);
+            // 다른 차량 Status가 남는 문제 방지: 활성화 시 Status를 차량명+Ready로 리셋.
+            try { var mv = App.Container.GetInstance<MainViewModel>(); if (mv != null) mv.Status = $"{item.Name} Ready"; } catch { }
         }
         public virtual void UpdateFromModel<TModel>(TModel model)
         {
