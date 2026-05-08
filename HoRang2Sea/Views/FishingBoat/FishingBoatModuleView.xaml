@@ -162,11 +162,12 @@
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="3,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Border x:Name="border" Background="White" BorderBrush="#999"
-                                BorderThickness="1,1,0,1" CornerRadius="4,0,0,4"
+                                BorderThickness="1" CornerRadius="4"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
                                               TextElement.Foreground="#444"/>
@@ -190,7 +191,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Border x:Name="border" Background="White" BorderBrush="#999"
-                                BorderThickness="1" CornerRadius="0,4,4,0"
+                                BorderThickness="1" CornerRadius="4"
                                 Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
                                               TextElement.Foreground="#444"/>
@@ -351,11 +352,11 @@
         </dxr:RibbonControl>
         <!-- ===== Segmented Mode Toggle: 입력 / 그래프 ===== -->
         <Border DockPanel.Dock="Top" Padding="0,8" Background="#FAFAFA" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <RadioButton GroupName="ViewMode" Content="입력"
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="12,0,0,0">
+                <RadioButton GroupName="ViewMode" Content="Input"
                              IsChecked="{Binding IsInputMode, Mode=TwoWay}"
                              Style="{StaticResource SegmentedFirstStyle}"/>
-                <RadioButton GroupName="ViewMode" Content="그래프"
+                <RadioButton GroupName="ViewMode" Content="Graph"
                              IsChecked="{Binding IsGraphMode, Mode=TwoWay}"
                              Style="{StaticResource SegmentedLastStyle}"/>
             </StackPanel>
