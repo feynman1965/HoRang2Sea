@@ -464,9 +464,9 @@ namespace HoRang2Sea.ViewModels
                     double time = i * 0.001; // 1 step = 0.001 sec // 필요에 따라 시간 값을 조정하세요.
                     double velocity = _uploadedVelocityLines[i];
                     VelocityLineDataSeries.Append(time, velocity);
-
-            ChartRefreshRequested?.Invoke();
                 }
+
+                ChartRefreshRequested?.Invoke();
 
 
             }
