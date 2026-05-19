@@ -38,23 +38,6 @@ namespace HoRang2Sea.ViewModels
 {
     public partial class TrainingShipModuleViewModel : DocumentViewModel
     {
-        private bool _layoutDialogOpen = false;
-
-        // 차량 선택 시 자동으로 레이아웃 다이얼로그 표시 (재진입 방지)
-        public void ShowLayoutSelectionDialog()
-        {
-            if (_layoutDialogOpen) return;
-            _layoutDialogOpen = true;
-            try { ShowLayoutSelectionDialogInternal(); }
-            finally { _layoutDialogOpen = false; }
-        }
-
-        public override void OpenItemByItem(SolutionItem item)
-        {
-            ShowLayoutSelectionDialog();
-            base.OpenItemByItem(item);
-        }
-
         public DatabaseDefinition Database { get; set; }
         public MainViewModel MainViewModel { get; set; }
         public ObservableCollection<ColumnDefinition> Data { get; set; }
@@ -1270,75 +1253,5 @@ namespace HoRang2Sea.ViewModels
             catch (Exception ex) { Debug.WriteLine($"ChartUpdate 오류: {ex.Message}"); }
         }
 
-        private void ShowLayoutSelectionDialogInternal()
-        {
-            var dialog = new System.Windows.Window
-            {
-                Title = "Select Layout - TrainingShip",
-                Width = 700, Height = 680,
-                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
-                ResizeMode = System.Windows.ResizeMode.NoResize,
-                Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 247, 250))
-            };
-
-            var mainGrid = new System.Windows.Controls.Grid { Margin = new System.Windows.Thickness(35) };
-            var headerStack = new System.Windows.Controls.StackPanel { Margin = new System.Windows.Thickness(0, 0, 0, 25) };
-            headerStack.Children.Add(new System.Windows.Controls.TextBlock
-            {
-                Text = "Layout Configuration", FontSize = 26, FontWeight = System.Windows.FontWeights.Bold,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Center
-            });
-
-            var buttonGrid = new System.Windows.Controls.Grid { HorizontalAlignment = System.Windows.HorizontalAlignment.Center };
-            buttonGrid.RowDefinitions.Add(new System.Windows.Controls.RowDefinition());
-            buttonGrid.RowDefinitions.Add(new System.Windows.Controls.RowDefinition());
-            buttonGrid.ColumnDefinitions.Add(new System.Windows.Controls.ColumnDefinition());
-            buttonGrid.ColumnDefinitions.Add(new System.Windows.Controls.ColumnDefinition());
-
-            System.Windows.Controls.Button CreateBtn(string text, string desc, int dv, int cv)
-            {
-                var btn = new System.Windows.Controls.Button { Width = 280, Height = 150, Margin = new System.Windows.Thickness(12), Background = System.Windows.Media.Brushes.White };
-                var stack = new System.Windows.Controls.StackPanel { HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Center };
-                stack.Children.Add(new System.Windows.Controls.TextBlock { Text = text, FontSize = 18, FontWeight = System.Windows.FontWeights.Bold, HorizontalAlignment = System.Windows.HorizontalAlignment.Center });
-                stack.Children.Add(new System.Windows.Controls.TextBlock { Text = desc, FontSize = 12, HorizontalAlignment = System.Windows.HorizontalAlignment.Center });
-                btn.Content = stack;
-                btn.Click += (s, e) =>
-                {
-                    // 시뮬레이션 실행 중이거나 일시정지 상태면 먼저 정지
-                    if (BaseMWModel is TrainingShipMW mw && mw.CalculateThread != null && (mw.CalculateThread.IsAlive || mw.IsPause))
-                    {
-                        mw.StopCalculation();
-                    }
-                    DesignLayout = dv; ControlLayout = cv; SyncLayoutToDatabase(); UpdateLayoutVisibility(); dialog.Close();
-                };
-                return btn;
-            }
-
-            var btn1 = CreateBtn("Default Layout", "Design: 0 | Control: 0", 0, 0); System.Windows.Controls.Grid.SetRow(btn1, 0); System.Windows.Controls.Grid.SetColumn(btn1, 0);
-            var btn2 = CreateBtn("Control Mode", "Design: 0 | Control: 1", 0, 1); System.Windows.Controls.Grid.SetRow(btn2, 0); System.Windows.Controls.Grid.SetColumn(btn2, 1);
-            var btn3 = CreateBtn("Design Mode", "Design: 1 | Control: 0", 1, 0); System.Windows.Controls.Grid.SetRow(btn3, 1); System.Windows.Controls.Grid.SetColumn(btn3, 0);
-            var btn4 = CreateBtn("Full Configuration", "Design: 1 | Control: 1", 1, 1); System.Windows.Controls.Grid.SetRow(btn4, 1); System.Windows.Controls.Grid.SetColumn(btn4, 1);
-
-            buttonGrid.Children.Add(btn1); buttonGrid.Children.Add(btn2); buttonGrid.Children.Add(btn3); buttonGrid.Children.Add(btn4);
-
-            var container = new System.Windows.Controls.StackPanel();
-            container.Children.Add(headerStack); container.Children.Add(buttonGrid);
-            mainGrid.Children.Add(container);
-            dialog.Content = mainGrid;
-            dialog.ShowDialog();
-        }
-
-        private void SyncLayoutToDatabase()
-        {
-            if (Database == null || Database.Tables == null) return;
-            var layoutTable = Database.Tables.FirstOrDefault(t => t.Name == "Layout");
-            if (layoutTable == null) return;
-            var modeCol = layoutTable.Columns.FirstOrDefault(c => c.Name == "Mode");
-            var designCol = layoutTable.Columns.FirstOrDefault(c => c.Name == "Design_Layout");
-            var controlCol = layoutTable.Columns.FirstOrDefault(c => c.Name == "Control_Layout");
-            if (modeCol != null) modeCol.Init = "1";
-            if (designCol != null) designCol.Init = DesignLayout.ToString();
-            if (controlCol != null) controlCol.Init = ControlLayout.ToString();
-        }
     }
 }
