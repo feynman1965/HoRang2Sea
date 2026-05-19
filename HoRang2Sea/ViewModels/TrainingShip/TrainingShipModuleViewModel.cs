@@ -976,13 +976,19 @@ namespace HoRang2Sea.ViewModels
                 TrainingShipMW.SetDriveModes(_uploadedVelocityLines);
 
                 Debug.WriteLine($"TrainingShip input list length : {TrainingShipMWInputs.Count}");
+                // Index-based value mapping (skip profile items, stop at MWInputs.Count) — Ground 패턴으로 통일
+                int i = 0;
+                bool inputsFull = false;
                 foreach (var Table in Database.Tables)
                 {
+                    if (inputsFull) break;
                     foreach (var Column in Table.Columns)
                     {
                         string colName = Column.Name?.ToLower() ?? "";
                         if (colName.Contains("working_rpm") || colName.Contains("working_torque") || colName.Contains("torque_profile") || colName.Contains("rpm_profile"))
                             continue;
+
+                        if (i >= TrainingShipMWInputs.Count) { inputsFull = true; break; }
 
                         double result = 0;
                         if (!Double.TryParse(Column.Init, out result))
@@ -994,18 +1000,12 @@ namespace HoRang2Sea.ViewModels
                             adjustedValue = GetLayoutAdjustedValue(result, minVal, maxVal, Column.Name);
                         }
 
-                        string xmlNorm = Column.Name.ToLower().Replace(" ", "").Replace("_", "");
-                        for (int j = 0; j < TrainingShipMWInputs.Count; j++)
-                        {
-                            string mwNorm = TrainingShipMWInputs[j].Name.ToLower().Replace("fcs_", "").Replace("_", "");
-                            if (xmlNorm == mwNorm || xmlNorm.Contains(mwNorm) || mwNorm.Contains(xmlNorm))
-                            {
-                                TrainingShipMWInputs[j].Value = adjustedValue;
-                                break;
-                            }
-                        }
+                        TrainingShipMWInputs[i].Value = adjustedValue;
+                        Debug.WriteLine($"[{i}] XML '{Column.Name}' -> Input '{TrainingShipMWInputs[i].Name}' = {adjustedValue}");
+                        i++;
                     }
                 }
+                Debug.WriteLine($"TrainingShip input list length : {TrainingShipMWInputs.Count}, mapped: {i}");
                 TrainingShipMW.TrainingShipMWInputs = TrainingShipMWInputs;
 
                 // ViewModel의 레이아웃 설정을 Model로 전달 (그래프 패턴 변경용)
