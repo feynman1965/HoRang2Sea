@@ -2,7 +2,9 @@
 
   <PropertyGroup>
     <LangVersion>9</LangVersion>
-    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+    <!-- SDK 9.0.311 + VS 17.14 MSBuild 의 wpftmp 메커니즘이 baml 경로 처리 버그가 있어 BG1002 에러 발생.
+         wpftmp를 끄고 옛 방식(부모 csproj가 PackageReference 어셈블리 직접 참조)으로 markup compile. -->
+    <IncludePackageReferencesDuringMarkupCompilation>false</IncludePackageReferencesDuringMarkupCompilation>
     <Platforms>AnyCPU;x64</Platforms>
     <!-- SDK가 RuntimeIdentifier=win-x64 자동 inject하면서 obj/bin 경로에 win-x64 폴더가 추가되어
          VS의 Platform=x64 경로(obj/x64/Release/net9.0-windows/)와 어긋나 baml 못 찾음.
