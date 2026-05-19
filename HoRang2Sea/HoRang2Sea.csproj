@@ -4,9 +4,9 @@
     <LangVersion>9</LangVersion>
     <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
     <Platforms>AnyCPU;x64</Platforms>
-    <!-- VS Platform=x64 와 SDK RuntimeIdentifier=win-x64 가 obj 경로를 다르게 만들어 baml 못 찾는 문제 fix.
-         두 segment 모두 obj 경로에서 빼서 단일 폴더 (obj/Release/net9.0-windows/) 사용. -->
-    <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+    <!-- SDK가 RuntimeIdentifier=win-x64 자동 inject하면서 obj/bin 경로에 win-x64 폴더가 추가되어
+         VS의 Platform=x64 경로(obj/x64/Release/net9.0-windows/)와 어긋나 baml 못 찾음.
+         RID inject만 끄고 Platform 자연 경로는 그대로 유지 → VS/CLI 모두 obj/x64/Release/net9.0-windows/ 사용. -->
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
