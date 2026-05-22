@@ -282,7 +282,9 @@ namespace HoRang2Sea.Models
                 int Maxiterations = _driveModes != null ? _driveModes.Length : 100000;
                 WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, manualEvent };
 
-                StartRecording(PortGuideShipMWOuts.Select(o => o.Name).ToList());
+                var outputNames = PortGuideShipMWOuts.Select(o => o.Name).ToList();
+                var outputValues = new double[PortGuideShipMWOuts.Count];
+                StartRecording(outputNames);
 
                 for (; Step < Maxiterations; Step++)
                 {
@@ -295,7 +297,6 @@ namespace HoRang2Sea.Models
 
                     CallStep();
 
-                    var outputValues = new double[PortGuideShipMWOuts.Count];
                     for (int i = 0; i < PortGuideShipMWOuts.Count; i++)
                     {
                         if (OutputPortMap.TryGetValue(i, out int port))
@@ -306,7 +307,7 @@ namespace HoRang2Sea.Models
                         }
                     }
 
-                    if (CheckNaN(outputValues, PortGuideShipMWOuts.Select(o => o.Name).ToList(), Step)) { Step = 0; break; }
+                    if (CheckNaN(outputValues, outputNames, Step)) { Step = 0; break; }
                     RecordStep(Step, outputValues);
 
                     if (Step % 100 == 0)

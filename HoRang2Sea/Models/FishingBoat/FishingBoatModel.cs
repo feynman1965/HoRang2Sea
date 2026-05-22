@@ -283,7 +283,9 @@ namespace HoRang2Sea.Models
                 WaitHandle[] waitHandles = new WaitHandle[] { token.WaitHandle, manualEvent };
 
                 // Start CSV recording
-                StartRecording(FishingBoatMWOuts.Select(o => o.Name).ToList());
+                var outputNames = FishingBoatMWOuts.Select(o => o.Name).ToList();
+                var outputValues = new double[FishingBoatMWOuts.Count];
+                StartRecording(outputNames);
 
                 for (; Step < Maxiterations; Step++)
                 {
@@ -299,7 +301,6 @@ namespace HoRang2Sea.Models
                     CallStep();
 
                     // Read all outputs
-                    var outputValues = new double[FishingBoatMWOuts.Count];
                     for (int i = 0; i < FishingBoatMWOuts.Count; i++)
                     {
                         if (OutputPortMap.TryGetValue(i, out int port))
@@ -310,7 +311,7 @@ namespace HoRang2Sea.Models
                         }
                     }
 
-                    if (CheckNaN(outputValues, FishingBoatMWOuts.Select(o => o.Name).ToList(), Step)) { Step = 0; break; }
+                    if (CheckNaN(outputValues, outputNames, Step)) { Step = 0; break; }
                     RecordStep(Step, outputValues);
 
                     // UI 업데이트 (GUI 멈춤 방지: 100스텝마다)
