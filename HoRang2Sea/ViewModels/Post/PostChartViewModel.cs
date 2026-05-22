@@ -406,7 +406,7 @@ namespace HoRang2Sea.ViewModels
                         }
                     }
 
-                    timer += 0.001; //interval
+                    timer += 0.1; //interval
                 }
 
                 else if (BaseMWModel is PortGuideShipMW PortGuideShipMW)
@@ -446,7 +446,7 @@ namespace HoRang2Sea.ViewModels
                         }
                     }
 
-                    timer += 0.001; //interval
+                    timer += 0.1; //interval
                 }
                 else if (BaseMWModel is TrainingShipMW TrainingShipMW)
                 {
@@ -485,7 +485,7 @@ namespace HoRang2Sea.ViewModels
                         }
                     }
 
-                    timer += 0.001; //interval
+                    timer += 0.1; //interval
                 }
                 
 

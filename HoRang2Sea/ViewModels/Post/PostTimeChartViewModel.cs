@@ -386,7 +386,7 @@ namespace HoRang2Sea.ViewModels
                         }
                     }
 
-                    timer += 0.001; // interval 에 따른 조정 필요
+                    timer += 0.1; // interval 에 따른 조정 필요
                 }
                 else if (BaseMWModel is PortGuideShipMW PortGuideShipMW)
                 {
@@ -411,7 +411,7 @@ namespace HoRang2Sea.ViewModels
                             }
                         }
                     }
-                    timer += 0.001; // interval 에 따른 조정 필요
+                    timer += 0.1; // interval 에 따른 조정 필요
                 }
 
 
@@ -439,7 +439,7 @@ namespace HoRang2Sea.ViewModels
                         }
                     }
 
-                    timer += 0.001; // interval 에 따른 조정 필요
+                    timer += 0.1; // interval 에 따른 조정 필요
                 }
 
             }
