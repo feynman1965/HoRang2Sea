@@ -266,6 +266,13 @@
                 </dxr:RibbonPageGroup>
 
                 <dxr:RibbonPageGroup Caption="File Operations" ShowCaptionButton="False">
+                    <dxb:BarButtonItem Name="bLoadFile"
+                                       Content="Load Profile"
+                                       Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=DarkBlue}"
+                                       Command="{Binding UploadVelocityCommand}" 
+                                       Hint=""
+                                       RibbonStyle="SmallWithText" />
+
                     <dxb:BarButtonItem Name="bSaveVehicle"
                                        Content="Save Config"
                                        Glyph="{iconPacks:IoniconsImage Kind=SaveiOS,Brush=DarkGreen}"
@@ -275,13 +282,6 @@
                                        Content="Load Config"
                                        Glyph="{iconPacks:IoniconsImage Kind=FolderiOS,Brush=DarkOrange}"
                                        Command="{Binding OnClickLoadButtonCommand}"
-                                       RibbonStyle="SmallWithText" />
-
-                    <dxb:BarButtonItem Name="bLoadFile"
-                                       Content="Load Slip Txt"
-                                       Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=DarkBlue}"
-                                       Command="{Binding UploadVelocityCommand}" 
-                                       Hint=""
                                        RibbonStyle="SmallWithText" />
                     <dxb:BarButtonItem Name="bExportCsv"
                                        Content="Export CSV"
