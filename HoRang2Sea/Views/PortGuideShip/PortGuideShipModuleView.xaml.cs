@@ -154,7 +154,7 @@ namespace HoRang2Sea.Views
                 foreach (var v in xy.YValues)
                     if (v > dataMax) dataMax = v;
             }
-            if (dataMax > 0) _profileYAxis.VisibleRange = new DoubleRange(0, dataMax * 1.1);
+            if (dataMax > 0) _profileYAxis.VisibleRange = new DoubleRange(0, dataMax * 1.3);
         }
 
     }
