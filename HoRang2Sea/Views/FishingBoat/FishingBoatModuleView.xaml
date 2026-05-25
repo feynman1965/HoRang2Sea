@@ -354,7 +354,7 @@
 
         <Grid>
         <!-- ===== Input Mode: Diagram + Velocity + Property ===== -->
-        <dxdo:DockLayoutManager FloatingMode="Desktop" ShowFloatWindowsInTaskbar="False" CloseFloatWindowsOnManagerUnloading="True"
+        <dxdo:DockLayoutManager FloatingMode="Window" ShowFloatWindowsInTaskbar="False" CloseFloatWindowsOnManagerUnloading="True"
                                 Visibility="{Binding IsInputMode, Converter={StaticResource BoolToVisConverter}}">
             <dxdo:LayoutGroup Margin="0" Orientation="Horizontal">
                 <!-- 왼쪽: Diagram + Velocity Profile -->
