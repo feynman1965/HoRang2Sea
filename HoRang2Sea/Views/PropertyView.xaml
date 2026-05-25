@@ -15,6 +15,7 @@
 
     <UserControl.Resources>
         <local:DetailImageVisibilityConverter x:Key="DetailImgVis"/>
+        <local:PropertyImageSourceConverter x:Key="PropImgSrc"/>
     </UserControl.Resources>
 
     <dxdo:LayoutGroup Orientation="Vertical">
@@ -23,7 +24,7 @@
         <Image Source="{Binding PropertyImagePath}" Grid.Column="0" Grid.Row="0" Width="500" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform"  Margin="5,5,5,5" />
 !-->
         <dxdo:LayoutPanel ShowCaption="False" Visibility="{Binding PropertyImagePath, Converter={StaticResource DetailImgVis}}">
-            <Image Source="{Binding PropertyImagePath}"
+            <dx:DXImage Source="{Binding PropertyImagePath, Converter={StaticResource PropImgSrc}}"
        Grid.Column="0"
        Grid.Row="0"
        HorizontalAlignment="Center"
@@ -32,17 +33,17 @@
              MouseWheel="Image_MouseWheel"
        MouseDown="Image_MouseDown"
        MouseMove="Image_MouseMove"
-              
+
        MouseUp="Image_MouseUp">
-                <Image.RenderTransform>
+                <dx:DXImage.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="scaleTransform"
                             CenterX="0.5"
                             CenterY="0.5" />
                         <TranslateTransform x:Name="translateTransform" />
                     </TransformGroup>
-                </Image.RenderTransform>
-            </Image>
+                </dx:DXImage.RenderTransform>
+            </dx:DXImage>
         </dxdo:LayoutPanel>
 
 
