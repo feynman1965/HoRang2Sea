@@ -13,12 +13,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <local:DetailImageVisibilityConverter x:Key="DetailImgVis"/>
+    </UserControl.Resources>
+
     <dxdo:LayoutGroup Orientation="Vertical">
 
             <!--
         <Image Source="{Binding PropertyImagePath}" Grid.Column="0" Grid.Row="0" Width="500" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform"  Margin="5,5,5,5" />
 !-->
-        <dxdo:LayoutPanel ShowCaption="False">
+        <dxdo:LayoutPanel ShowCaption="False" Visibility="{Binding PropertyImagePath, Converter={StaticResource DetailImgVis}}">
             <Image Source="{Binding PropertyImagePath}"
        Grid.Column="0"
        Grid.Row="0"
