@@ -7,8 +7,9 @@ using System.Windows.Data;
 namespace HoRang2Sea.Views
 {
     /// <summary>
-    /// Property 패널 컴포넌트 이미지 경로 해석: Detail SVG(일부) → ModelImage SVG(대부분) 순으로
-    /// 실존 리소스의 pack URI 반환, 둘 다 없으면 null. (Property는 dx:DXImage로 SVG 렌더)
+    /// Property 패널 컴포넌트 상세 이미지 경로 해석: Detail SVG(상세 일러스트, 일부만 존재)가
+    /// 실존하면 pack URI 반환, 없으면 null. ⚠️ ModelImage는 노드(버튼) 아이콘이라 용도 다름 → 폴백 금지.
+    /// (Property는 dx:DXImage로 SVG 렌더 — 네이티브 Image는 SVG 렌더 불가)
     /// </summary>
     internal static class PropertyImageResolver
     {
@@ -37,7 +38,7 @@ namespace HoRang2Sea.Views
                 catch { }
                 return null;
             }
-            return TryRel($"Resource/Detail/{name}Detail.svg") ?? TryRel($"Resource/ModelImage/{name}.svg");
+            return TryRel($"Resource/Detail/{name}Detail.svg");
         }
     }
 
