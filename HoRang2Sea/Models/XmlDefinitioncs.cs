@@ -1,4 +1,4 @@
-﻿using DevExpress.Data.Filtering;
+using DevExpress.Data.Filtering;
 using DevExpress.Diagram.Core;
 using DevExpress.Mvvm;
 using System;
@@ -107,7 +107,6 @@ namespace HoRang2Sea.Models
             Columns = new ObservableCollection<ColumnDefinition>(columns.ToList());
             Columns_Visible = new ObservableCollection<ColumnDefinition>(columns.ToList());
             VisibleData = new ObservableCollection<object>();
-            string projectpath = System.IO.Directory.GetParent(System.Environment.CurrentDirectory).Parent.FullName;
             ImageDefinition = new ImageDefinition();
             OutputColumns = new ObservableCollection<OutputDefinition>();
 
