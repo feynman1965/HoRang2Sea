@@ -312,10 +312,10 @@
         <!-- ===== Segmented Mode Toggle: 입력 / 그래프 ===== -->
         <Border DockPanel.Dock="Top" Padding="0,4" Background="#FAFAFA" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="12,0,0,0">
-                <RadioButton GroupName="ViewMode" Content="Input"
+                <RadioButton Content="Input"
                              IsChecked="{Binding IsInputMode, Mode=TwoWay}"
                              Style="{StaticResource SegmentedFirstStyle}"/>
-                <RadioButton GroupName="ViewMode" Content="Graph"
+                <RadioButton Content="Graph"
                              IsChecked="{Binding IsGraphMode, Mode=TwoWay}"
                              Style="{StaticResource SegmentedLastStyle}"/>
             </StackPanel>
@@ -450,11 +450,11 @@
             <DockPanel Grid.Column="0">
                 <Border DockPanel.Dock="Top" Padding="6,4" Background="#F8F8F8" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <RadioButton GroupName="ChartType" Content="y-t"
+                        <RadioButton Content="y-t"
                                      IsChecked="{Binding IsYTChartActive, Mode=TwoWay}"
                                      Style="{StaticResource SegmentedFirstStyle}"
                                      Padding="14,4" FontSize="12"/>
-                        <RadioButton GroupName="ChartType" Content="x-y"
+                        <RadioButton Content="x-y"
                                      IsChecked="{Binding IsXYChartActive, Mode=TwoWay}"
                                      Style="{StaticResource SegmentedLastStyle}"
                                      Padding="14,4" FontSize="12"/>
