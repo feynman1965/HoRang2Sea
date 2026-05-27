@@ -178,9 +178,6 @@ namespace HoRang2Sea.Models
         public List<TrainingShipMWDataModel> TrainingShipMWOuts = new()
         {
             //TrainingShipMode  ( 개수 : 3 )
-            new("Navigation_mode", "-", "TrainingShipProfile"),
-            new("FB_displacement", "miles", "TrainingShipProfile"),
-            new("FB_fuelefficiency", "miles/kg", "TrainingShipProfile"),
 
             //Stack  ( 개수 : 5 )
             new("FCS_Current_density", "A/cm2", "Stack"),

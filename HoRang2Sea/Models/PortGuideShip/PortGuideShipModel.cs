@@ -179,9 +179,6 @@ namespace HoRang2Sea.Models
         public List<PortGuideShipMWDataModel> PortGuideShipMWOuts = new()
         {
             //PortGuideShipMode  ( 개수 : 3 )
-            new("Navigation_mode", "-", "PortGuideShipProfile"),
-            new("FB_displacement", "miles", "PortGuideShipProfile"),
-            new("FB_fuelefficiency", "miles/kg", "PortGuideShipProfile"),
 
             //Stack  ( 개수 : 5 )
             new("FCS_Current_density", "A/cm2", "Stack"),

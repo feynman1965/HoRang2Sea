@@ -178,9 +178,6 @@ namespace HoRang2Sea.Models
         public List<FishingBoatMWDataModel> FishingBoatMWOuts = new()
         {
             //FishingBoatMode  ( 개수 : 3 )
-            new("Navigation_mode", "-", "FishingBoatProfile"),
-            new("FB_displacement", "miles", "FishingBoatProfile"),
-            new("FB_fuelefficiency", "miles/kg", "FishingBoatProfile"),
 
             //Stack  ( 개수 : 5 )
             new("FCS_Current_density", "A/cm2", "Stack"),
