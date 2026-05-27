@@ -78,12 +78,8 @@ namespace HoRang2Sea.ViewModels
             SolutionExplorerViewModel.ItemOpening += SolutionExplorerViewModel_ItemOpening;
             StartViewModel = CreatePanelWorkspaceViewModel<StartViewModel>();
             Bars = new ReadOnlyCollection<BarModel>(CreateBars());
-            RecentDocuments = new RecentItemViewModel[] {
-                new RecentItemViewModel("Recent Document 1", @"c:\My Documents\Recent Document 1.rtf"),
-                new RecentItemViewModel("Recent Document 2", @"c:\My Documents\Recent Document 2.rtf"),
-                new RecentItemViewModel("Recent Document 3", @"c:\My Documents\Recent Document 3.rtf"),
-                
-            };
+            // 더미 하드코딩 경로(c:\My Documents\*.rtf) 제거 — 실제 최근 문서가 없으면 빈 목록.
+            RecentDocuments = new RecentItemViewModel[] { };
             ProjectViewModels = new List<ProjectViewModel>()
             {
                 /*new("Nexo","/Resource/Vehiclesflat/3-suv.svg"),*/
