@@ -26,20 +26,46 @@ namespace HoRang2Sea.Views
         public StartView()
         {
             InitializeComponent();
-            // mp4 절대경로 설정 (작업 디렉터리 차이로 인한 영상 미표시 문제 해결)
-            this.Loaded += (s, e) =>
+            // 최초 표시 + 프로젝트 탭→Start 탭 복귀 시 모두 IsVisibleChanged 발생 → 영상 재시작 (탭 복귀 시 검정 화면 방지)
+            this.IsVisibleChanged += (s, e) =>
             {
-                try
-                {
-                    var moviePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StartMovie.mp4");
-                    if (System.IO.File.Exists(moviePath) && myMediaElement != null)
-                    {
-                        myMediaElement.Source = new Uri(moviePath, UriKind.Absolute);
-                        myMediaElement.Play();
-                    }
-                }
-                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"StartMovie load failed: {ex.Message}"); }
+                if (e.NewValue is bool visible && visible)
+                    StartMovie();
             };
+        }
+
+        // mp4 절대경로로 재생. 첫 프레임 준비 전까지 Hidden → 뒤 Border 배경색이 보임(검정 방지).
+        // Source를 null→경로로 재설정해 같은 파일이어도 MediaOpened가 다시 발생(탭 복귀 시 재표시 보장).
+        private void StartMovie()
+        {
+            try
+            {
+                if (myMediaElement == null) return;
+                myMediaElement.Visibility = Visibility.Hidden;
+                var moviePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "StartMovie.mp4");
+                if (System.IO.File.Exists(moviePath))
+                {
+                    myMediaElement.Stop();
+                    myMediaElement.Source = null;
+                    myMediaElement.Source = new Uri(moviePath, UriKind.Absolute);
+                    myMediaElement.Position = TimeSpan.Zero;
+                    myMediaElement.Play();
+                }
+            }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"StartMovie load failed: {ex.Message}"); }
+        }
+
+        // 영상 첫 프레임이 준비되면 표시 (그 전엔 Hidden → Border 배경색만 보여 검정 화면 방지)
+        private void MyMedia_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            if (myMediaElement != null)
+                myMediaElement.Visibility = Visibility.Visible;
+        }
+
+        // 반복 재생 (기존 RepeatBehavior=Forever 대체)
+        private void MyMedia_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            if (myMediaElement != null) { myMediaElement.Position = TimeSpan.Zero; myMediaElement.Play(); }
         }
 
         private void Tile_Click_1(object sender, EventArgs e)

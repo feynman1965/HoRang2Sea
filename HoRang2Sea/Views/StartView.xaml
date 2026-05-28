@@ -62,22 +62,11 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Video - Uniform (no crop) with dark background -->
+                <!-- Video - Uniform (no crop). 로딩/탭 복귀 시 첫 프레임 준비 전까지 Hidden → 뒤 Border 배경색(#E8E8EE) 노출 (검정 화면 방지). 재생/반복/표시는 code-behind에서 관리. -->
                 <Border Grid.Row="0" Background="#E8E8EE">
-                    <MediaElement Name="myMediaElement" Volume="0" LoadedBehavior="Play"
-                                  Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <MediaElement.Triggers>
-                            <EventTrigger RoutedEvent="MediaElement.Loaded">
-                                <EventTrigger.Actions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <MediaTimeline Source="StartMovie.mp4" Storyboard.TargetName="myMediaElement" RepeatBehavior="Forever"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger.Actions>
-                            </EventTrigger>
-                        </MediaElement.Triggers>
-                    </MediaElement>
+                    <MediaElement Name="myMediaElement" Volume="0" LoadedBehavior="Manual" Visibility="Hidden"
+                                  MediaOpened="MyMedia_MediaOpened" MediaEnded="MyMedia_MediaEnded"
+                                  Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- Bottom content area -->
