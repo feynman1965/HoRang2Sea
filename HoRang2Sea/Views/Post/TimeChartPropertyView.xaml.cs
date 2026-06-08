@@ -54,5 +54,25 @@ namespace HoRang2Sea.Views
             }
         }
 
+        // 컴포넌트 트리에서 변수(잎)를 더블클릭 → Y축 항목으로 추가
+        private void GlobalTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TreeView tv && tv.SelectedItem is string name
+                && DataContext is ViewModels.PostTimeChartViewModel vm)
+            {
+                vm.AddYItem(name);
+            }
+        }
+
+        // 우측 Y 목록에서 항목을 더블클릭 → 제거
+        private void YItemsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListBoxEdit lb && lb.SelectedItem is string name
+                && DataContext is ViewModels.PostTimeChartViewModel vm)
+            {
+                vm.RemoveYItem(name);
+            }
+        }
+
     }
 }

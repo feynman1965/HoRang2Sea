@@ -16,6 +16,7 @@
         <DataTemplate x:Key="TimeChartPropertyDialogTemplate">
             <local:TimeChartPropertyView/>
         </DataTemplate>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </UserControl.Resources>
 
     <dxmvvm:Interaction.Behaviors>
@@ -71,7 +72,46 @@
                     <ext:ToolbarIcon Kind="ViewDashboardOutline" Margin="-7" Style="{StaticResource ToolbarButtonIconStyle}"/>
                 </Button>
             </ext:SciChartInteractionToolbar>-->
-            <s:SciChartSurface x:Name="sciChart" Grid.Column="1"
+            <DockPanel Grid.Column="1">
+                <ListBox DockPanel.Dock="Top"
+                         ItemsSource="{Binding ChartTabs}"
+                         SelectedItem="{Binding SelectedChartTab, Mode=TwoWay}"
+                         Visibility="{Binding HasChartTabs, Converter={StaticResource BoolToVis}}"
+                         BorderThickness="0,0,0,1" BorderBrush="#E0E0E0" Background="#F8F8F8" Padding="2,2,2,0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0,0,2,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="bd" Background="#ECECEC" CornerRadius="3,3,0,0" Padding="10,3" BorderBrush="#E0E0E0" BorderThickness="1,1,1,0">
+                                            <TextBlock x:Name="tb" Text="{Binding}" FontSize="12" Foreground="#555555"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="bd" Property="Background" Value="#FFFFFF"/>
+                                                <Setter TargetName="tb" Property="FontWeight" Value="SemiBold"/>
+                                                <Setter TargetName="tb" Property="Foreground" Value="#1F618D"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="bd" Property="Background" Value="#F4F4F4"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+
+                <s:SciChartSurface x:Name="sciChart"
                                    RenderableSeries="{s:SeriesBinding RenderableSeries}"
                                    ChartTitle="Monitor Chart"
                                    s:VisualXcceleratorEngine.IsEnabled="True"
@@ -98,6 +138,7 @@
                     </s:ModifierGroup>
                 </s:SciChartSurface.ChartModifier>
             </s:SciChartSurface>
+            </DockPanel>
 
 
         </Grid>

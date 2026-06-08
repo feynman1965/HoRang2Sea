@@ -93,6 +93,53 @@ namespace HoRang2Sea.ViewModels
         public ObservableCollection<IRenderableSeriesViewModel> RenderableSeries { get; set; }
         public ObservableCollection<XyDataSeries<double, double>> lineData = new ObservableCollection<XyDataSeries<double, double>>();
 
+        // ── 변수별 보기 탭 ──────────────────────────────────────────────
+        // 각 변수의 series/axis 참조. 탭 전환 시 가시성만 토글한다(데이터 append 경로는 그대로 → 저비용).
+        private readonly List<(string name, LineRenderableSeriesViewModel series, NumericAxisViewModel axis)> _seriesRefs
+            = new List<(string, LineRenderableSeriesViewModel, NumericAxisViewModel)>();
+
+        public ObservableCollection<string> ChartTabs { get; set; } = new ObservableCollection<string>();
+
+        private string _selectedChartTab = "전체";
+        public string SelectedChartTab
+        {
+            get => _selectedChartTab;
+            set { if (SetValue(ref _selectedChartTab, value)) ApplyTabView(); }
+        }
+
+        private bool _hasChartTabs;
+        public bool HasChartTabs
+        {
+            get => _hasChartTabs;
+            set => SetValue(ref _hasChartTabs, value);
+        }
+
+        // ChartYItems 기준으로 탭 목록 재구성: "전체"(오버레이) + 각 변수
+        private void RebuildChartTabs()
+        {
+            ChartTabs.Clear();
+            ChartTabs.Add("전체");
+            foreach (var name in ChartYItems.Distinct())
+                ChartTabs.Add(name);
+            HasChartTabs = ChartYItems.Count > 0;
+            _selectedChartTab = "전체";
+            RaisePropertyChanged(nameof(SelectedChartTab));
+            ApplyTabView();
+        }
+
+        // 선택 탭에 해당하는 series/axis 만 표시. 데이터는 모든 series 에 계속 append 되므로 탭 전환만으로 즉시 전환된다.
+        private void ApplyTabView()
+        {
+            string tab = _selectedChartTab;
+            bool all = string.IsNullOrEmpty(tab) || tab == "전체";
+            foreach (var r in _seriesRefs)
+            {
+                bool show = all || r.name == tab;
+                r.series.IsVisible = show;
+                r.axis.Visibility = show ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            }
+        }
+
         public DelegateCommand OnChartPropertyCommand { get; set; }
 
         protected override string WorkspaceName { get { return "BottomHost"; } }
@@ -136,6 +183,14 @@ namespace HoRang2Sea.ViewModels
             set => SetValue(ref _filteredChartGlobalItems, value);
         }
 
+        // 컴포넌트 트리(좌측 Global Items)용. FilteredChartGlobalItems 를 접두어로 그룹화한 표시용 컬렉션.
+        private ObservableCollection<ChartVariableGroup> _groupedChartGlobalItems;
+        public ObservableCollection<ChartVariableGroup> GroupedChartGlobalItems
+        {
+            get => _groupedChartGlobalItems;
+            set => SetValue(ref _groupedChartGlobalItems, value);
+        }
+
         private void UpdateFilteredList()
         {
             if (FilteredChartGlobalItems == null)
@@ -164,6 +219,32 @@ namespace HoRang2Sea.ViewModels
             }
 
             RaisePropertyChanged(nameof(FilteredChartGlobalItems));
+
+            // 트리(그룹) 갱신: 검색 중이면 펼친 상태로
+            GroupedChartGlobalItems = ChartVariableGroup.Build(FilteredChartGlobalItems, expandAll: true);
+        }
+
+        // 컴포넌트 트리에서 변수를 더블클릭 → Y축 항목으로 추가 (기존 드래그-드롭과 동일 동작·4개 제한 유지)
+        public void AddYItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (ChartYItems.Contains(name)) return;
+
+            ChartYItems.Add(name);
+            if (ChartGlobalItems != null) ChartGlobalItems.Remove(name);
+            UpdateFilteredList();
+        }
+
+        // 우측 Y 목록에서 더블클릭 → 제거 (다시 좌측 트리로 복귀)
+        public void RemoveYItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (!ChartYItems.Contains(name)) return;
+
+            ChartYItems.Remove(name);
+            if (ChartGlobalItems != null && !ChartGlobalItems.Contains(name))
+                ChartGlobalItems.Add(name);
+            UpdateFilteredList();
         }
 
 
@@ -267,6 +348,7 @@ namespace HoRang2Sea.ViewModels
             lineData.Clear();
             XAxes.Clear();
             YAxes.Clear();
+            _seriesRefs.Clear();
 
             // 일시정지 상태에서 재개되는 경우 timer 복원, 아니면 0으로 초기화
             if (isPausedState)
@@ -339,8 +421,11 @@ namespace HoRang2Sea.ViewModels
                 };
 
                 RenderableSeries.Add(newRenderableSeries);
+                _seriesRefs.Add((Chartitem, newRenderableSeries, yNumAxis));
                 colorIdx++;
             }
+
+            RebuildChartTabs();
         }
 
         public void ChartUpdate()
@@ -522,6 +607,7 @@ namespace HoRang2Sea.ViewModels
                 lineData.Clear();
                 XAxes.Clear();
                 YAxes.Clear();
+                _seriesRefs.Clear();
 
                 // ChartYItems는 유지 (사용자 선택 유지)
 

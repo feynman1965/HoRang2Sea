@@ -38,6 +38,15 @@ namespace HoRang2Sea.ViewModels
             get => _filteredChartGlobalItems;
             set => SetValue(ref _filteredChartGlobalItems, value);
         }
+
+        // 컴포넌트 트리(좌측 Global Items)용. FilteredChartGlobalItems 를 접두어로 그룹화한 표시용 컬렉션.
+        private ObservableCollection<ChartVariableGroup> _groupedChartGlobalItems;
+        public ObservableCollection<ChartVariableGroup> GroupedChartGlobalItems
+        {
+            get => _groupedChartGlobalItems;
+            set => SetValue(ref _groupedChartGlobalItems, value);
+        }
+
         public PostChartViewModel(string displayName, DocumentViewModel parent = null)
         {
             DisplayName = displayName;
@@ -91,6 +100,63 @@ namespace HoRang2Sea.ViewModels
             }
 
             RaisePropertyChanged(nameof(FilteredChartGlobalItems));
+
+            // 트리(그룹) 갱신: 검색 중이면 펼친 상태로
+            GroupedChartGlobalItems = ChartVariableGroup.Build(FilteredChartGlobalItems, expandAll: true);
+        }
+
+        // 컴포넌트 트리에서 변수를 더블클릭 → Y축 항목으로 추가 (기존 4개 제한 유지)
+        public void AddYItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (ChartYItems.Contains(name)) return;
+            if (ChartYItems.Count >= 4) return;
+
+            ChartYItems.Add(name);
+            if (ChartGlobalItems != null) ChartGlobalItems.Remove(name);
+            UpdateFilteredList();
+        }
+
+        // 우측 Y 목록에서 더블클릭 → 제거
+        public void RemoveYItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (!ChartYItems.Contains(name)) return;
+
+            ChartYItems.Remove(name);
+            if (ChartGlobalItems != null && !ChartGlobalItems.Contains(name))
+                ChartGlobalItems.Add(name);
+            UpdateFilteredList();
+        }
+
+        // 트리에서 우클릭 → "X축으로 지정" (X축은 1개만, 기존 X는 목록으로 복귀)
+        public void SetXItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (ChartXItems.Contains(name)) return;
+
+            foreach (var prev in ChartXItems.ToList())
+            {
+                ChartXItems.Remove(prev);
+                if (ChartGlobalItems != null && !ChartGlobalItems.Contains(prev))
+                    ChartGlobalItems.Add(prev);
+            }
+
+            ChartXItems.Add(name);
+            if (ChartGlobalItems != null) ChartGlobalItems.Remove(name);
+            UpdateFilteredList();
+        }
+
+        // 우측 X 목록에서 더블클릭 → 제거
+        public void RemoveXItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (!ChartXItems.Contains(name)) return;
+
+            ChartXItems.Remove(name);
+            if (ChartGlobalItems != null && !ChartGlobalItems.Contains(name))
+                ChartGlobalItems.Add(name);
+            UpdateFilteredList();
         }
 
         private void UpdateChartGlobalItems()

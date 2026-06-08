@@ -71,5 +71,45 @@ namespace HoRang2Sea.Views
                 e.Handled = true;
             }
         }
+
+        // 컴포넌트 트리에서 변수(잎)를 더블클릭 → Y축 항목으로 추가
+        private void GlobalTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TreeView tv && tv.SelectedItem is string name
+                && DataContext is PostChartViewModel vm)
+            {
+                vm.AddYItem(name);
+            }
+        }
+
+        // 트리에서 우클릭 → "X축으로 지정"
+        private void SetX_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem mi && mi.DataContext is string name
+                && DataContext is PostChartViewModel vm)
+            {
+                vm.SetXItem(name);
+            }
+        }
+
+        // 우측 X 목록에서 더블클릭 → 제거
+        private void XItemsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListBoxEdit lb && lb.SelectedItem is string name
+                && DataContext is PostChartViewModel vm)
+            {
+                vm.RemoveXItem(name);
+            }
+        }
+
+        // 우측 Y 목록에서 더블클릭 → 제거
+        private void YItemsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListBoxEdit lb && lb.SelectedItem is string name
+                && DataContext is PostChartViewModel vm)
+            {
+                vm.RemoveYItem(name);
+            }
+        }
     }
 }

@@ -171,9 +171,9 @@ namespace HoRang2Sea.ViewModels
             get
             {
                 if (DesignLayout == 0 && ControlLayout == 0) return 1.0;    // Default: 기본값
-                if (DesignLayout == 0 && ControlLayout == 1) return 1.05;   // Control: +5%
-                if (DesignLayout == 1 && ControlLayout == 0) return 0.95;   // Design: -5%
-                if (DesignLayout == 1 && ControlLayout == 1) return 1.10;   // Advanced: +10%
+                if (DesignLayout == 0 && ControlLayout == 1) return 1.0;   // Control: +5%
+                if (DesignLayout == 1 && ControlLayout == 0) return 1.0;   // Design: -5%
+                if (DesignLayout == 1 && ControlLayout == 1) return 1.0;   // Advanced: +10%
                 return 1.0;
             }
         }
@@ -1300,7 +1300,7 @@ namespace HoRang2Sea.ViewModels
                             var data = FishingBoatMW.FishingBoatMWOuts.FirstOrDefault(d => d.Name == gridItem.Name);
                             if (data != null)
                             {
-                                double valueWithNoise = GetOutputWithNoise(data.Value * GetDisplayMultiplier());
+                                double valueWithNoise = data.Value * GetDisplayMultiplier();
                                 gridItem.UpdateInternal(valueWithNoise);
                             }
                         }
