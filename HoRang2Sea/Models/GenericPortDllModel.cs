@@ -54,6 +54,27 @@ namespace HoRang2Sea.Models
             get { lock (_csvLock) { return new List<string>(_csvHeaders); } }
         }
 
+        /// <summary>기록 버퍼에서 변수의 시계열을 라이브 차트와 동일 cadence(매 100스텝, x=step*0.001)로 반환.
+        /// 시뮬 후/중에 임의 변수를 차트에 backfill(되채움)하기 위함. 데이터 없거나 변수 없으면 빈 리스트.</summary>
+        public List<(double x, double y)> GetRecordedSeries(string varName)
+        {
+            var result = new List<(double x, double y)>();
+            if (string.IsNullOrEmpty(varName)) return result;
+            lock (_csvLock)
+            {
+                int idx = _csvHeaders.IndexOf(varName);
+                if (idx <= 0) return result;   // 0=Step, -1=없음
+                foreach (var row in _csvResults)
+                {
+                    if (row.Length <= idx) continue;
+                    int step = (int)row[0];
+                    if (step % 100 != 0) continue;   // 라이브 차트와 동일하게 100스텝마다
+                    result.Add((step * 0.001, row[idx]));
+                }
+            }
+            return result;
+        }
+
         public void ExportToCsv(string filePath)
         {
             ExportToCsv(filePath, 1, -1, -1, null);

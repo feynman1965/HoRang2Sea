@@ -301,7 +301,7 @@ namespace HoRang2Sea.ViewModels
                     {
                         try
                         {
-                            ChartSet();
+                            ChartSet(true);   // 사용자가 변수 추가/변경 → 기록 버퍼에서 backfill (시뮬 후에도 표시)
                         }
                         catch (Exception ex)
                         {
@@ -331,11 +331,13 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
-        public void ChartSet()
+        // backfill=true 면 기록 버퍼에서 각 변수 series 를 되채움(시뮬 후/중 임의 변수 표시).
+        // 실행 시작 시 호출되는 ChartSet 은 backfill=false 라 기존 동작 유지.
+        public void ChartSet(bool backfill = false)
         {
             if (System.Windows.Application.Current?.Dispatcher.CheckAccess() == false)
             {
-                System.Windows.Application.Current.Dispatcher.Invoke(() => ChartSet());
+                System.Windows.Application.Current.Dispatcher.Invoke(() => ChartSet(backfill));
                 return;
             }
 
@@ -408,6 +410,13 @@ namespace HoRang2Sea.ViewModels
                 newLineData.AcceptsUnsortedData = true;
                 // FifoCapacity 제거: 데이터가 0부터 쌓이도록 함 (롤링 윈도우 비활성화)
                 lineData.Add(newLineData);
+
+                // 시뮬 후/중 임의 변수 표시: 기록 버퍼에서 series 되채움 (실행 시작 시엔 버퍼 비어 no-op)
+                if (backfill && BaseMWModel is GenericPortDllModel recModel)
+                {
+                    var rec = recModel.GetRecordedSeries(Chartitem);
+                    foreach (var pt in rec) newLineData.Append(pt.x, pt.y);
+                }
 
                 Color seriesColor = fixedPalette[colorIdx % fixedPalette.Length];
 
