@@ -210,7 +210,59 @@ namespace HoRang2Sea.Models
         private Dictionary<int, IntPtr> _outputPorts = new();
         private int _maxInputPort;
         private int _maxOutputPort;
+        private string _tempDllPath;   // 인스턴스별 유니크 복사본 경로(null이면 원본 직접 로드)
+        private static readonly object _tempDirLock = new();
+        private static string _dllTempDir;
+        private static bool _tempCleaned;
         #endregion
+
+        // 유니크 DLL 복사가 들어갈 temp 폴더. 프로그램 폴더 안(dll_temp), 쓰기 불가 시 시스템 temp로 폴백.
+        private static string GetDllTempDir()
+        {
+            lock (_tempDirLock)
+            {
+                if (_dllTempDir != null) return _dllTempDir;
+                string dir;
+                try
+                {
+                    dir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dll_temp");
+                    System.IO.Directory.CreateDirectory(dir);
+                    string test = System.IO.Path.Combine(dir, ".w");
+                    System.IO.File.WriteAllText(test, "x");
+                    System.IO.File.Delete(test);
+                }
+                catch
+                {
+                    dir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "HoRang2_dll_temp");
+                    try { System.IO.Directory.CreateDirectory(dir); } catch { }
+                }
+                if (!_tempCleaned)   // 이전 비정상 종료 잔여물 청소
+                {
+                    _tempCleaned = true;
+                    try { foreach (var f in System.IO.Directory.GetFiles(dir, "*.dll")) { try { System.IO.File.Delete(f); } catch { } } }
+                    catch { }
+                }
+                _dllTempDir = dir;
+                return dir;
+            }
+        }
+
+        // 원본(ModelDLLs/{dll})을 유니크 이름으로 복사해 로드 → In/Out 전역변수 격리(같은 모델 2개 동시 실행 충돌 방지).
+        // 실패하면 _hDll=Zero 유지 → 호출부가 기존 방식으로 폴백(무해).
+        private void TryLoadUniqueCopy(string dllFileName, string functionPrefix)
+        {
+            try
+            {
+                string original = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ModelDLLs", dllFileName);
+                if (!System.IO.File.Exists(original)) return;
+                string tempPath = System.IO.Path.Combine(GetDllTempDir(), $"{functionPrefix}_{System.Guid.NewGuid():N}.dll");
+                System.IO.File.Copy(original, tempPath, true);
+                var h = LoadLibrary(tempPath);
+                if (h != IntPtr.Zero) { _hDll = h; _tempDllPath = tempPath; Debug.WriteLine($"DLL 유니크 복사 로드: {tempPath}"); }
+                else { try { System.IO.File.Delete(tempPath); } catch { } }
+            }
+            catch (Exception ex) { Debug.WriteLine($"유니크 DLL 복사 실패(폴백): {ex.Message}"); }
+        }
 
         protected bool LoadDll(string dllFileName, string functionPrefix, int maxInputPort, int maxOutputPort)
         {
@@ -218,8 +270,11 @@ namespace HoRang2Sea.Models
             _functionPrefix = functionPrefix;
             _maxInputPort = maxInputPort;
             _maxOutputPort = maxOutputPort;
+            _tempDllPath = null;
 
-            _hDll = LoadLibrary(dllFileName);
+            TryLoadUniqueCopy(dllFileName, functionPrefix);
+            if (_hDll == IntPtr.Zero)
+                _hDll = LoadLibrary(dllFileName);
             if (_hDll == IntPtr.Zero)
             {
                 // Fallback: ModelDLLs/ 하위 폴더에서 시도 (작업 디렉터리에 없을 때)
@@ -337,20 +392,35 @@ namespace HoRang2Sea.Models
             try
             {
                 Thread.Sleep(50);
-                int freeCount = 0;
-                IntPtr hModule = GetModuleHandle(_dllFileName);
-                while (hModule != IntPtr.Zero && freeCount < 10)
+                if (_tempDllPath != null)
                 {
-                    FreeLibrary(hModule);
-                    freeCount++;
-                    Thread.Sleep(10);
-                    hModule = GetModuleHandle(_dllFileName);
+                    // 유니크 복사본: 핸들로 직접 FreeLibrary (한 번 로드라 1회면 충분)
+                    if (_hDll != IntPtr.Zero) FreeLibrary(_hDll);
+                    Debug.WriteLine($"DLL(유니크 복사) FreeLibrary 완료");
                 }
-                Debug.WriteLine($"DLL FreeLibrary 완료 ({freeCount}회)");
+                else
+                {
+                    int freeCount = 0;
+                    IntPtr hModule = GetModuleHandle(_dllFileName);
+                    while (hModule != IntPtr.Zero && freeCount < 10)
+                    {
+                        FreeLibrary(hModule);
+                        freeCount++;
+                        Thread.Sleep(10);
+                        hModule = GetModuleHandle(_dllFileName);
+                    }
+                    Debug.WriteLine($"DLL FreeLibrary 완료 ({freeCount}회)");
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"FreeLibrary 예외: {ex.Message}");
+            }
+            // 임시 복사본 삭제 (best-effort; 실패해도 다음 시작 시 청소됨)
+            if (_tempDllPath != null)
+            {
+                try { Thread.Sleep(20); System.IO.File.Delete(_tempDllPath); } catch { }
+                _tempDllPath = null;
             }
             _hDll = IntPtr.Zero;
             _initializeFunc = null;

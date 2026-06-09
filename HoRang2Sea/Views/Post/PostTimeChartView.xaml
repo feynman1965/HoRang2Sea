@@ -130,7 +130,7 @@
                         <s:ZoomPanModifier ExecuteOn="MouseRightButton" ClipModeX="None" />
                         <s:MouseWheelZoomModifier/>
                         <s:ZoomExtentsModifier ExecuteOn="MouseDoubleClick" />
-                        <s:LegendModifier ShowLegend="True" Orientation="Horizontal"
+                        <s:LegendModifier ShowLegend="{Binding DataContext.ShowChartLegend, ElementName=sciChart, FallbackValue=True}" Orientation="Horizontal"
                                        VerticalAlignment="Bottom"                                     
                                        HorizontalAlignment="Center"
                                        LegendPlacement="Inside" ToolBar.OverflowMode="Never"/>

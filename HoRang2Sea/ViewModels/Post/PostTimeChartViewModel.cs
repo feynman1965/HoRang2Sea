@@ -114,6 +114,14 @@ namespace HoRang2Sea.ViewModels
             set => SetValue(ref _hasChartTabs, value);
         }
 
+        // 차트 하단 범례: "전체" 탭(오버레이)에서만 표시, 개별 변수 탭에선 숨김
+        private bool _showChartLegend = true;
+        public bool ShowChartLegend
+        {
+            get => _showChartLegend;
+            set => SetValue(ref _showChartLegend, value);
+        }
+
         // ChartYItems 기준으로 탭 목록 재구성: "전체"(오버레이) + 각 변수
         private void RebuildChartTabs()
         {
@@ -132,6 +140,7 @@ namespace HoRang2Sea.ViewModels
         {
             string tab = _selectedChartTab;
             bool all = string.IsNullOrEmpty(tab) || tab == "전체";
+            ShowChartLegend = all;   // 전체 탭에서만 범례 표시
             foreach (var r in _seriesRefs)
             {
                 bool show = all || r.name == tab;
@@ -387,7 +396,15 @@ namespace HoRang2Sea.ViewModels
                 Color.FromRgb(31, 119, 180),   // Blue
                 Color.FromRgb(214, 39, 40),    // Red
                 Color.FromRgb(44, 160, 44),    // Green
-                Color.FromRgb(255, 127, 14)    // Orange
+                Color.FromRgb(255, 127, 14),   // Orange
+                Color.FromRgb(148, 103, 189),  // Purple
+                Color.FromRgb(140, 86, 75),    // Brown
+                Color.FromRgb(227, 119, 194),  // Pink
+                Color.FromRgb(127, 127, 127),  // Gray
+                Color.FromRgb(188, 189, 34),   // Olive
+                Color.FromRgb(23, 190, 207),   // Cyan
+                Color.FromRgb(255, 152, 150),  // Salmon
+                Color.FromRgb(23, 100, 60)     // Dark Green
             };
             int colorIdx = 0;
             foreach (var Chartitem in ChartYItems.Distinct())
@@ -396,6 +413,7 @@ namespace HoRang2Sea.ViewModels
                 var yNumAxis = new NumericAxisViewModel
                 {
                     AutoRange = AutoRange.Always,
+                    GrowBy = new DoubleRange(1.0, 1.0),   // Y축 여유(데이터 ~33% 차지). 라이브·시뮬후 공통. 값↑=더 여유
                     AxisAlignment = AxisAlignment.Left,
                     AxisTitle = Chartitem,
                     DrawMajorBands = true,
@@ -415,7 +433,29 @@ namespace HoRang2Sea.ViewModels
                 if (backfill && BaseMWModel is GenericPortDllModel recModel)
                 {
                     var rec = recModel.GetRecordedSeries(Chartitem);
-                    foreach (var pt in rec) newLineData.Append(pt.x, pt.y);
+                    double ymin = double.MaxValue, ymax = double.MinValue; int cnt = 0;
+                    foreach (var pt in rec)
+                    {
+                        newLineData.Append(pt.x, pt.y);
+                        if (!double.IsNaN(pt.y) && !double.IsInfinity(pt.y))
+                        {
+                            if (pt.y < ymin) ymin = pt.y;
+                            if (pt.y > ymax) ymax = pt.y;
+                            cnt++;
+                        }
+                    }
+                    // 상수/전NaN만 명시범위(AutoRange가 0폭이라 축이 안 보임). 그 외는 라이브와 동일하게 AutoRange+GrowBy 사용(동일 여유).
+                    if (cnt == 0)
+                    {
+                        yNumAxis.AutoRange = AutoRange.Never;
+                        yNumAxis.VisibleRange = new DoubleRange(-1, 1);
+                    }
+                    else if (ymin == ymax)
+                    {
+                        double pad = System.Math.Max(System.Math.Abs(ymin) * 0.5, 0.5);
+                        yNumAxis.AutoRange = AutoRange.Never;
+                        yNumAxis.VisibleRange = new DoubleRange(ymin - pad, ymax + pad);
+                    }
                 }
 
                 Color seriesColor = fixedPalette[colorIdx % fixedPalette.Length];
