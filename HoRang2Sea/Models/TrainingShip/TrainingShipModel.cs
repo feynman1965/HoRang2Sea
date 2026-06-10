@@ -180,80 +180,80 @@ namespace HoRang2Sea.Models
             //TrainingShipMode  ( 개수 : 3 )
 
             //Stack  ( 개수 : 5 )
-            new("FCS_Current_density", "A/cm2", "Stack"),
-            new("FCS_Stack_Voltage", "V", "Stack"),
-            new("FCS_Net_power", "kW", "Stack"),
-            new("FCS_Open_Circuit_Voltage", "V", "Stack"),
-            new("FCS_Stack_temperature", "K", "Stack"),
+            new("Inlet current density", "A/cm2", "Stack"),
+            new("Stack voltage", "V", "Stack"),
+            new("Stack net power", "kW", "Stack"),
+            new("Stack OCV", "V", "Stack"),
+            new("Stack temperature", "K", "Stack"),
 
             //Blower  ( 개수 : 4 )
-            new("Bwr_Compressor_torque", "Nm", "Blower"),
-            new("Bwr_Compressor_Efficiency", "-", "Blower"),
-            new("Bwr_Compressor_Air_mass_flow_rate", "kg/s", "Blower"),
-            new("Bwr_outlet_pressure", "Pa", "Blower"),
+            new("Compressor torque", "Nm", "Blower"),
+            new("Compressor efficiency", "-", "Blower"),
+            new("Compressor air mass flow rate", "kg/s", "Blower"),
+            new("Plenum downstream pressure", "Pa", "Blower"),
 
             //Air Humidifier  ( 개수 : 4 )
-            new("AH_Total_humidified_air_flow_rate", "kg/s", "Air Humidifier"),
-            new("AH_Cathode_gas_temperature", "K", "Air Humidifier"),
-            new("AH_Cathode_gas_total_pressure", "Pa", "Air Humidifier"),
-            new("AH_Outlet_relative_humidity", "-", "Air Humidifier"),
+            new("Total humidified air mass flow rate", "kg/s", "Air Humidifier"),
+            new("Cathode gas temperature", "K", "Air Humidifier"),
+            new("Cathode gas total pressure", "Pa", "Air Humidifier"),
+            new("Air humidifier outlet relative humidity", "-", "Air Humidifier"),
 
             //Hydrogen Humidifier  ( 개수 : 4 )
-            new("HH_Anode_inlet_mass_flow_rate", "kg/s", "Hydrogen Humidifier"),
-            new("HH_Water_mole_fraction", "-", "Hydrogen Humidifier"),
-            new("HH_Anode_gas_temperature", "K", "Hydrogen Humidifier"),
-            new("HH_Anode_gas_total_pressure", "Pa", "Hydrogen Humidifier"),
+            new("Anode inlet mass flow rate", "kg/s", "Hydrogen Humidifier"),
+            new("Hydrogen humidifier water mole fraction", "-", "Hydrogen Humidifier"),
+            new("Anode gas temperature", "K", "Hydrogen Humidifier"),
+            new("Anode gas total pressure", "Pa", "Hydrogen Humidifier"),
 
             //Fresh Water Pump  ( 개수 : 3 )
-            new("FWP_Fresh_water_flow_rate", "kg/s", "Fresh Water Pump"),
-            new("FWP_Fresh_water_outlet_temperature", "K", "Fresh Water Pump"),
-            new("FWP_Fresh_water_outlet_pressure", "bar", "Fresh Water Pump"),
+            new("Fresh water pump cooling water flow rate", "kg/s", "Fresh Water Pump"),
+            new("Fresh water pump cooling water temperature", "K", "Fresh Water Pump"),
+            new("Fresh water pump coolant outlet pressure", "bar", "Fresh Water Pump"),
 
             //Sea Water Pump  ( 개수 : 3 )
-            new("SWP_Sea_water_flow_rate", "kg/s", "Sea Water Pump"),
-            new("SWP_Sea_water_outlet_temperature", "K", "Sea Water Pump"),
-            new("SWP_Sea_water_outlet_pressure", "bar", "Sea Water Pump"),
+            new("Sea water pump sea water flow rate", "kg/s", "Sea Water Pump"),
+            new("Sea water pump sea water temperature", "K", "Sea Water Pump"),
+            new("Sea water pump sea water outlet pressure", "bar", "Sea Water Pump"),
 
             //Valve  ( 개수 : 14 )
-            new("TWV_Valve_opening_ratio", "-", "Valve"),
-            new("TVW_Bypass_coolant_flow_rate", "kg/s", "Valve"),
-            new("TVW_Bypass_coolant_temperature", "K", "Valve"),
-            new("TVW_Bypass_coolant_inlet_pressure", "kPa", "Valve"),
-            new("TVW_heatexchanger_coolant_flow_rate", "kg/s", "Valve"),
-            new("TVW_heatexchanger_coolant_temperature", "K", "Valve"),
-            new("TWV_heatexchanger_coolant_inlet_pressure", "kPa", "Valve"),
-            new("TWV_stack_valve_opening_ratio", "-", "Valve"),
-            new("TWV_stack_bypass_coolant_flow_rate", "kg/s", "Valve"),
-            new("TWV_stack_bypass_coolant_temperature ", "K", "Valve"),
-            new("TWV_stack_bypass_coolant_inlet_pressure ", "kPa", "Valve"),
-            new("TWV_stack_coolant_flow_rate ", "kg/s", "Valve"),
-            new("TWV_stack_coolant_temperature ", "K", "Valve"),
-            new("TWV_stack_coolant_pressure ", "kPa", "Valve"),
+            new("Valve opening ratio", "-", "Valve"),
+            new("Bypass coolant mass flow rate", "kg/s", "Valve"),
+            new("Bypass coolant temperature", "K", "Valve"),
+            new("Bypass coolant inlet pressure", "kPa", "Valve"),
+            new("heatexchanger coolant mass flow rate", "kg/s", "Valve"),
+            new("heatexchanger coolant temperature", "K", "Valve"),
+            new("heatexchanger coolant inlet pressure", "kPa", "Valve"),
+            new("Stack valve opening ratio", "-", "Valve"),
+            new("Stack bypass coolant flow rate", "kg/s", "Valve"),
+            new("Stack bypass coolant temperature", "K", "Valve"),
+            new("Stack bypass coolant inlet pressure", "kPa", "Valve"),
+            new("Stack coolant flow rate", "kg/s", "Valve"),
+            new("Stack coolant temperature", "K", "Valve"),
+            new("Stack coolant pressure", "kPa", "Valve"),
 
             //Heat Exchanger  ( 개수 : 2 )
-            new("HX_coolant_temperature_outlet", "\u2103", "Heat Exchanger"),
-            new("HX_sea_water_temperature_outlet", "\u2103", "Heat Exchanger"),
+            new("Heat exchanger coolant outlet temperature", "\u2103", "Heat Exchanger"),
+            new("Heat exchanger sea water outlet temperature", "\u2103", "Heat Exchanger"),
 
             //Induction Motor  ( 개수 : 2 )
-            new("IM_Motor_RPM", "Nm", "Induction Motor"),
-            new("IM_Electric_power", "kW", "Induction Motor"),
+            new("Motor RPM", "Nm", "Induction Motor"),
+            new("Electric power", "kW", "Induction Motor"),
 
             //Converter  ( 개수 : 3 )
-            new("DCC_Duty_ratio", "-", "Converter"),
-            new("DCC_Converter_voltage", "V", "Converter"),
-            new("DCC_Converter_current", "I", "Converter"),
+            new("Duty ratio", "-", "Converter"),
+            new("Converter voltage", "V", "Converter"),
+            new("Converter current", "I", "Converter"),
 
             //Intercooler  ( 개수 : 4 )
-            new("IC_outlet_mass_flow_rate", "kg/s", "Intercooler"),
-            new("IC_outlet_temperature", "K", "Intercooler"),
-            new("IC_outlet_pressure", "Pa", "Intercooler"),
-            new("IC_outlet_relative_humidity ", "-", "Intercooler"),
+            new("Intercooler outlet air mass flow rate", "kg/s", "Intercooler"),
+            new("Intercooler outlet air temperature", "K", "Intercooler"),
+            new("Intercooler outlet pressure", "Pa", "Intercooler"),
+            new("Intercooler outlet relative humidity", "-", "Intercooler"),
 
             //Battery  ( 개수 : 4 )
-            new("BAT_SOC", "-", "Battery"),
-            new("BAT_voltage", "V", "Battery"),
-            new("BAT_discharge_current", "A", "Battery"),
-            new("BAT_battery_power ", "kW", "Battery"),
+            new("Battery SOC(State Of Charge)", "-", "Battery"),
+            new("Battery output voltage", "V", "Battery"),
+            new("Battery output current", "A", "Battery"),
+            new("Battery output power", "kW", "Battery"),
         };
 
         public TrainingShipMW()

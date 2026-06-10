@@ -72,23 +72,24 @@ namespace HoRang2Sea.Views
             }
         }
 
-        // 컴포넌트 트리에서 변수(잎)를 더블클릭 → Y축 항목으로 추가
+        // 트리 변수(잎) 더블클릭 → Y축 토글(추가됨이면 제거, 아니면 추가). 트리에선 안 빠지고 ✓ 표시만 바뀜.
         private void GlobalTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (sender is TreeView tv && tv.SelectedItem is string name
+            if (sender is TreeView tv && tv.SelectedItem is ChartVariableItem item
                 && DataContext is PostChartViewModel vm)
             {
-                vm.AddYItem(name);
+                if (item.IsAdded) vm.RemoveYItem(item.Name);
+                else vm.AddYItem(item.Name);
             }
         }
 
         // 트리에서 우클릭 → "X축으로 지정"
         private void SetX_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is MenuItem mi && mi.DataContext is string name
+            if (sender is MenuItem mi && mi.DataContext is ChartVariableItem item
                 && DataContext is PostChartViewModel vm)
             {
-                vm.SetXItem(name);
+                vm.SetXItem(item.Name);
             }
         }
 

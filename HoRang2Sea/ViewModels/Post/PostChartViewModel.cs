@@ -101,8 +101,11 @@ namespace HoRang2Sea.ViewModels
 
             RaisePropertyChanged(nameof(FilteredChartGlobalItems));
 
-            // 트리(그룹) 갱신: 검색 중이면 펼친 상태로
-            GroupedChartGlobalItems = ChartVariableGroup.Build(FilteredChartGlobalItems, expandAll: true);
+            // 트리 갱신: available(미추가) + added(ChartYItems, ✓표시). 검색 시 added도 동일 필터.
+            var addedForTree = string.IsNullOrEmpty(SearchKeyword)
+                ? ChartYItems.ToList()
+                : ChartYItems.Where(n => n != null && n.IndexOf(SearchKeyword, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+            GroupedChartGlobalItems = ChartVariableGroup.Build(FilteredChartGlobalItems, addedForTree, expandAll: true);
         }
 
         // 컴포넌트 트리에서 변수를 더블클릭 → Y축 항목으로 추가 (기존 4개 제한 유지)

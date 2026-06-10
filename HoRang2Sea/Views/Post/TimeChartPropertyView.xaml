@@ -22,9 +22,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Global Items 레이블 (더블클릭으로 추가) -->
+        <!-- Global Items 레이블 (더블클릭 토글: 추가/제거, ✓=추가됨) -->
         <Label  Grid.Column="0" Grid.Row="0"
-                Content="Global Items  (더블클릭 → 추가)" Foreground="Gray" FontSize="14"/>
+                Content="Global Items  (더블클릭 → 추가/제거, ✓=추가됨)" Foreground="Gray" FontSize="14"/>
 
         <!-- 검색어 입력 -->
         <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5" Height="25"
@@ -45,9 +45,21 @@
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
+                <BooleanToVisibilityConverter x:Key="BoolToVis"/>
                 <HierarchicalDataTemplate DataType="{x:Type vm:ChartVariableGroup}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding GroupName}" FontWeight="SemiBold" Foreground="#444444"/>
                 </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type vm:ChartVariableItem}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="✓" Foreground="#1E8449" FontWeight="Bold"
+                                   Visibility="{Binding IsAdded, Converter={StaticResource BoolToVis}}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                    </Grid>
+                </DataTemplate>
             </TreeView.Resources>
         </TreeView>
 

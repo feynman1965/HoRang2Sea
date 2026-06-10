@@ -100,7 +100,7 @@ namespace HoRang2Sea.ViewModels
 
         public ObservableCollection<string> ChartTabs { get; set; } = new ObservableCollection<string>();
 
-        private string _selectedChartTab = "전체";
+        private string _selectedChartTab;   // "전체" 제거: 기본은 첫 변수(RebuildChartTabs에서 설정)
         public string SelectedChartTab
         {
             get => _selectedChartTab;
@@ -114,36 +114,34 @@ namespace HoRang2Sea.ViewModels
             set => SetValue(ref _hasChartTabs, value);
         }
 
-        // 차트 하단 범례: "전체" 탭(오버레이)에서만 표시, 개별 변수 탭에선 숨김
-        private bool _showChartLegend = true;
+        // 차트 하단 범례: 변수별 단일 표시이므로 항상 숨김(탭 이름이 곧 변수명)
+        private bool _showChartLegend = false;
         public bool ShowChartLegend
         {
             get => _showChartLegend;
             set => SetValue(ref _showChartLegend, value);
         }
 
-        // ChartYItems 기준으로 탭 목록 재구성: "전체"(오버레이) + 각 변수
+        // ChartYItems 기준으로 탭 목록 재구성: 변수별 탭만(오버레이 "전체" 제거)
         private void RebuildChartTabs()
         {
             ChartTabs.Clear();
-            ChartTabs.Add("전체");
             foreach (var name in ChartYItems.Distinct())
                 ChartTabs.Add(name);
             HasChartTabs = ChartYItems.Count > 0;
-            _selectedChartTab = "전체";
+            _selectedChartTab = ChartTabs.FirstOrDefault();   // "전체" 제거: 변수별로만, 첫 변수 선택
             RaisePropertyChanged(nameof(SelectedChartTab));
             ApplyTabView();
         }
 
-        // 선택 탭에 해당하는 series/axis 만 표시. 데이터는 모든 series 에 계속 append 되므로 탭 전환만으로 즉시 전환된다.
+        // 선택 탭(변수)에 해당하는 series/axis 만 표시. 데이터는 모든 series 에 계속 append 되므로 탭 전환만으로 즉시 전환된다.
         private void ApplyTabView()
         {
             string tab = _selectedChartTab;
-            bool all = string.IsNullOrEmpty(tab) || tab == "전체";
-            ShowChartLegend = all;   // 전체 탭에서만 범례 표시
+            ShowChartLegend = false;   // 단일 변수 표시 → 범례 불필요
             foreach (var r in _seriesRefs)
             {
-                bool show = all || r.name == tab;
+                bool show = !string.IsNullOrEmpty(tab) && r.name == tab;
                 r.series.IsVisible = show;
                 r.axis.Visibility = show ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
             }
@@ -229,8 +227,11 @@ namespace HoRang2Sea.ViewModels
 
             RaisePropertyChanged(nameof(FilteredChartGlobalItems));
 
-            // 트리(그룹) 갱신: 검색 중이면 펼친 상태로
-            GroupedChartGlobalItems = ChartVariableGroup.Build(FilteredChartGlobalItems, expandAll: true);
+            // 트리 갱신: available(미추가) + added(ChartYItems, ✓표시). 검색 시 added도 동일 필터.
+            var addedForTree = string.IsNullOrEmpty(SearchKeyword)
+                ? ChartYItems.ToList()
+                : ChartYItems.Where(n => n != null && n.IndexOf(SearchKeyword, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+            GroupedChartGlobalItems = ChartVariableGroup.Build(FilteredChartGlobalItems, addedForTree, expandAll: true);
         }
 
         // 컴포넌트 트리에서 변수를 더블클릭 → Y축 항목으로 추가 (기존 드래그-드롭과 동일 동작·4개 제한 유지)

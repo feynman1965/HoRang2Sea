@@ -25,7 +25,7 @@
 
         <!-- Labels -->
         <Label Grid.Column="0" Grid.Row="0"
-               Content="Global Items  (더블클릭→Y, 우클릭→X)" Foreground="Gray" FontSize="14"/>
+               Content="Global Items  (더블클릭→Y 추가/제거, 우클릭→X, ✓=추가됨)" Foreground="Gray" FontSize="14"/>
         <Label Grid.Column="1" Grid.Row="0"
                Content="X Axis Item  (더블클릭 → 제거)" Foreground="Gray" FontSize="14"/>
 
@@ -48,17 +48,26 @@
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
+                <BooleanToVisibilityConverter x:Key="BoolToVis"/>
                 <HierarchicalDataTemplate DataType="{x:Type vm:ChartVariableGroup}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding GroupName}" FontWeight="SemiBold" Foreground="#444444"/>
                 </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type sys:String}">
-                    <TextBlock Text="{Binding}">
-                        <TextBlock.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="X축으로 지정" Click="SetX_Click"/>
-                            </ContextMenu>
-                        </TextBlock.ContextMenu>
-                    </TextBlock>
+                <DataTemplate DataType="{x:Type vm:ChartVariableItem}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="✓" Foreground="#1E8449" FontWeight="Bold"
+                                   Visibility="{Binding IsAdded, Converter={StaticResource BoolToVis}}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Name}">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="X축으로 지정" Click="SetX_Click"/>
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
+                    </Grid>
                 </DataTemplate>
             </TreeView.Resources>
         </TreeView>

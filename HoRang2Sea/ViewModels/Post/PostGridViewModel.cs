@@ -83,6 +83,14 @@ namespace HoRang2Sea.ViewModels
             set => SetValue(ref _filteredGridGlobalItems, value);
         }
 
+        // 컴포넌트 트리(접두어 그룹화) + ✓ 표시. 차트 Property와 동일 선택 시스템.
+        private ObservableCollection<ChartVariableGroup> _groupedGridGlobalItems = new ObservableCollection<ChartVariableGroup>();
+        public ObservableCollection<ChartVariableGroup> GroupedGridGlobalItems
+        {
+            get => _groupedGridGlobalItems;
+            set => SetValue(ref _groupedGridGlobalItems, value);
+        }
+
         private void UpdateFilteredList()
         {
             if (FilteredGridGlobalItems == null)
@@ -111,6 +119,29 @@ namespace HoRang2Sea.ViewModels
             }
 
             RaisePropertyChanged(nameof(FilteredGridGlobalItems));
+
+            // 트리(✓): available(필터됨) + added(GridItems) 합집합. 검색 시 added도 동일 필터.
+            var addedForTree = string.IsNullOrEmpty(SearchKeyword)
+                ? GridItems.ToList()
+                : GridItems.Where(item => item != null && item.IndexOf(SearchKeyword, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+            GroupedGridGlobalItems = ChartVariableGroup.Build(FilteredGridGlobalItems, addedForTree, expandAll: true);
+        }
+
+        // 트리 변수(잎) 더블클릭 토글용. 추가/제거해도 트리에서 사라지지 않고 ✓ 표시만 바뀜.
+        public void AddGridItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (!GridItems.Contains(name)) GridItems.Add(name);
+            if (GridGlobalItems.Contains(name)) GridGlobalItems.Remove(name);
+            UpdateFilteredList();
+        }
+
+        public void RemoveGridItem(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            if (GridItems.Contains(name)) GridItems.Remove(name);
+            if (!GridGlobalItems.Contains(name)) GridGlobalItems.Add(name);
+            UpdateFilteredList();
         }
 
         private void UpdateGridGlobalItems()
