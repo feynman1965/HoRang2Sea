@@ -114,10 +114,10 @@ namespace HoRang2Sea.ViewModels
         {
             get
             {
-                if (DesignLayout == 0 && ControlLayout == 0) return "Default";
-                if (DesignLayout == 0 && ControlLayout == 1) return "Control";
-                if (DesignLayout == 1 && ControlLayout == 0) return "Design";
-                if (DesignLayout == 1 && ControlLayout == 1) return "Full extended";
+                if (DesignLayout == 0 && ControlLayout == 0) return "Base";
+                if (DesignLayout == 0 && ControlLayout == 1) return "Fuzzy control";
+                if (DesignLayout == 1 && ControlLayout == 0) return "Series cooling";
+                if (DesignLayout == 1 && ControlLayout == 1) return "Series cooling + Fuzzy";
                 return "Unknown";
             }
         }

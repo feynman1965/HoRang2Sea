@@ -212,32 +212,32 @@ namespace HoRang2Sea.ViewModels
 
             // 4개의 레이아웃 버튼 생성 (2x2 배치) - 각기 다른 색상
             var btn1 = CreateLayoutButton(
-                "Default Layout",
-                "Standard configuration\nDesign: 0 | Control: 0",
+                "Base",
+                "Design: standard / Control: standard",
                 0, 0,
                 System.Windows.Media.Color.FromRgb(52, 152, 219)); // Blue
             System.Windows.Controls.Grid.SetRow(btn1, 0);
             System.Windows.Controls.Grid.SetColumn(btn1, 0);
 
             var btn2 = CreateLayoutButton(
-                "Control Mode",
-                "Enhanced control settings\nDesign: 0 | Control: 1",
+                "Fuzzy control",
+                "Design: standard / Control: Fuzzy control",
                 0, 1,
                 System.Windows.Media.Color.FromRgb(46, 204, 113)); // Green
             System.Windows.Controls.Grid.SetRow(btn2, 0);
             System.Windows.Controls.Grid.SetColumn(btn2, 1);
 
             var btn3 = CreateLayoutButton(
-                "Design Mode",
-                "Advanced design features\nDesign: 1 | Control: 0",
+                "Series cooling",
+                "Design: Series cooling system / Control: standard",
                 1, 0,
                 System.Windows.Media.Color.FromRgb(155, 89, 182)); // Purple
             System.Windows.Controls.Grid.SetRow(btn3, 1);
             System.Windows.Controls.Grid.SetColumn(btn3, 0);
 
             var btn4 = CreateLayoutButton(
-                "Full Configuration",
-                "Complete system setup\nDesign: 1 | Control: 1",
+                "Series cooling + Fuzzy",
+                "Design: Series cooling system / Control: Fuzzy control",
                 1, 1,
                 System.Windows.Media.Color.FromRgb(230, 126, 34)); // Orange
             System.Windows.Controls.Grid.SetRow(btn4, 1);

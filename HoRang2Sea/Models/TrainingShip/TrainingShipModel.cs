@@ -45,18 +45,21 @@ namespace HoRang2Sea.Models
         // Input index -> port number mapping (sequential 1-65)
         private static readonly Dictionary<int, int> InputPortMap = new()
         {
-            { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 }, { 5, 6 }, { 6, 7 }, { 7, 8 }, { 8, 9 }, { 9, 10 },
-            { 10, 11 }, { 11, 12 }, { 12, 13 }, { 13, 14 }, { 14, 15 }, { 15, 16 }, { 16, 17 }, { 17, 18 }, { 18, 19 },
-            { 19, 20 }, { 20, 21 }, { 21, 22 }, { 22, 23 }, { 23, 24 }, { 24, 25 }, { 25, 26 }, { 26, 27 }, { 27, 28 },
-            { 28, 29 }, { 29, 30 }, { 30, 31 }, { 31, 32 }, { 32, 33 }, { 33, 34 }, { 34, 35 }, { 35, 36 }, { 36, 37 },
-            { 37, 38 }, { 38, 39 }, { 39, 40 }, { 40, 41 }, { 41, 42 }, { 42, 43 }, { 43, 44 }, { 44, 45 }, { 45, 46 },
-            { 46, 47 }, { 47, 48 }, { 48, 49 }, { 49, 50 }, { 50, 51 }, { 51, 52 }, { 52, 53 }, { 53, 54 }, { 54, 55 },
-            { 55, 56 }, { 56, 57 }, { 57, 58 }, { 58, 59 }, { 59, 60 }, { 60, 61 }, { 61, 62 }, { 62, 63 },
-            // Layout: Mode/Design는 Sea DLL에 해당 포트 없어 silent no-op,
-            // Control_Layout만 port 65 (mode2)에 실제 매핑됨.
+            // XML 컬럼 순서 → 실제 DLL 포트 (TS.xlsx 권위 매핑 + ctypes 직접 검증 기준).
+            // idx0=Slip = 속도 프로파일 → In64 (DM_Speed_Profile, 매 step 주입).
+            // idx1~62 = 물리 파라미터(Ambient~Intercooler Area) → In1~In62 (Excel 포트와 1:1).
+            { 0, 64 },
+            { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 }, { 10, 10 },
+            { 11, 11 }, { 12, 12 }, { 13, 13 }, { 14, 14 }, { 15, 15 }, { 16, 16 }, { 17, 17 }, { 18, 18 }, { 19, 19 }, { 20, 20 },
+            { 21, 21 }, { 22, 22 }, { 23, 23 }, { 24, 24 }, { 25, 25 }, { 26, 26 }, { 27, 27 }, { 28, 28 }, { 29, 29 }, { 30, 30 },
+            { 31, 31 }, { 32, 32 }, { 33, 33 }, { 34, 34 }, { 35, 35 }, { 36, 36 }, { 37, 37 }, { 38, 38 }, { 39, 39 }, { 40, 40 },
+            { 41, 41 }, { 42, 42 }, { 43, 43 }, { 44, 44 }, { 45, 45 }, { 46, 46 }, { 47, 47 }, { 48, 48 }, { 49, 49 }, { 50, 50 },
+            { 51, 51 }, { 52, 52 }, { 53, 53 }, { 54, 54 }, { 55, 55 }, { 56, 56 }, { 57, 57 }, { 58, 58 }, { 59, 59 }, { 60, 60 },
+            { 61, 61 }, { 62, 62 },
+            // Layout: Mode/Design는 이 DLL에 포트 없어 silent no-op, Control_Layout만 port 65(DM_Control_mode)에 실제 매핑.
             { 63, 482 }, // Mode (port 482 not in DLL — silent no-op)
             { 64, 483 }, // Design_Layout (port 483 not in DLL — silent no-op)
-            { 65, 65 }   // Control_Layout (port 65 = mode2, profiles.json에서 활성화된 유일한 layout 포트)
+            { 65, 65 }   // Control_Layout (port 65 = DM_Control_mode)
         };
 
         // Output index -> port number mapping (sequential 1-55)
@@ -289,7 +292,7 @@ namespace HoRang2Sea.Models
                     if (signaledIndex == 0) break;
 
                     if (_driveModes != null && Step < _driveModes.Length)
-                        SetInputPort(1, _driveModes[Step]);
+                        SetInputPort(64, _driveModes[Step]);   // 속도 프로파일 = port 64 (DM_Speed_Profile, ctypes 검증)
 
                     CallStep();
 
@@ -361,7 +364,7 @@ namespace HoRang2Sea.Models
         {
             Step++;
             if (_driveModes != null && Step < _driveModes.Length)
-                SetInputPort(1, _driveModes[Step]);
+                SetInputPort(64, _driveModes[Step]);   // 속도 프로파일 = port 64 (DM_Speed_Profile, ctypes 검증)
 
             CallStep();
 
@@ -406,18 +409,15 @@ namespace HoRang2Sea.Models
                 SetInputPort(kvp.Key, kvp.Value);
             }
 
-            // Override mode/layout ports from MWInputs (GUI-selected values)
-            // Skip *_profile placeholders — filled per step in RunWithCancellation
+            // GUI 그리드의 모든 입력값을 해당 DLL 포트에 반영 (Ground와 동일 방식, Sea 고유 포트맵).
+            // 속도 프로파일(port 64)은 매 step RunWithCancellation에서 채우므로 skip.
+            // Mode(482)/Design(483)는 이 DLL에 포트 없어 silent no-op, Control(65)은 반영됨.
             for (int i = 0; i < TrainingShipMWInputs.Count; i++)
             {
                 if (InputPortMap.TryGetValue(i, out int port))
                 {
-                    string name = TrainingShipMWInputs[i].Name.ToLower();
-                    if (name.Contains("_profile")) continue;
-                    if (name.Contains("mode") || name.Contains("layout") || name.Contains("design") || name.Contains("control"))
-                    {
-                        SetInputPort(port, TrainingShipMWInputs[i].Value);
-                    }
+                    if (port == 64) continue;   // 속도 프로파일 = 매 step 주입
+                    SetInputPort(port, TrainingShipMWInputs[i].Value);
                 }
             }
         }
