@@ -262,9 +262,8 @@
             
             <dxr:RibbonControl.PageHeaderItems>
                 <dxb:BarButtonItem Name="bHelp"
-                                   Content="Help"
+                                   Content="❔  Help"
                                    Hint="Show the step-by-step guide"
-                                   Glyph="{dx:DXImage SvgImages/Outlook Inspired/Support.svg}"
                                    ItemClick="bHelp_ItemClick"
                                    RibbonStyle="SmallWithText" />
                 <dxb:BarItemLink BarItemName="ribbonStyleItem" RibbonStyle="SmallWithText" />

@@ -182,16 +182,52 @@ namespace HoRang2Sea.Views
             win.Loaded += (s, a) =>
             {
                 var owner = win.Owner;
-                if (owner != null && owner.ActualWidth > 0)
+                if (owner == null) return;
+
+                // Help 버튼 실제 위치에 말풍선 꼬리를 맞춤 (못 찾으면 우상단 폴백)
+                var btn = FindBarItemVisual(owner, bHelp);
+                if (btn != null)
+                {
+                    var src = PresentationSource.FromVisual(owner);
+                    double sx = src?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
+                    double sy = src?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
+                    var devPt = btn.PointToScreen(new Point(btn.ActualWidth / 2.0, btn.ActualHeight));
+                    double btnCenterX = devPt.X / sx;
+                    double btnBottomY = devPt.Y / sy;
+                    // 꼬리 중심 = win.Left + 344, 꼬리 끝(tip) = win.Top + 16
+                    win.Left = btnCenterX - 344;
+                    win.Top = btnBottomY - 14;
+                }
+                else if (owner.ActualWidth > 0)
                 {
                     win.Left = owner.Left + owner.ActualWidth - win.ActualWidth - 24;
                     win.Top = owner.Top + 88;
                 }
+
+                if (win.Left < owner.Left + 8) win.Left = owner.Left + 8;
             };
 
             render();
             _helpGuideWindow = win;
             win.Show();
+        }
+
+        // Help 버튼의 렌더된 비주얼(링크 컨트롤)을 찾아 화면 좌표 계산에 사용 (가장 넓은 매칭 = 버튼 본체)
+        private static FrameworkElement FindBarItemVisual(DependencyObject root, object barItem)
+        {
+            FrameworkElement best = null;
+            void Walk(DependencyObject d)
+            {
+                if (d is FrameworkElement fe && fe.DataContext == barItem && fe.IsVisible
+                    && fe.ActualWidth > 0 && fe.ActualHeight > 0)
+                {
+                    if (best == null || fe.ActualWidth > best.ActualWidth) best = fe;
+                }
+                int n = VisualTreeHelper.GetChildrenCount(d);
+                for (int i = 0; i < n; i++) Walk(VisualTreeHelper.GetChild(d, i));
+            }
+            Walk(root);
+            return best;
         }
     }
 }

@@ -145,7 +145,7 @@ namespace HoRang2Sea.ViewModels
                 };
 
                 stack.Children.Add(titleText);
-                stack.Children.Add(descText);
+                if (!string.IsNullOrEmpty(description)) stack.Children.Add(descText);
                 button.Content = stack;
 
                 if (isActive)

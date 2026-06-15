@@ -73,11 +73,12 @@
                 </Button>
             </ext:SciChartInteractionToolbar>-->
             <DockPanel Grid.Column="1">
-                <ListBox DockPanel.Dock="Top"
+                <ListBox x:Name="ChartTabList" DockPanel.Dock="Top"
                          ItemsSource="{Binding ChartTabs}"
                          SelectedItem="{Binding SelectedChartTab, Mode=TwoWay}"
                          Visibility="{Binding HasChartTabs, Converter={StaticResource BoolToVis}}"
                          BorderThickness="0,0,0,1" BorderBrush="#E0E0E0" Background="#F8F8F8" Padding="2,2,2,0"
+                         PreviewMouseWheel="ChartTabList_PreviewMouseWheel"
                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
                          ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
@@ -92,7 +93,28 @@
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ListBoxItem">
                                         <Border x:Name="bd" Background="#ECECEC" CornerRadius="3,3,0,0" Padding="10,3" BorderBrush="#E0E0E0" BorderThickness="1,1,1,0">
-                                            <TextBlock x:Name="tb" Text="{Binding}" FontSize="12" Foreground="#555555"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock x:Name="tb" Text="{Binding}" FontSize="12" Foreground="#555555" VerticalAlignment="Center"/>
+                                                <Button Margin="7,0,0,0" Width="14" Height="14" Padding="0"
+                                                        VerticalAlignment="Center" Cursor="Hand" Foreground="#999999"
+                                                        ToolTip="Close tab"
+                                                        Command="{Binding DataContext.RemoveChartTabCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                        CommandParameter="{Binding}">
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="Transparent">
+                                                                <TextBlock Text="✕" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                           Foreground="{TemplateBinding Foreground}"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Foreground" Value="#E53935"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                </Button>
+                                            </StackPanel>
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsSelected" Value="True">

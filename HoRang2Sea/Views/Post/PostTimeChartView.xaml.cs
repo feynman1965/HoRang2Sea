@@ -52,5 +52,29 @@ namespace HoRang2Sea.Views
             window.Show();
         }
 
+        // 변수 탭 스트립: 마우스 휠로 좌우 스크롤
+        private void ChartTabList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var sv = FindVisualChild<ScrollViewer>(sender as DependencyObject);
+            if (sv != null)
+            {
+                sv.ScrollToHorizontalOffset(sv.HorizontalOffset - e.Delta);
+                e.Handled = true;
+            }
+        }
+
+        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null;
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T t) return t;
+                var result = FindVisualChild<T>(child);
+                if (result != null) return result;
+            }
+            return null;
+        }
     }
 }

@@ -34,6 +34,7 @@ namespace HoRang2Sea.ViewModels
 
             RenderableSeries = new ObservableCollection<IRenderableSeriesViewModel>();
             OnChartPropertyCommand = new DelegateCommand(OnChartProperty);
+            RemoveChartTabCommand = new DelegateCommand<string>(OnRemoveChartTab);
             ParentViewModel = parent;
 
             if (_isPropertyDialogOpen) return;
@@ -255,6 +256,15 @@ namespace HoRang2Sea.ViewModels
             if (ChartGlobalItems != null && !ChartGlobalItems.Contains(name))
                 ChartGlobalItems.Add(name);
             UpdateFilteredList();
+        }
+
+        // 변수 탭의 ✕ 클릭 → 해당 변수 차트에서 제거 (트리 더블클릭 제거와 동일 경로)
+        public DelegateCommand<string> RemoveChartTabCommand { get; private set; }
+        private void OnRemoveChartTab(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return;
+            RemoveYItem(name);
+            ChartSet(true);   // 남은 변수로 재렌더 + 탭 재구성
         }
 
 

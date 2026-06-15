@@ -119,7 +119,7 @@ namespace HoRang2Sea.Views
                 var titleAnnotation = new TextAnnotation
                 {
                     Text = "Profile", // 그래프 제목
-                    FontSize = 20,
+                    FontSize = 13,
                     Foreground = Brushes.Black,
                     HorizontalAnchorPoint = HorizontalAnchorPoint.Center,
                     VerticalAnchorPoint = VerticalAnchorPoint.Top,
