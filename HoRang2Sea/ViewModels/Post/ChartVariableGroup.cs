@@ -24,10 +24,10 @@ namespace HoRang2Sea.ViewModels
         // 그 외(구 Simulink명 등)는 첫 '_' 앞 토큰, 없으면 "기타".
         public static string GroupKeyOf(string name)
         {
-            if (string.IsNullOrEmpty(name)) return "기타";
+            if (string.IsNullOrEmpty(name)) return "Other";
             if (OutputComponentRegistry.Map.TryGetValue(name, out var comp)) return comp;
             int idx = name.IndexOf('_');
-            return idx > 0 ? name.Substring(0, idx) : "기타";
+            return idx > 0 ? name.Substring(0, idx) : "Other";
         }
 
         // available(미추가) + added(추가됨)를 합쳐 그룹 트리 생성. added는 ✓ 표시(IsAdded=true).

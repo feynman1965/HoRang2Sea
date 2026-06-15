@@ -50,8 +50,34 @@ namespace HoRang2Sea.Views
             evaluationOperator = new TableRelationEvaluationOperator();
             CriteriaOperator.RegisterCustomFunction(evaluationOperator);
             InitializeComponent();
+            this.DataContextChanged += TrainingShipModuleView_DataContextChanged;
+        }
 
-
+        // 레이아웃 변경 시 상태바 색 알약을 잠깐 강조(pulse) — "티 나는 전환" (#13)
+        private System.ComponentModel.INotifyPropertyChanged _layoutVm;
+        private void TrainingShipModuleView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (_layoutVm != null) _layoutVm.PropertyChanged -= LayoutVm_PropertyChanged;
+            _layoutVm = DataContext as System.ComponentModel.INotifyPropertyChanged;
+            if (_layoutVm != null) _layoutVm.PropertyChanged += LayoutVm_PropertyChanged;
+        }
+        private void LayoutVm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "CurrentLayoutName") PulseLayoutPill();
+        }
+        private void PulseLayoutPill()
+        {
+            if (LayoutPill == null || !(LayoutPill.RenderTransform is System.Windows.Media.ScaleTransform st)) return;
+            var anim = new System.Windows.Media.Animation.DoubleAnimation
+            {
+                From = 1.0,
+                To = 1.18,
+                Duration = TimeSpan.FromMilliseconds(160),
+                AutoReverse = true,
+                EasingFunction = new System.Windows.Media.Animation.QuadraticEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseOut }
+            };
+            st.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleXProperty, anim);
+            st.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleYProperty, anim);
         }
         private void VelocityProfilePanel_Loaded(object sender, RoutedEventArgs e)
         {

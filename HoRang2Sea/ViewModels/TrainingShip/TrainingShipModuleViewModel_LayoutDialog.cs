@@ -16,7 +16,7 @@ namespace HoRang2Sea.ViewModels
 
         public override void OpenItemByItem(SolutionItem item)
         {
-            ShowLayoutSelectionDialog();
+            // 모달 자동 팝업 제거 → 하단 상태바 알약 클릭으로 선택 (#13 더 확실한 방식)
             base.OpenItemByItem(item);
         }
 
@@ -97,6 +97,7 @@ namespace HoRang2Sea.ViewModels
             // 버튼 스타일 정의 함수
             System.Windows.Controls.Button CreateLayoutButton(string text, string description, int designValue, int controlValue, System.Windows.Media.Color accentColor)
             {
+                bool isActive = (designValue == DesignLayout && controlValue == ControlLayout);
                 var button = new System.Windows.Controls.Button
                 {
                     Width = 280,
@@ -147,6 +148,21 @@ namespace HoRang2Sea.ViewModels
                 stack.Children.Add(descText);
                 button.Content = stack;
 
+                if (isActive)
+                {
+                    button.BorderBrush = new System.Windows.Media.SolidColorBrush(accentColor);
+                    button.BorderThickness = new System.Windows.Thickness(3);
+                    stack.Children.Add(new System.Windows.Controls.TextBlock
+                    {
+                        Text = "✓ CURRENT",
+                        FontSize = 11,
+                        FontWeight = System.Windows.FontWeights.Bold,
+                        Foreground = new System.Windows.Media.SolidColorBrush(accentColor),
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                        Margin = new System.Windows.Thickness(0, 8, 0, 0)
+                    });
+                }
+
                 // 마우스 오버 효과
                 button.MouseEnter += (s, e) =>
                 {
@@ -165,8 +181,8 @@ namespace HoRang2Sea.ViewModels
                 button.MouseLeave += (s, e) =>
                 {
                     button.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
-                    button.BorderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 225, 230));
-                    button.BorderThickness = new System.Windows.Thickness(2);
+                    button.BorderBrush = isActive ? new System.Windows.Media.SolidColorBrush(accentColor) : new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 225, 230));
+                    button.BorderThickness = isActive ? new System.Windows.Thickness(3) : new System.Windows.Thickness(2);
                     var effect = button.Effect as System.Windows.Media.Effects.DropShadowEffect;
                     if (effect != null)
                     {

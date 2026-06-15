@@ -24,7 +24,7 @@
 
         <!-- Global Items 레이블 (더블클릭 토글: 추가/제거, ✓=추가됨) -->
         <Label  Grid.Column="0" Grid.Row="0"
-                Content="Global Items  (더블클릭 → 추가/제거, ✓=추가됨)" Foreground="Gray" FontSize="14"/>
+                Content="Global Items  (double-click → add/remove, ✓=added)" Foreground="Gray" FontSize="14"/>
 
         <!-- 검색어 입력 -->
         <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5" Height="25"
@@ -38,7 +38,7 @@
                   VirtualizingStackPanel.IsVirtualizing="True"
                   VirtualizingStackPanel.VirtualizationMode="Recycling"
                   BorderBrush="#D0D0D0" BorderThickness="1"
-                  ToolTip="컴포넌트별로 묶인 변수입니다. 변수를 더블클릭하면 우측 Y축 목록에 추가됩니다.">
+                  ToolTip="Variables grouped by component. Double-click a variable to add it to the Y axis list on the right.">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsExpanded" Value="True"/>
@@ -65,7 +65,7 @@
 
         <!-- Y Axis Item 레이블 (더블클릭으로 제거) -->
         <Label  Grid.Column="1" Grid.Row="0"
-                Content="Y Axis Item  (더블클릭 → 제거)" Foreground="Gray" FontSize="14"/>
+                Content="Y Axis Item  (double-click → remove)" Foreground="Gray" FontSize="14"/>
 
         <!-- Y Axis Items 리스트 -->
         <dxe:ListBoxEdit x:Name="YItemsList" ItemsSource="{Binding ChartYItems}"

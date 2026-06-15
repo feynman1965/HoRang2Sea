@@ -25,9 +25,9 @@
 
         <!-- Labels -->
         <Label Grid.Column="0" Grid.Row="0"
-               Content="Global Items  (더블클릭→Y 추가/제거, 우클릭→X, ✓=추가됨)" Foreground="Gray" FontSize="14"/>
+               Content="Global Items  (double-click → add/remove Y, right-click → X, ✓=added)" Foreground="Gray" FontSize="14"/>
         <Label Grid.Column="1" Grid.Row="0"
-               Content="X Axis Item  (더블클릭 → 제거)" Foreground="Gray" FontSize="14"/>
+               Content="X Axis Item  (double-click → remove)" Foreground="Gray" FontSize="14"/>
 
         <!-- Search Box under Global Items -->
         <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5"
@@ -41,7 +41,7 @@
                   VirtualizingStackPanel.IsVirtualizing="True"
                   VirtualizingStackPanel.VirtualizationMode="Recycling"
                   BorderBrush="#D0D0D0" BorderThickness="1"
-                  ToolTip="변수 더블클릭 → Y축 추가 / 우클릭 → X축으로 지정">
+                  ToolTip="Double-click a variable → add to Y axis / right-click → set as X axis">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsExpanded" Value="True"/>
@@ -63,7 +63,7 @@
                         <TextBlock Grid.Column="1" Text="{Binding Name}">
                             <TextBlock.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="X축으로 지정" Click="SetX_Click"/>
+                                    <MenuItem Header="Set as X axis" Click="SetX_Click"/>
                                 </ContextMenu>
                             </TextBlock.ContextMenu>
                         </TextBlock>
@@ -80,7 +80,7 @@
 
         <!-- Y Axis Label -->
         <Label Grid.Column="1" Grid.Row="3"
-               Content="Y Axis Item  (더블클릭 → 제거)" Foreground="Gray" FontSize="14"/>
+               Content="Y Axis Item  (double-click → remove)" Foreground="Gray" FontSize="14"/>
 
         <!-- Y Axis ListBox -->
         <dxe:ListBoxEdit x:Name="YItemsList" ItemsSource="{Binding ChartYItems}" Grid.Column="1" Grid.Row="4" Margin="5"

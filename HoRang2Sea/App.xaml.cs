@@ -102,8 +102,8 @@ namespace HoRang2Sea
                 string logPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error_log.txt");
                 string message = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {source}\n{ex?.ToString()}\n\n";
                 System.IO.File.AppendAllText(logPath, message);
-                MessageBox.Show($"오류가 발생했습니다.\n{ex?.Message}\n\n자세한 내용은 error_log.txt를 확인하세요.",
-                    "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred.\n{ex?.Message}\n\nSee error_log.txt for details.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch { }
         }

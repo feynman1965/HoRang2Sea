@@ -117,7 +117,7 @@ namespace HoRang2Sea.ViewModels
                 if (DesignLayout == 0 && ControlLayout == 0) return "Default";
                 if (DesignLayout == 0 && ControlLayout == 1) return "Control";
                 if (DesignLayout == 1 && ControlLayout == 0) return "Design";
-                if (DesignLayout == 1 && ControlLayout == 1) return "Control + Design";
+                if (DesignLayout == 1 && ControlLayout == 1) return "Full extended";
                 return "Unknown";
             }
         }
@@ -1119,11 +1119,11 @@ namespace HoRang2Sea.ViewModels
                     };
                     saveData.Save(dialog.FileName);
                     VehicleSaveData.RememberDir("TrainingShip", dialog.FileName);
-                    System.Windows.MessageBox.Show("저장 완료", "Save", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show("Saved", "Save", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.MessageBox.Show($"저장 실패: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show($"Save failed: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
             }
         }
@@ -1175,11 +1175,11 @@ namespace HoRang2Sea.ViewModels
                         UpdateVelocityLineDataSeries();
                     }
                     UpdateLayoutVisibility();
-                    System.Windows.MessageBox.Show("불러오기 완료", "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show("Loaded", "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.MessageBox.Show($"불러오기 실패: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show($"Load failed: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
             }
         }
@@ -1202,12 +1202,12 @@ namespace HoRang2Sea.ViewModels
                     };
                     if (optsDlg.ShowDialog() != true) return;
                     model.ExportToCsv(dialog.FileName, optsDlg.StepInterval, optsDlg.StartStep, optsDlg.EndStep, optsDlg.SelectedVariables);
-                    System.Windows.MessageBox.Show("CSV 저장 완료", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show("CSV saved", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
             }
             else
             {
-                System.Windows.MessageBox.Show("저장할 데이터가 없습니다. 시뮬레이션을 먼저 실행하세요.", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("No data to export. Please run the simulation first.", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
             }
         }
 

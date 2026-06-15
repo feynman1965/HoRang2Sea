@@ -63,7 +63,7 @@
                 <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Properties" Command="{Binding OnChartPropertyCommand}" Width="21" Height="21">
                     <ext:ToolbarIcon Width="13" Kind="ViewDashboardOutline" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
                 </Button>
-                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="큰 화면으로 보기 (Pop Out)" Click="PopOutChart_Click" Width="21" Height="21" Margin="0,4,0,0">
+                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="View larger (Pop Out)" Click="PopOutChart_Click" Width="21" Height="21" Margin="0,4,0,0">
                     <ext:ToolbarIcon Width="13" Kind="OpenInNew" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
                 </Button>
             </StackPanel>

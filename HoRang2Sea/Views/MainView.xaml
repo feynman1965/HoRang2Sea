@@ -261,39 +261,14 @@
             </dxr:RibbonControl.ApplicationMenu>
             
             <dxr:RibbonControl.PageHeaderItems>
-                <dxb:BarButtonItem Name="eDescription"
-                                   Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Info.svg}"
-                                   Command="{Binding NavigateToHomeSiteCommand}" />
+                <dxb:BarButtonItem Name="bHelp"
+                                   Content="Help"
+                                   Hint="Show the step-by-step guide"
+                                   Glyph="{dx:DXImage SvgImages/Outlook Inspired/Support.svg}"
+                                   ItemClick="bHelp_ItemClick"
+                                   RibbonStyle="SmallWithText" />
                 <dxb:BarItemLink BarItemName="ribbonStyleItem" RibbonStyle="SmallWithText" />
             </dxr:RibbonControl.PageHeaderItems>
-            
-            <dxr:RibbonPageCategory x:Name="selectionPageCategory"
-                                    Color="PowderBlue"
-                                    Caption=""
-                                    >
-                <dxr:RibbonPage Caption="Views" >
-                    <dxr:RibbonPageGroup Caption="Views">
-                        <dxb:BarCheckItem Content="Start page"
-                                      Command="{DXCommand  Execute='OpenOrCloseWorkspace(@parameter)'}" CommandParameter="{DXBinding 'StartViewModel'}"
-                                          Glyph="{dx:DXImage 'SvgImages/Icon Builder/Actions_Home.svg'}"
-                                          IsChecked="{DXBinding 'StartViewModel.IsOpened', Mode=OneWay}" />
-                        <dxb:BarCheckItem Content="Solution"
-                                      Command="{DXCommand  Execute='OpenOrCloseWorkspace(@parameter)'}" CommandParameter="{DXBinding 'SolutionExplorerViewModel'}"
-                                          Glyph="{dx:DXImage 'SvgImages/Dashboards/AutoExpand.svg'}"
-                                          IsChecked="{DXBinding 'SolutionExplorerViewModel.IsOpened', Mode=OneWay}" />
-                    </dxr:RibbonPageGroup>
-                </dxr:RibbonPage>
-                <dxr:RibbonPage Caption="Help" >
-                    <dxr:RibbonPageGroup Caption="Help">
-                        <dxb:BarButtonItem Content="Support"
-                                          Glyph="{dx:DXImage 'SvgImages/Outlook Inspired/Support.svg'}"
-                                           />
-                        <dxb:BarButtonItem Content="Update"
-                                          Glyph="{dx:DXImage 'SvgImages/RichEdit/UpdateTableOfContents2.svg'}"
-                                           />
-                    </dxr:RibbonPageGroup>
-                </dxr:RibbonPage>
-            </dxr:RibbonPageCategory>
         </dxr:RibbonControl>
         
         

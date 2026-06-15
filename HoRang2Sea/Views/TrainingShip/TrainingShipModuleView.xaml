@@ -293,14 +293,6 @@
 
                 <dxr:RibbonPageGroup Caption="Layout" ShowCaptionButton="False">
                     <dxb:BarButtonItem Name="btnSelectLayout" Content="Select Layout" Glyph="{dx:DXImage 'SvgImages/Dashboards/SwitchViewType.svg'}" Command="{Binding SelectLayoutCommand}" RibbonStyle="SmallWithText" />
-                    <dxb:BarStaticItem Name="currentLayout" Content="{Binding CurrentLayoutName, StringFormat='Current: {0}'}" Foreground="{Binding LayoutAccentColor}" RibbonStyle="SmallWithText" />
-                </dxr:RibbonPageGroup>
-
-                <dxr:RibbonPageGroup Caption="Panels" ShowCaptionButton="False">
-                    <dxb:BarCheckItem Name="chkVelocityProfile" Content="Profile" Glyph="{dx:DXImage 'SvgImages/Chart/LineChart.svg'}" IsChecked="{Binding IsVelocityProfileVisible, Mode=TwoWay}" RibbonStyle="SmallWithText" />
-                    <dxb:BarCheckItem Name="chkGridProperties" Content="Grid Properties" Glyph="{dx:DXImage 'SvgImages/Spreadsheet/ShowDetail.svg'}" IsChecked="{Binding IsGridVisible, Mode=TwoWay}" RibbonStyle="SmallWithText" />
-                    <dxb:BarCheckItem Name="chkTimeChart" Content="Time Chart" Glyph="{dx:DXImage 'SvgImages/Chart/ChartType_Line.svg'}" IsChecked="{Binding IsTimeChartVisible, Mode=TwoWay}" RibbonStyle="SmallWithText" />
-                    <dxb:BarCheckItem Name="chkXYChart" Content="XY Chart" Glyph="{dx:DXImage 'SvgImages/Chart/ChartType_Point.svg'}" IsChecked="{Binding IsXYChartVisible, Mode=TwoWay}" RibbonStyle="SmallWithText" />
                 </dxr:RibbonPageGroup>
             </dxr:RibbonPage>
             <dxr:RibbonPageCategory x:Name="selectionPageCategory" Caption="Image tools" IsVisible="False">
@@ -318,6 +310,31 @@
                 <RadioButton Content="Graph"
                              IsChecked="{Binding IsGraphMode, Mode=TwoWay}"
                              Style="{StaticResource SegmentedLastStyle}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ===== Bottom Status Bar: 활성 레이아웃 색 알약 + 클릭 시 설정창 (#13) ===== -->
+        <Border DockPanel.Dock="Bottom" Background="#ECEFF1" BorderBrush="#D5DAE0" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,3">
+                <TextBlock Text="Active Layout:" Foreground="#546E7A" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Button x:Name="LayoutPill" Command="{Binding SelectLayoutCommand}" Cursor="Hand"
+                        Background="{Binding LayoutAccentColor}" ToolTip="Click to change layout"
+                        RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <ScaleTransform/>
+                    </Button.RenderTransform>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="3" Padding="11,2">
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding CurrentLayoutName}" Foreground="White" FontWeight="SemiBold"/>
+                        <TextBlock Text="&#x2699;" Foreground="White" Opacity="0.85" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 

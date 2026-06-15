@@ -34,7 +34,7 @@ namespace HoRang2Sea.Views
 
         public CsvExportOptionsDialog(int totalSteps, IList<string> availableHeaders)
         {
-            Title = "CSV 저장 옵션";
+            Title = "CSV Export Options";
             Width = 500;
             Height = 660;
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -56,7 +56,7 @@ namespace HoRang2Sea.Views
             // ---- 0: 총 step ----
             var totalLabel = new TextBlock
             {
-                Text = $"기록된 총 step 수: {totalSteps}",
+                Text = $"Total recorded steps: {totalSteps}",
                 FontWeight = FontWeights.Bold,
                 Margin = new Thickness(0, 0, 0, 10)
             };
@@ -64,16 +64,16 @@ namespace HoRang2Sea.Views
             root.Children.Add(totalLabel);
 
             // ---- 1: 시간 범위 ----
-            var rangeBox = new GroupBox { Header = "시간 범위 (옵션)", Margin = new Thickness(0, 0, 0, 8) };
+            var rangeBox = new GroupBox { Header = "Time Range (optional)", Margin = new Thickness(0, 0, 0, 8) };
             var rangeGrid = MakeFormGrid();
-            AddFormRow(rangeGrid, 0, "시작 step (비우면 처음부터)", out _startStepBox, "");
-            AddFormRow(rangeGrid, 1, "종료 step (비우면 끝까지)", out _endStepBox, "");
+            AddFormRow(rangeGrid, 0, "Start step (blank = from beginning)", out _startStepBox, "");
+            AddFormRow(rangeGrid, 1, "End step (blank = to end)", out _endStepBox, "");
             rangeBox.Content = rangeGrid;
             Grid.SetRow(rangeBox, 1);
             root.Children.Add(rangeBox);
 
             // ---- 2: 샘플링 방식 (CheckBox 2개, 양자택일 보장 + 둘 다 해제 시 전체 저장) ----
-            var sampleBox = new GroupBox { Header = "샘플링 방식 (둘 다 해제 시 전체 저장)", Margin = new Thickness(0, 0, 0, 8) };
+            var sampleBox = new GroupBox { Header = "Sampling Mode (both off = save all)", Margin = new Thickness(0, 0, 0, 8) };
             var sampleGrid = new Grid();
             sampleGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             sampleGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -81,12 +81,12 @@ namespace HoRang2Sea.Views
             // Step 기준
             _modeStepCheck = new CheckBox
             {
-                Content = "Step 기준 — N step마다 저장",
+                Content = "By step — save every N steps",
                 FontWeight = FontWeights.SemiBold,
                 Margin = new Thickness(4, 6, 4, 2)
             };
             var stepInner = MakeFormGrid();
-            AddFormRow(stepInner, 0, "Step 간격 (1=전체, 10=10step)", out _stepIntervalBox, "1");
+            AddFormRow(stepInner, 0, "Step interval (1=all, 10=every 10 steps)", out _stepIntervalBox, "1");
             stepInner.Margin = new Thickness(24, 0, 4, 6);
             stepInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeStepCheck });
             var stepStack = new StackPanel();
@@ -98,12 +98,12 @@ namespace HoRang2Sea.Views
             // 시간 기준
             _modeTimeCheck = new CheckBox
             {
-                Content = "시간 기준 — 1초 간격으로 저장",
+                Content = "By time — save at 1-second intervals",
                 FontWeight = FontWeights.SemiBold,
                 Margin = new Thickness(4, 6, 4, 2)
             };
             var timeInner = MakeFormGrid();
-            AddFormRow(timeInner, 0, "Steps per second (DLL 보통 100)", out _stepsPerSecondBox, "100");
+            AddFormRow(timeInner, 0, "Steps per second (DLL usually 100)", out _stepsPerSecondBox, "100");
             timeInner.Margin = new Thickness(24, 0, 4, 6);
             timeInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeTimeCheck });
             var timeStack = new StackPanel();
@@ -121,7 +121,7 @@ namespace HoRang2Sea.Views
             root.Children.Add(sampleBox);
 
             // ---- 3: 변수 선택 ----
-            var varSection = new GroupBox { Header = "저장 변수 선택 (전부 끄면 전체 저장)" };
+            var varSection = new GroupBox { Header = "Select Variables (all off = save all)" };
             var varGrid = new Grid();
             varGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             varGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -157,7 +157,7 @@ namespace HoRang2Sea.Views
             // ---- 4: hint ----
             var hint = new TextBlock
             {
-                Text = "* 시간 범위 비우면 전체 step 저장. * 변수 모두 체크 해제 시 전체 변수 저장.",
+                Text = "* Blank time range saves all steps.  * All variables unchecked saves all variables.",
                 Foreground = System.Windows.Media.Brushes.Gray,
                 FontSize = 11,
                 Margin = new Thickness(0, 8, 0, 8),
@@ -172,8 +172,8 @@ namespace HoRang2Sea.Views
                 Orientation = Orientation.Horizontal,
                 HorizontalAlignment = HorizontalAlignment.Right
             };
-            var okBtn = new Button { Content = "저장", Width = 80, Margin = new Thickness(0, 0, 8, 0), IsDefault = true };
-            var cancelBtn = new Button { Content = "취소", Width = 80, IsCancel = true };
+            var okBtn = new Button { Content = "Save", Width = 80, Margin = new Thickness(0, 0, 8, 0), IsDefault = true };
+            var cancelBtn = new Button { Content = "Cancel", Width = 80, IsCancel = true };
             okBtn.Click += (s, e) =>
             {
                 if (TryParseValues())
@@ -303,12 +303,12 @@ namespace HoRang2Sea.Views
 
             if (!string.IsNullOrWhiteSpace(_startStepBox.Text) && !int.TryParse(_startStepBox.Text, out startStep))
             {
-                MessageBox.Show("시작 step은 정수여야 합니다.", "입력 오류", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Start step must be an integer.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
             if (!string.IsNullOrWhiteSpace(_endStepBox.Text) && !int.TryParse(_endStepBox.Text, out endStep))
             {
-                MessageBox.Show("종료 step은 정수여야 합니다.", "입력 오류", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("End step must be an integer.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
@@ -316,7 +316,7 @@ namespace HoRang2Sea.Views
             {
                 if (!int.TryParse(_stepsPerSecondBox.Text, out int sps) || sps < 1)
                 {
-                    MessageBox.Show("Steps per second는 1 이상의 정수여야 합니다.", "입력 오류", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Steps per second must be an integer of at least 1.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
                 interval = sps;
@@ -325,7 +325,7 @@ namespace HoRang2Sea.Views
             {
                 if (!string.IsNullOrWhiteSpace(_stepIntervalBox.Text) && !int.TryParse(_stepIntervalBox.Text, out interval))
                 {
-                    MessageBox.Show("Step 간격은 정수여야 합니다.", "입력 오류", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Step interval must be an integer.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return false;
                 }
                 if (interval < 1) interval = 1;

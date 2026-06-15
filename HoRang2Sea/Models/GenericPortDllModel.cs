@@ -160,8 +160,8 @@ namespace HoRang2Sea.Models
                     {
                         System.Windows.MessageBox.Show(
                             System.Windows.Application.Current.MainWindow,
-                            $"Step {step}에서 '{varName}' 출력이 NaN/Inf입니다.\n\n입력 변수 설정을 확인하세요.\n(파라미터 값이 해당 모델에 맞지 않을 수 있습니다)\n\n시뮬레이션을 중지합니다.",
-                            "입력 변수 경고",
+                            $"Output '{varName}' is NaN/Inf at step {step}.\n\nPlease check the input variable settings.\n(The parameter values may not be appropriate for this model.)\n\nThe simulation will be stopped.",
+                            "Input Variable Warning",
                             System.Windows.MessageBoxButton.OK,
                             System.Windows.MessageBoxImage.Warning);
                     }));

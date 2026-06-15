@@ -289,13 +289,13 @@ namespace HoRang2Sea.ViewModels
                     BackstageViewService?.Close();
 
                     if (System.IO.File.Exists(filename))
-                        MessageBox.Show("프로젝트 저장 완료\n" + filename, "Save Project", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Project saved\n" + filename, "Save Project", MessageBoxButton.OK, MessageBoxImage.Information);
                     else
-                        MessageBox.Show("프로젝트 파일 생성에 실패했습니다.", "Save Project", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Failed to create the project file.", "Save Project", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"프로젝트 저장 실패: {ex.Message}", "Save Project", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Project save failed: {ex.Message}", "Save Project", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
