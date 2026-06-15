@@ -273,7 +273,7 @@
                                        Hint=""
                                        RibbonStyle="SmallWithText" />
                     <dxb:BarButtonItem Name="bRemoveText"
-                                       Content="Remove Txt (to default)"
+                                       Content="Remove Text"
                                        Glyph="{iconPacks:IoniconsImage Kind=DocumentiOS,Brush=SkyBlue}"
                                        Command="{Binding RemoveTextCommand}"
                                        RibbonStyle="SmallWithText" />
