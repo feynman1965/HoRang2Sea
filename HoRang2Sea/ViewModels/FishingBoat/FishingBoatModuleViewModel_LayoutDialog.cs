@@ -213,7 +213,7 @@ namespace HoRang2Sea.ViewModels
             // 4개의 레이아웃 버튼 생성 (2x2 배치) - 각기 다른 색상
             var btn1 = CreateLayoutButton(
                 "Base",
-                "Design: standard / Control: standard",
+                "",
                 0, 0,
                 System.Windows.Media.Color.FromRgb(52, 152, 219)); // Blue
             System.Windows.Controls.Grid.SetRow(btn1, 0);
@@ -221,7 +221,7 @@ namespace HoRang2Sea.ViewModels
 
             var btn2 = CreateLayoutButton(
                 "Fuzzy control",
-                "Design: standard / Control: Fuzzy control",
+                "",
                 0, 1,
                 System.Windows.Media.Color.FromRgb(46, 204, 113)); // Green
             System.Windows.Controls.Grid.SetRow(btn2, 0);
@@ -229,7 +229,7 @@ namespace HoRang2Sea.ViewModels
 
             var btn3 = CreateLayoutButton(
                 "Series cooling",
-                "Design: Series cooling system / Control: standard",
+                "",
                 1, 0,
                 System.Windows.Media.Color.FromRgb(155, 89, 182)); // Purple
             System.Windows.Controls.Grid.SetRow(btn3, 1);
@@ -237,7 +237,7 @@ namespace HoRang2Sea.ViewModels
 
             var btn4 = CreateLayoutButton(
                 "Series cooling + Fuzzy",
-                "Design: Series cooling system / Control: Fuzzy control",
+                "",
                 1, 1,
                 System.Windows.Media.Color.FromRgb(230, 126, 34)); // Orange
             System.Windows.Controls.Grid.SetRow(btn4, 1);

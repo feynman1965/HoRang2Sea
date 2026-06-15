@@ -949,6 +949,71 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
+        // ===== 시뮬 진행 표시 (충남대 #5: 그래프 안 열어도 작동/진행 확인) =====
+        private System.Windows.Threading.DispatcherTimer _simTimer;
+        private int _simTotalSteps = 0;
+        private DateTime _simStart;
+        private const double SimBarWidth = 78.0;
+
+        private string _simStateText = "Idle";
+        public string SimStateText { get => _simStateText; set { if (_simStateText != value) { _simStateText = value; RaisePropertyChanged(nameof(SimStateText)); } } }
+        private string _simPercentText = "";
+        public string SimPercentText { get => _simPercentText; set { if (_simPercentText != value) { _simPercentText = value; RaisePropertyChanged(nameof(SimPercentText)); } } }
+        private string _simTimeText = "";
+        public string SimTimeText { get => _simTimeText; set { if (_simTimeText != value) { _simTimeText = value; RaisePropertyChanged(nameof(SimTimeText)); } } }
+        private double _simProgressWidth = 0;
+        public double SimProgressWidth { get => _simProgressWidth; set { if (_simProgressWidth != value) { _simProgressWidth = value; RaisePropertyChanged(nameof(SimProgressWidth)); } } }
+        private System.Windows.Media.Brush _simStatusBrush = System.Windows.Media.Brushes.Gray;
+        public System.Windows.Media.Brush SimStatusBrush { get => _simStatusBrush; set { _simStatusBrush = value; RaisePropertyChanged(nameof(SimStatusBrush)); } }
+        private void StartSimMonitor()
+        {
+            _simStart = DateTime.Now;
+            _simTotalSteps = (_uploadedVelocityLines != null && _uploadedVelocityLines.Length > 0) ? _uploadedVelocityLines.Length : LinesLength;
+            if (_simTimer == null)
+            {
+                _simTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+                _simTimer.Tick += (s, e) => UpdateSimStatus();
+            }
+            _simTimer.Start();
+            UpdateSimStatus();
+        }
+        private void UpdateSimStatus()
+        {
+            if (!(BaseMWModel is FishingBoatMW mw)) return;
+            int step = mw.Step;
+            double prog = _simTotalSteps > 0 ? Math.Min(1.0, (double)step / _simTotalSteps) : 0;
+            bool alive = mw.CalculateThread != null && mw.CalculateThread.IsAlive;
+            bool started = (DateTime.Now - _simStart).TotalMilliseconds > 800;
+            SimProgressWidth = prog * SimBarWidth;
+            SimPercentText = prog.ToString("P0");
+            SimTimeText = $"{step * 0.001:F0} / {_simTotalSteps * 0.001:F0} s";
+
+            if (mw.IsPause)
+            {
+                SimStateText = "Paused";
+                SimStatusBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xC7, 0x7B, 0x30));
+            }
+            else if (!alive && started)
+            {
+                if (prog >= 0.98)
+                {
+                    SimStateText = "Done"; SimProgressWidth = SimBarWidth; SimPercentText = "100%";
+                    SimStatusBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x2E, 0x6D, 0xB4));
+                }
+                else
+                {
+                    SimStateText = "Stopped";
+                    SimStatusBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x78, 0x90, 0x9C));
+                }
+                _simTimer?.Stop();
+            }
+            else
+            {
+                SimStateText = "Running";
+                SimStatusBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x2E, 0x8B, 0x57));
+            }
+        }
+
         public void OnClickCalculateButton()
         {
             if (BaseMWModel is FishingBoatMW FishingBoatMW)
@@ -1067,6 +1132,7 @@ namespace HoRang2Sea.ViewModels
                 Debug.WriteLine($"FishingBoat: Layout 설정 - Design={DesignLayout}, Control={ControlLayout}");
 
                 FishingBoatMW.Calculate();
+                StartSimMonitor();
             }
         }
 

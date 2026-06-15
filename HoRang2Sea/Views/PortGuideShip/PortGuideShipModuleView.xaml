@@ -320,7 +320,9 @@
 
         <!-- ===== Bottom Status Bar: 활성 레이아웃 색 알약 + 클릭 시 설정창 (#13) ===== -->
         <Border DockPanel.Dock="Bottom" Background="#ECEFF1" BorderBrush="#D5DAE0" BorderThickness="0,1,0,0">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,3">
+            <DockPanel Margin="8,3" LastChildFill="False">
+                <!-- 좌: Active Layout (고정) -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Active Layout:" Foreground="#546E7A" VerticalAlignment="Center" Margin="0,0,8,0"/>
                 <Button x:Name="LayoutPill" Command="{Binding SelectLayoutCommand}" Cursor="Hand"
                         Background="{Binding LayoutAccentColor}" ToolTip="Click to change layout"
@@ -340,7 +342,19 @@
                         <TextBlock Text="&#x2699;" Foreground="White" Opacity="0.85" Margin="8,0,0,0"/>
                     </StackPanel>
                 </Button>
-            </StackPanel>
+                </StackPanel>
+
+                <!-- 우: 진행 표시 (고정폭 미니바, 충남대 #5) — 폭 고정이라 상태 바뀌어도 안 움직임 -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,4,0">
+                    <Ellipse Width="9" Height="9" Fill="{Binding SimStatusBrush}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                    <TextBlock Text="{Binding SimStateText}" Foreground="{Binding SimStatusBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Width="56"/>
+                    <Border Width="78" Height="6" Background="#DDE3E8" CornerRadius="3" VerticalAlignment="Center" Margin="2,0,8,0">
+                        <Border HorizontalAlignment="Left" Width="{Binding SimProgressWidth}" Background="{Binding SimStatusBrush}" CornerRadius="3"/>
+                    </Border>
+                    <TextBlock Text="{Binding SimPercentText}" Foreground="#546E7A" VerticalAlignment="Center" Width="38" TextAlignment="Right"/>
+                    <TextBlock Text="{Binding SimTimeText}" Foreground="#90A4AE" VerticalAlignment="Center" Width="104" TextAlignment="Right" Margin="10,0,0,0"/>
+                </StackPanel>
+            </DockPanel>
         </Border>
 
         <Grid>
