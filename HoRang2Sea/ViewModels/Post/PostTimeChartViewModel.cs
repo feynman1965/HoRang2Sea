@@ -394,7 +394,7 @@ namespace HoRang2Sea.ViewModels
                 AxisAlignment = AxisAlignment.Bottom,
                 AxisTitle = "Time [sec]",
                 DrawMajorBands = false,
-                TextFormatting = "0.00",
+                TextFormatting = "G6", CursorTextFormatting = "G6",
                 VisibleRange = new DoubleRange(0, 1000),
                 BorderBrush = new SolidColorBrush(Colors.CadetBlue)
             };
@@ -429,7 +429,7 @@ namespace HoRang2Sea.ViewModels
                     AxisTitle = Chartitem,
                     DrawMajorBands = true,
                     BorderThickness = ythick,
-                    TextFormatting = "0.000",
+                    TextFormatting = "G6", CursorTextFormatting = "G6",
                     Id = YAxis,
                 };
                 YAxes.Add(yNumAxis);
