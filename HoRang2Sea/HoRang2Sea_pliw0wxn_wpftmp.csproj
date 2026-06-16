@@ -1,0 +1,575 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <LangVersion>9</LangVersion>
+    <!-- SDK 9.0.311 + VS 17.14 MSBuild 의 wpftmp 메커니즘이 baml 경로 처리 버그가 있어 BG1002 에러 발생.
+         wpftmp를 끄고 옛 방식(부모 csproj가 PackageReference 어셈블리 직접 참조)으로 markup compile. -->
+    <IncludePackageReferencesDuringMarkupCompilation>false</IncludePackageReferencesDuringMarkupCompilation>
+    <Platforms>AnyCPU;x64</Platforms>
+    <!-- SDK가 RuntimeIdentifier=win-x64 자동 inject하면서 obj/bin 경로에 win-x64 폴더가 추가되어
+         VS의 Platform=x64 경로(obj/x64/Release/net9.0-windows/)와 어긋나 baml 못 찾음.
+         RID inject만 끄고 Platform 자연 경로는 그대로 유지 → VS/CLI 모두 obj/x64/Release/net9.0-windows/ 사용. -->
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Resource\NexoModel\**" />
+    <EmbeddedResource Remove="Resource\NexoModel\**" />
+    <None Remove="Resource\NexoModel\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resource\Air HumidifierDetail.svg" />
+    <None Remove="Resource\Detail\Air HumidifierDetail.svg" />
+    <None Remove="Resource\Detail\BatteryDetail.svg" />
+    <None Remove="Resource\Detail\EjectorDetail.svg" />
+    <None Remove="Resource\Detail\IntercoolerDetail.svg" />
+    <None Remove="Resource\Detail\RadiatorDetail.svg" />
+    <None Remove="Resource\Detail\ReducerDetail.svg" />
+    <None Remove="Resource\Detail\ValveDetail.svg" />
+    <None Remove="Resource\EjectorDetail.svg" />
+    <None Remove="Resource\Fuelcell.gif" />
+    <None Remove="Resource\Fuelcell.png" />
+    <None Remove="Resource\hydrogen.png" />
+    <None Remove="Resource\id.svg" />
+    <None Remove="Resource\MainImage.png" />
+    <None Remove="Resource\MainText.png" />
+    <None Remove="Resource\ModelImage\Air Humidifier.svg" />
+    <None Remove="Resource\ModelImage\Battery.svg" />
+    <None Remove="Resource\ModelImage\Blower.svg" />
+    <None Remove="Resource\ModelImage\Converter.svg" />
+    <None Remove="Resource\ModelImage\Driver.svg" />
+    <None Remove="Resource\ModelImage\Ejector.svg" />
+    <None Remove="Resource\ModelImage\Fan.svg" />
+    <None Remove="Resource\ModelImage\heater %285%29.svg" />
+    <None Remove="Resource\ModelImage\hydrogen %282%29.svg" />
+    <None Remove="Resource\ModelImage\Hydrogen Humidifier.svg" />
+    <None Remove="Resource\ModelImage\Induction motor.svg" />
+    <None Remove="Resource\ModelImage\Intercooler.svg" />
+    <None Remove="Resource\ModelImage\Inverter.svg" />
+    <None Remove="Resource\ModelImage\pipe-tool.svg" />
+    <None Remove="Resource\ModelImage\Pump.svg" />
+    <None Remove="Resource\ModelImage\Radiator.svg" />
+    <None Remove="Resource\ModelImage\Reducer.svg" />
+    <None Remove="Resource\ModelImage\Stack.svg" />
+    <None Remove="Resource\ModelImage\Valve.svg" />
+    <None Remove="Resource\ModelImage\DCConverter.svg" />
+    <None Remove="Resource\ModelImage\H2 Tank.svg" />
+    <None Remove="Resource\ModelImage\Thrust Motor.svg" />
+    <None Remove="Resource\path153647-3.png" />
+    <None Remove="Resource\property.svg" />
+    <None Remove="Resource\Radiator.png" />
+    <None Remove="Resource\RadiatorDetail.png" />
+    <None Remove="Resource\RadiatorDetail.svg" />
+    <None Remove="Resource\Renault-Scenic-Vision-Concept-car-28.png" />
+    <None Remove="Resource\Renault-Scenic-Vision-Concept-car-29.png" />
+    <None Remove="Resource\Splash.png" />
+    <None Remove="Resource\SplashMovie.mp4" />
+    <None Remove="Resource\startpage.png" />
+    <None Remove="Resource\tigerh2.svg" />
+    <None Remove="Resource\tigerh2icon.svg" />
+    <None Remove="Resource\Vehiclesflat\3-suv.svg" />
+    <None Remove="Resource\Vehiclesflat\55-TrainingShip.svg" />
+    <None Remove="Resource\Vehiclesflat\56-FishingBoat.svg" />
+    <None Remove="Resource\Vehiclesflat\57-PortGuideShip.svg" />
+    <None Remove="Resource\ModelImage\Heat Exchanger.svg" />
+    <None Remove="Resource\ModelImage\Sea Water Pump.svg" />
+    <None Remove="Resource\ModelImage\Fresh Water Pump.svg" />
+    <None Remove="Resource\ModelImage\FishingBoatProfile.svg" />
+    <None Remove="Resource\ModelImage\PortGuideShipProfile.svg" />
+    <None Remove="Resource\ModelImage\TrainingShipProfile.svg" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="DevExpress.Wpf" Version="25.1.3" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="25.1.3" />
+    <PackageReference Include="DevExpress.Wpf.Themes.All" Version="25.1.3" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.2.18" />
+    <PackageReference Include="SciChart" Version="7.0.1.27055" />
+    <PackageReference Include="SciChart.DirectX" Version="7.0.1.27055" />
+    <PackageReference Include="SciChart.DrawingTools" Version="7.0.1.27055" />
+    <PackageReference Include="SciChart.ExternalDependencies" Version="7.0.1.27055" />
+    <PackageReference Include="SimpleInjector" Version="5.4.1" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Models\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="DefaultProfiles\*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ModelDLLs\*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="*.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
+      <Analyzer Remove="@(Analyzer)" />
+      <Analyzer Include="@(FilteredAnalyzer)" />
+    </ItemGroup>
+  </Target>
+  <ItemGroup>
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\Accessibility.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.charts\25.1.3\lib\net8.0-windows\DevExpress.Charts.Designer.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.charts.core\25.1.3\lib\net8.0\DevExpress.Charts.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.codeparser\25.1.3\lib\net8.0\DevExpress.CodeParser.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.data.desktop\25.1.3\lib\net8.0-windows\DevExpress.Data.Desktop.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.data\25.1.3\lib\net8.0\DevExpress.Data.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.dataaccess\25.1.3\lib\net8.0\DevExpress.DataAccess.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.datavisualization.core\25.1.3\lib\net8.0\DevExpress.DataVisualization.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.diagram.core\25.1.3\lib\net8.0-windows\DevExpress.Diagram.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.dialogs.core\25.1.3\lib\net8.0-windows\DevExpress.Dialogs.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.drawing\25.1.3\lib\net8.0\DevExpress.Drawing.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.images\25.1.3\lib\net8.0\DevExpress.Images.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.map.core\25.1.3\lib\net8.0\DevExpress.Map.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.scaffolding.core\25.1.3\lib\net8.0-windows\DevExpress.Mvvm.v25.1.DataModel.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.scaffolding.efcore\25.1.3\lib\net8.0-windows\DevExpress.Mvvm.v25.1.DataModel.EFCore.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.mvvm\25.1.3\lib\net8.0-windows\DevExpress.Mvvm.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.scaffolding.core\25.1.3\lib\net8.0-windows\DevExpress.Mvvm.v25.1.ViewModel.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.office.core\25.1.3\lib\net8.0\DevExpress.Office.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.pdf.core\25.1.3\lib\net8.0\DevExpress.Pdf.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.pdf.drawing\25.1.3\lib\net8.0\DevExpress.Pdf.v25.1.Drawing.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.pivotgrid.core\25.1.3\lib\net8.0\DevExpress.PivotGrid.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.printing.core\25.1.3\lib\net8.0\DevExpress.Printing.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.richedit.core\25.1.3\lib\net8.0\DevExpress.RichEdit.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.richedit.export\25.1.3\lib\net8.0\DevExpress.RichEdit.v25.1.Export.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.sparkline.core\25.1.3\lib\net8.0\DevExpress.Sparkline.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.spellchecker.core\25.1.3\lib\net8.0\DevExpress.SpellChecker.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.spreadsheet.core\25.1.3\lib\net8.0\DevExpress.Spreadsheet.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.treemap.core\25.1.3\lib\net8.0\DevExpress.TreeMap.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.utils\25.1.3\lib\net8.0-windows\DevExpress.Utils.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.accordion\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Accordion.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.carousel\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Carousel.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.charts\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Charts.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.reporting\25.1.3\lib\net8.0-windows\DevExpress.Xpf.CodeView.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.controls\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Controls.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.core\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Core.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.core.extensions\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Core.v25.1.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.reporting\25.1.3\lib\net8.0-windows\DevExpress.Xpf.DataAccess.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.diagram\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Diagram.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.dialogs\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Dialogs.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.docking\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Docking.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.documentviewer.core\25.1.3\lib\net8.0-windows\DevExpress.Xpf.DocumentViewer.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.expressioneditor\25.1.3\lib\net8.0-windows\DevExpress.Xpf.ExpressionEditor.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.gantt\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Gantt.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.gauges\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Gauges.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.grid.core\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Grid.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.grid.core\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Grid.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.grid.core\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Grid.v25.1.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.docking\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Layout.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.layoutcontrol\25.1.3\lib\net8.0-windows\DevExpress.Xpf.LayoutControl.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.map\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Map.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.navbar\25.1.3\lib\net8.0-windows\DevExpress.Xpf.NavBar.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.office\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Office.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.pdfviewer\25.1.3\lib\net8.0-windows\DevExpress.Xpf.PdfViewer.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.pivotgrid\25.1.3\lib\net8.0-windows\DevExpress.Xpf.PivotGrid.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.printing\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Printing.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.prismadapters\25.1.3\lib\net8.0-windows\DevExpress.Xpf.PrismAdapters.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.propertygrid\25.1.3\lib\net8.0-windows\DevExpress.Xpf.PropertyGrid.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.reporting\25.1.3\lib\net8.0-windows\DevExpress.Xpf.ReportDesigner.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.ribbon\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Ribbon.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.richedit\25.1.3\lib\net8.0-windows\DevExpress.Xpf.RichEdit.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.scheduling\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Scheduling.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.spellchecker\25.1.3\lib\net8.0-windows\DevExpress.Xpf.SpellChecker.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.spreadsheet\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Spreadsheet.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.dxstyle\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.DXStyle.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.lightgray\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.LightGray.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.metropolisdark\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.MetropolisDark.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.metropolislight\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.MetropolisLight.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2007black\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2007Black.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2007blue\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2007Blue.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2007silver\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2007Silver.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2010black\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2010Black.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2010blue\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2010Blue.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2010silver\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2010Silver.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2013\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2013.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2013darkgray\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2013DarkGray.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2013lightgray\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2013LightGray.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2016black\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2016Black.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2016blackse\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2016BlackSE.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2016colorful\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2016Colorful.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2016colorfulse\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2016ColorfulSE.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2016darkgrayse\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2016DarkGraySE.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2016white\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2016White.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2016whitese\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2016WhiteSE.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2019black\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2019Black.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2019colorful\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2019Colorful.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2019darkgray\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2019DarkGray.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2019highcontrast\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2019HighContrast.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.office2019white\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Office2019White.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.seven\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Seven.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.touchlinedark\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.TouchlineDark.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.vs2010\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.VS2010.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.vs2017blue\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.VS2017Blue.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.vs2017dark\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.VS2017Dark.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.vs2017light\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.VS2017Light.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.vs2019blue\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.VS2019Blue.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.vs2019dark\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.VS2019Dark.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.vs2019light\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.VS2019Light.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.win10dark\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Win10Dark.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.win10light\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Win10Light.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.win11dark\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Win11Dark.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.themes.win11light\25.1.3\lib\net8.0-windows\DevExpress.Xpf.Themes.Win11Light.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.treemap\25.1.3\lib\net8.0-windows\DevExpress.Xpf.TreeMap.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.wpf.typedstyles\25.1.3\lib\net8.0-windows\DevExpress.Xpf.TypedStyles.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.xpo\25.1.3\lib\net8.0\DevExpress.Xpo.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.navigation\25.1.3\lib\net8.0-windows\DevExpress.XtraBars.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.charts\25.1.3\lib\net8.0\DevExpress.XtraCharts.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.navigation\25.1.3\lib\net8.0-windows\DevExpress.XtraEditors.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.gauges.core\25.1.3\lib\net8.0\DevExpress.XtraGauges.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.grid\25.1.3\lib\net8.0-windows\DevExpress.XtraGrid.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.navigation\25.1.3\lib\net8.0-windows\DevExpress.XtraLayout.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.printing\25.1.3\lib\net8.0-windows\DevExpress.XtraPrinting.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.reporting.core\25.1.3\lib\net8.0\DevExpress.XtraReports.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.scheduler.coredesktop\25.1.3\lib\net8.0-windows\DevExpress.XtraScheduler.v25.1.Core.Desktop.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.scheduler.core\25.1.3\lib\net8.0\DevExpress.XtraScheduler.v25.1.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.scheduler\25.1.3\lib\net8.0-windows\DevExpress.XtraScheduler.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.schedulerreporting\25.1.3\lib\net8.0-windows\DevExpress.XtraScheduler.v25.1.Reporting.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\devexpress.win.treelist\25.1.3\lib\net8.0-windows\DevExpress.XtraTreeList.v25.1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\dynamicdata\7.1.1\lib\net5.0\DynamicData.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.BootstrapIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.BoxIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Codicons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Coolicons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Entypo.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.EvaIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.FeatherIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.FileIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Fontaudio.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.FontAwesome.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Fontisto.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.ForkAwesome.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Ionicons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.JamIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Material.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.MaterialDesign.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.MaterialLight.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Microns.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Modern.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Octicons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.PicolIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.PixelartIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.RadixIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.RemixIcon.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.RPGAwesome.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.SimpleIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Typicons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Unicons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.VaadinIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.WeatherIcons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\mahapps.metro.iconpacks\4.11.0\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Zondicons.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\Microsoft.CSharp.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.2\lib\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.extensions.dependencyinjection\8.0.1\lib\net8.0\Microsoft.Extensions.DependencyInjection.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.extensions.objectpool\8.0.10\lib\net8.0\Microsoft.Extensions.ObjectPool.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\Microsoft.VisualBasic.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\Microsoft.VisualBasic.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\Microsoft.VisualBasic.Forms.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\Microsoft.Win32.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\Microsoft.Win32.Registry.AccessControl.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\Microsoft.Win32.Registry.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\Microsoft.Win32.SystemEvents.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.xaml.behaviors.wpf\1.1.39\lib\net5.0-windows7.0\Microsoft.Xaml.Behaviors.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\mscorlib.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\netstandard.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationCore.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationFramework.Aero.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationFramework.Aero2.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationFramework.AeroLite.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationFramework.Classic.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationFramework.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationFramework.Luna.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationFramework.Royale.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\PresentationUI.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\ReachFramework.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\reactiveui\13.2.18\lib\net5.0-windows7.0\ReactiveUI.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\reactiveui.wpf\13.2.18\lib\net5.0-windows7.0\ReactiveUI.Wpf.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Charting.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart.drawingtools\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Charting.DrawingTools.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart3d\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Charting3D.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Data.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart.directx\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Drawing.DirectX.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Drawing.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\scichart.externaldependencies\7.0.1.27055\lib\net6.0-windows7.0\SciChart.Examples.ExternalDependencies.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\sharpdx.d3dcompiler\4.2.0\lib\netstandard1.1\SharpDX.D3DCompiler.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\sharpdx.direct3d11\4.2.0\lib\netstandard1.1\SharpDX.Direct3D11.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\sharpdx.direct3d11.effects\4.2.0\lib\netstandard1.1\SharpDX.Direct3D11.Effects.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\sharpdx.direct3d9\4.2.0\lib\netstandard1.3\SharpDX.Direct3D9.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\sharpdx\4.2.0\lib\netstandard1.1\SharpDX.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\sharpdx.dxgi\4.2.0\lib\netstandard1.1\SharpDX.DXGI.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\sharpdx.mathematics\4.2.0\lib\netstandard1.1\SharpDX.Mathematics.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\simpleinjector\5.4.1\lib\netstandard2.1\SimpleInjector.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\splat\11.0.1\lib\net5.0\Splat.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.AppContext.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Buffers.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.CodeDom.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Collections.Concurrent.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Collections.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Collections.Immutable.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Collections.NonGeneric.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Collections.Specialized.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ComponentModel.Annotations.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ComponentModel.DataAnnotations.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ComponentModel.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ComponentModel.EventBasedAsync.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ComponentModel.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ComponentModel.TypeConverter.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Configuration.ConfigurationManager.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Configuration.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Console.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Data.Common.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Data.DataSetExtensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Data.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.data.oledb\8.0.1\lib\net8.0\System.Data.OleDb.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Design.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.Contracts.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.Debug.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.DiagnosticSource.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Diagnostics.EventLog.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.FileVersionInfo.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Diagnostics.PerformanceCounter.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.Process.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.StackTrace.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.TextWriterTraceListener.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.Tools.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.TraceSource.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Diagnostics.Tracing.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.DirectoryServices.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Drawing.Common.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Drawing.Design.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Drawing.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Drawing.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Dynamic.Runtime.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Formats.Asn1.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Formats.Nrbf.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Formats.Tar.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Globalization.Calendars.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Globalization.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Globalization.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.Compression.Brotli.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.Compression.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.Compression.FileSystem.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.Compression.ZipFile.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.FileSystem.AccessControl.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.FileSystem.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.FileSystem.DriveInfo.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.FileSystem.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.FileSystem.Watcher.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.IsolatedStorage.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.MemoryMappedFiles.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.IO.Packaging.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.Pipelines.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.Pipes.AccessControl.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.Pipes.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.IO.UnmanagedMemoryStream.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Linq.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Linq.Expressions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Linq.Parallel.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Linq.Queryable.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Memory.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Http.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Http.Json.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.HttpListener.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Mail.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.NameResolution.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.NetworkInformation.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Ping.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Quic.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Requests.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Security.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.ServicePoint.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.Sockets.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.WebClient.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.WebHeaderCollection.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.WebProxy.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.WebSockets.Client.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Net.WebSockets.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Numerics.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Numerics.Vectors.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ObjectModel.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Printing.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Private.Windows.Core.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.reactive\5.0.0\lib\net5.0\System.Reactive.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.DispatchProxy.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.Emit.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.Emit.ILGeneration.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.Emit.Lightweight.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.Metadata.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Reflection.TypeExtensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Resources.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Resources.Reader.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Resources.ResourceManager.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Resources.Writer.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.CompilerServices.Unsafe.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.CompilerServices.VisualC.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Handles.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.InteropServices.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.InteropServices.JavaScript.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.InteropServices.RuntimeInformation.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Intrinsics.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Loader.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Numerics.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Serialization.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Serialization.Formatters.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Serialization.Json.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Serialization.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Runtime.Serialization.Xml.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.AccessControl.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Claims.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.Algorithms.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.Cng.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.Csp.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.Encoding.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.OpenSsl.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.Pkcs.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.ProtectedData.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.X509Certificates.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Security.Cryptography.Xml.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Security.Permissions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Principal.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.Principal.Windows.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Security.SecureString.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.servicemodel.primitives\8.1.2\ref\net8.0\System.ServiceModel.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.servicemodel.primitives\8.1.2\ref\net8.0\System.ServiceModel.Duplex.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.servicemodel.http\8.1.2\ref\net8.0\System.ServiceModel.Http.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.servicemodel.netframingbase\8.1.2\ref\net8.0\System.ServiceModel.NetFramingBase.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.servicemodel.nettcp\8.1.2\ref\net8.0\System.ServiceModel.NetTcp.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.servicemodel.primitives\8.1.2\ref\net8.0\System.ServiceModel.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\system.servicemodel.primitives\8.1.2\ref\net8.0\System.ServiceModel.Security.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ServiceModel.Web.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ServiceProcess.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Text.Encoding.CodePages.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Text.Encoding.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Text.Encoding.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Text.Encodings.Web.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Text.Json.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Text.RegularExpressions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Threading.AccessControl.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Channels.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Overlapped.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Tasks.Dataflow.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Tasks.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Tasks.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Tasks.Parallel.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Thread.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.ThreadPool.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Threading.Timer.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Transactions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Transactions.Local.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.ValueTuple.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Web.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Web.HttpUtility.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Controls.Ribbon.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Windows.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Extensions.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Forms.Design.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Forms.Design.Editors.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Forms.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Forms.Primitives.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Input.Manipulations.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Windows.Presentation.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\System.Xaml.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.Linq.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.ReaderWriter.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.Serialization.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.XDocument.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.XmlDocument.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.XmlSerializer.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.XPath.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.netcore.app.ref\9.0.15\ref\net9.0\System.Xml.XPath.XDocument.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\UIAutomationClient.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\UIAutomationClientSideProviders.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\UIAutomationProvider.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\UIAutomationTypes.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\WindowsBase.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\microsoft.windowsdesktop.app.ref\9.0.15\ref\net9.0\WindowsFormsIntegration.dll" />
+    <ReferencePath Include="C:\Users\feynm\.nuget\packages\wpfanimatedgif\2.0.2\lib\netcoreapp3.0\WpfAnimatedGif.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\MainWindow.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\FishingBoat\FishingBoatModuleView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\MainView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\MonitorView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\PortGuideShip\PortGuideShipModuleView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\ChartPropertyView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\GaugePropertyView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\GridPropertyView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\PostChartView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\PostGaugeView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\PostGridView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\PostTimeChartView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\PostView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\Post\TimeChartPropertyView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\PropertyView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\SolutionExplorerView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\StartView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\Views\TrainingShip\TrainingShipModuleView.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\App.g.cs" />
+    <Compile Include="e:\company_work\Horang2\HoRang2Sea\HoRang2Sea\obj\x64\Release\net9.0-windows\GeneratedInternalTypeHelper.g.cs" />
+  </ItemGroup>
+</Project>

@@ -14,7 +14,7 @@ using System.Xml.Serialization;
 
 namespace HoRang2Sea
 {
-    public enum SolutionType { GRID, XYCHART, FishingBoat, PortGuideShip, Con14ton, TrainingShip }
+    public enum SolutionType { GRID, XYCHART, FishingBoat, PortGuideShip, TrainingShip }
     [POCOViewModel]
     [XmlType(TypeName = "SolutionItem")]
     public class SolutionItem

@@ -21,7 +21,6 @@ namespace HoRang2Sea
         private int FishingBoatID = 1;
         private int PortGuideShipID = 1;
         private int TrainingShipID = 1;
-        private int Con14tonID = 1;
 
 
 

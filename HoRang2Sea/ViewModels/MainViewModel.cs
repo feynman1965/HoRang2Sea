@@ -427,15 +427,6 @@ namespace HoRang2Sea.ViewModels
                     CreateTrainingSHipDocument(Selname);
                     break;
 
-
-
-                /*case "14ton Construction":
-                   CreateCon14tonDocument(Selname);
-                   break;*/
-
-
-
-
                 default:
                     return;
 
