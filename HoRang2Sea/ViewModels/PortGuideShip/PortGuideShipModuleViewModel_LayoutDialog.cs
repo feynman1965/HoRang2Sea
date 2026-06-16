@@ -27,7 +27,7 @@ namespace HoRang2Sea.ViewModels
             {
                 Title = "Select Layout - PortGuideShip",
                 Width = 700,
-                Height = 680,
+                Height = 680, SizeToContent = System.Windows.SizeToContent.WidthAndHeight,
                 WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
                 ResizeMode = System.Windows.ResizeMode.NoResize,
                 WindowStyle = System.Windows.WindowStyle.SingleBorderWindow,
@@ -35,7 +35,7 @@ namespace HoRang2Sea.ViewModels
             };
 
             var mainGrid = new System.Windows.Controls.Grid();
-            mainGrid.Margin = new System.Windows.Thickness(35);
+            mainGrid.Margin = new System.Windows.Thickness(12);
 
             // 제목 영역
             var headerStack = new System.Windows.Controls.StackPanel
@@ -46,7 +46,7 @@ namespace HoRang2Sea.ViewModels
             var title = new System.Windows.Controls.TextBlock
             {
                 Text = "Layout Configuration",
-                FontSize = 26,
+                FontSize = 31,
                 FontWeight = System.Windows.FontWeights.Bold,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 73, 94))
@@ -55,7 +55,7 @@ namespace HoRang2Sea.ViewModels
             var subtitle = new System.Windows.Controls.TextBlock
             {
                 Text = "Choose your preferred system design and control configuration",
-                FontSize = 13,
+                FontSize = 15,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 Margin = new System.Windows.Thickness(0, 8, 0, 0),
                 Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 165, 166))
@@ -127,7 +127,7 @@ namespace HoRang2Sea.ViewModels
                 var titleText = new System.Windows.Controls.TextBlock
                 {
                     Text = text,
-                    FontSize = 18,
+                    FontSize = 21,
                     FontWeight = System.Windows.FontWeights.Bold,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(44, 62, 80))
@@ -136,7 +136,7 @@ namespace HoRang2Sea.ViewModels
                 var descText = new System.Windows.Controls.TextBlock
                 {
                     Text = description,
-                    FontSize = 12,
+                    FontSize = 14,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(127, 140, 141)),
                     Margin = new System.Windows.Thickness(0, 6, 0, 0),
@@ -155,7 +155,7 @@ namespace HoRang2Sea.ViewModels
                     stack.Children.Add(new System.Windows.Controls.TextBlock
                     {
                         Text = "✓ CURRENT",
-                        FontSize = 11,
+                        FontSize = 13,
                         FontWeight = System.Windows.FontWeights.Bold,
                         Foreground = new System.Windows.Media.SolidColorBrush(accentColor),
                         HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
@@ -254,6 +254,7 @@ namespace HoRang2Sea.ViewModels
             };
             container.Children.Add(headerStack);
             container.Children.Add(buttonGrid);
+            container.LayoutTransform = new System.Windows.Media.ScaleTransform(0.66, 0.66);
 
             mainGrid.Children.Add(container);
             dialog.Content = mainGrid;
