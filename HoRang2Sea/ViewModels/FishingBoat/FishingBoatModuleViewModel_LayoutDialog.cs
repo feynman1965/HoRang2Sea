@@ -128,6 +128,8 @@ namespace HoRang2Sea.ViewModels
                 {
                     Text = text,
                     FontSize = 21,
+                    TextWrapping = System.Windows.TextWrapping.Wrap,
+                    TextAlignment = System.Windows.TextAlignment.Center,
                     FontWeight = System.Windows.FontWeights.Bold,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(44, 62, 80))
@@ -220,7 +222,7 @@ namespace HoRang2Sea.ViewModels
             System.Windows.Controls.Grid.SetColumn(btn1, 0);
 
             var btn2 = CreateLayoutButton(
-                "Fuzzy control",
+                "control layout (Fuzzy control)",
                 "",
                 0, 1,
                 System.Windows.Media.Color.FromRgb(46, 204, 113)); // Green
@@ -228,7 +230,7 @@ namespace HoRang2Sea.ViewModels
             System.Windows.Controls.Grid.SetColumn(btn2, 1);
 
             var btn3 = CreateLayoutButton(
-                "Series cooling",
+                "design layout (Series cooling system)",
                 "",
                 1, 0,
                 System.Windows.Media.Color.FromRgb(155, 89, 182)); // Purple
@@ -236,7 +238,7 @@ namespace HoRang2Sea.ViewModels
             System.Windows.Controls.Grid.SetColumn(btn3, 0);
 
             var btn4 = CreateLayoutButton(
-                "Series cooling + Fuzzy",
+                "Integrated layout",
                 "",
                 1, 1,
                 System.Windows.Media.Color.FromRgb(230, 126, 34)); // Orange
