@@ -129,64 +129,6 @@ namespace HoRang2Sea.ViewModels
         public System.Windows.Media.SolidColorBrush LayoutAccentColor => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 120, 140));
         public System.Windows.Media.SolidColorBrush LayoutBackgroundColor => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 246, 248));
 
-        // 레이아웃에 따른 출력 보정 계수
-        public double LayoutOutputMultiplier
-        {
-            get
-            {
-                if (DesignLayout == 0 && ControlLayout == 0) return 1.0;    // Default: 기본값
-                if (DesignLayout == 0 && ControlLayout == 1) return 1.0;   // Control: +5%
-                if (DesignLayout == 1 && ControlLayout == 0) return 1.0;   // Design: -5%
-                if (DesignLayout == 1 && ControlLayout == 1) return 1.0;   // Advanced: +10%
-                return 1.0;
-            }
-        }
-
-        // 그래프/그리드 표시용 출력 보정 계수 (실제 값은 변경하지 않음, 표시용으로만 사용)
-        public double GetDisplayMultiplier()
-        {
-            return LayoutOutputMultiplier;
-        }
-
-        // 노이즈 시간 변수 (레이아웃 변경 시 출력 노이즈용)
-        private double _noiseTime = 0.0;
-        private const double NoiseTimeStep = 0.01; // 시간 증가량
-        private const double NoiseAmplitude = 0.15; // 15% 진폭
-
-        // 레이아웃별 위상 오프셋 반환
-        private double GetLayoutPhaseOffset()
-        {
-            if (DesignLayout == 0 && ControlLayout == 1) return 0.0;                    // Control: 위상 0
-            if (DesignLayout == 1 && ControlLayout == 0) return Math.PI / 2.0;          // Design: 위상 π/2
-            if (DesignLayout == 1 && ControlLayout == 1) return Math.PI;                // Full: 위상 π
-            return 0.0;
-        }
-
-        // 레이아웃 변경 시 출력 노이즈 계산 (원래값 * 0.15 * sin(2πt + phase))
-        // 원래값이 0이면 0 반환
-        public double GetOutputWithNoise(double originalValue)
-        {
-            // Default 레이아웃(0,0)이면 노이즈 없음
-            if (DesignLayout == 0 && ControlLayout == 0)
-                return originalValue;
-
-            // 원래값이 0이면 0 반환
-            if (Math.Abs(originalValue) < 1e-10)
-                return 0.0;
-
-            // 노이즈 계산: 원래값 + 원래값 * 0.15 * sin(2πt + phase)
-            double phase = GetLayoutPhaseOffset();
-            double noise = originalValue * NoiseAmplitude * Math.Sin(2.0 * Math.PI * _noiseTime + phase);
-            return originalValue + noise;
-        }
-
-        // 노이즈 시간 업데이트
-        private void UpdateNoiseTime()
-        {
-            _noiseTime += NoiseTimeStep;
-            if (_noiseTime > 1000.0) _noiseTime = 0.0; // 오버플로우 방지
-        }
-
         // 레이아웃별 입력값 조정이 필요한 파라미터 목록
         // XML: PortGuideShipModel.xml 파라미터명과 정확히 일치해야 함
         private static readonly HashSet<string> LayoutAdjustedParams = new HashSet<string>
@@ -239,7 +181,6 @@ namespace HoRang2Sea.ViewModels
             RaisePropertyChanged(nameof(IsLayout_D1_C0_Visible));
             RaisePropertyChanged(nameof(IsLayout_D1_C1_Visible));
             RaisePropertyChanged(nameof(CurrentLayoutName));
-            RaisePropertyChanged(nameof(LayoutOutputMultiplier));
         }
 
         // -------- Panel Visibility 프로퍼티 -------
@@ -1294,16 +1235,12 @@ namespace HoRang2Sea.ViewModels
                     if (GridViewModel == null || GridViewModel.listsource == null) return;
                     if (BaseMWModel is PortGuideShipMW PortGuideShipMW)
                     {
-                        // 노이즈 시간 업데이트
-                        UpdateNoiseTime();
-
                         foreach (var gridItem in GridViewModel.listsource.ToList())
                         {
                             var data = PortGuideShipMW.PortGuideShipMWOuts.FirstOrDefault(d => d.Name == gridItem.Name);
                             if (data != null)
                             {
-                                double valueWithNoise = data.Value * GetDisplayMultiplier();
-                                gridItem.UpdateInternal(valueWithNoise);
+                                gridItem.UpdateInternal(data.Value);
                             }
                         }
                     }
