@@ -1269,17 +1269,31 @@ namespace HoRang2Sea.ViewModels
                 {
                     Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
                     DefaultExt = ".csv",
-                    FileName = "FishingBoat_Result"
+                    FileName = "FishingBoat_Result",
+                    InitialDirectory = HoRang2Sea.Models.GenericPortDllModel.LastExportDirectory
                 };
                 if (dialog.ShowDialog() == true)
                 {
+                    HoRang2Sea.Models.GenericPortDllModel.LastExportDirectory = System.IO.Path.GetDirectoryName(dialog.FileName) ?? HoRang2Sea.Models.GenericPortDllModel.LastExportDirectory;
                     var optsDlg = new HoRang2Sea.Views.CsvExportOptionsDialog(model.RecordedStepCount, model.RecordedHeaders.ToList())
                     {
                         Owner = System.Windows.Application.Current?.MainWindow
                     };
                     if (optsDlg.ShowDialog() != true) return;
-                    model.ExportToCsv(dialog.FileName, optsDlg.StepInterval, optsDlg.StartStep, optsDlg.EndStep, optsDlg.SelectedVariables);
-                    System.Windows.MessageBox.Show("CSV saved", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    var __exPath = dialog.FileName; var __exSi = optsDlg.StepInterval; var __exSs = optsDlg.StartStep; var __exEs = optsDlg.EndStep; var __exVars = optsDlg.SelectedVariables;
+                    var __exDisp = System.Windows.Application.Current?.Dispatcher;
+                    System.Threading.Tasks.Task.Run(() =>
+                    {
+                        try
+                        {
+                            model.ExportToCsv(__exPath, __exSi, __exSs, __exEs, __exVars);
+                            __exDisp?.Invoke(() => System.Windows.MessageBox.Show("CSV saved", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information));
+                        }
+                        catch (System.Exception __exEx)
+                        {
+                            __exDisp?.Invoke(() => System.Windows.MessageBox.Show($"CSV export failed: {__exEx.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error));
+                        }
+                    });
                 }
             }
             else

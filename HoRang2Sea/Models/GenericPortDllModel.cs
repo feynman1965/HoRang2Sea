@@ -75,6 +75,9 @@ namespace HoRang2Sea.Models
             return result;
         }
 
+        // CSV 저장 다이얼로그의 마지막 사용 폴더 (기본값 = exe 폴더). Export 성공 시 갱신.
+        public static string LastExportDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
         public void ExportToCsv(string filePath)
         {
             ExportToCsv(filePath, 1, -1, -1, null);
@@ -123,17 +126,24 @@ namespace HoRang2Sea.Models
                 }
             }
 
-            var sb = new StringBuilder();
-            sb.AppendLine(string.Join(",", selHeaders));
-            for (int i = 0; i < snapshot.Count; i++)
+            // 전체 CSV를 메모리에 쌓지 않고 파일로 한 줄씩 스트리밍 기록 (대용량 기록 시 OutOfMemory 방지)
+            int baseStep = startStep < 0 ? 0 : startStep;
+            var fields = new string[selIndices.Count];
+            using (var writer = new StreamWriter(filePath, false, Encoding.UTF8, 1 << 20))
             {
-                int step = (int)snapshot[i][0];
-                if (startStep >= 0 && step < startStep) continue;
-                if (endStep >= 0 && step > endStep) break;
-                if ((step - (startStep < 0 ? 0 : startStep)) % stepInterval != 0) continue;
-                sb.AppendLine(string.Join(",", selIndices.Select(idx => snapshot[i][idx].ToString("G", CultureInfo.InvariantCulture))));
+                writer.WriteLine(string.Join(",", selHeaders));
+                for (int i = 0; i < snapshot.Count; i++)
+                {
+                    int step = (int)snapshot[i][0];
+                    if (startStep >= 0 && step < startStep) continue;
+                    if (endStep >= 0 && step > endStep) break;
+                    if ((step - baseStep) % stepInterval != 0) continue;
+                    var row = snapshot[i];
+                    for (int j = 0; j < selIndices.Count; j++)
+                        fields[j] = row[selIndices[j]].ToString("G", CultureInfo.InvariantCulture);
+                    writer.WriteLine(string.Join(",", fields));
+                }
             }
-            File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
         }
 
         public int RecordedStepCount
