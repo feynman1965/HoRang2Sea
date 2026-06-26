@@ -83,10 +83,11 @@ namespace HoRang2Sea.Views
             {
                 Content = "By step — save every N steps",
                 FontWeight = FontWeights.SemiBold,
-                Margin = new Thickness(4, 6, 4, 2)
+                Margin = new Thickness(4, 6, 4, 2),
+                IsChecked = true   // 기본: 매 100스텝(차트와 동일 cadence). 전체 원하면 체크 해제 또는 interval=1
             };
             var stepInner = MakeFormGrid();
-            AddFormRow(stepInner, 0, "Step interval (1=all, 10=every 10 steps)", out _stepIntervalBox, "1");
+            AddFormRow(stepInner, 0, "Step interval (1=all, 100=every 100 steps = chart cadence)", out _stepIntervalBox, "100");
             stepInner.Margin = new Thickness(24, 0, 4, 6);
             stepInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeStepCheck });
             var stepStack = new StackPanel();
