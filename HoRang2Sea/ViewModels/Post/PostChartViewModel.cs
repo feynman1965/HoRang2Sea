@@ -285,7 +285,7 @@ namespace HoRang2Sea.ViewModels
                     {
                         try
                         {
-                            ChartSet();
+                            ChartSet(true);
                         }
                         catch (Exception ex)
                         {
@@ -315,11 +315,11 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
-        public void ChartSet()
+        public void ChartSet(bool backfill = false)
         {
             if (System.Windows.Application.Current?.Dispatcher.CheckAccess() == false)
             {
-                System.Windows.Application.Current.Dispatcher.Invoke(() => ChartSet());
+                System.Windows.Application.Current.Dispatcher.Invoke(() => ChartSet(backfill));
                 return;
             }
 
@@ -403,6 +403,21 @@ namespace HoRang2Sea.ViewModels
                 // FifoCapacity 제거: 데이터가 0부터 쌓이도록 함 (롤링 윈도우 비활성화)
                 lineData.Add(newLineData);
 
+                // 시뮬 후/중 임의 변수 선택 시: 기록 버퍼에서 x-y series 되채움 (실행 시작 시엔 버퍼 비어 no-op).
+                // X축이 변수면 그 변수의 기록값을, 없으면(TimeX) 시간(step*0.001)을 x로 사용. x/y 모두 매 100스텝 샘플이라 인덱스 정렬.
+                if (backfill && BaseMWModel is GenericPortDllModel recModel)
+                {
+                    var yRec = recModel.GetRecordedSeries(Chartitem);
+                    System.Collections.Generic.List<(double x, double y)> xRec =
+                        (ChartXItems.Count > 0) ? recModel.GetRecordedSeries(ChartXItems[0]) : null;
+                    int n = (xRec != null) ? System.Math.Min(yRec.Count, xRec.Count) : yRec.Count;
+                    for (int k = 0; k < n; k++)
+                    {
+                        double xv = (xRec != null) ? xRec[k].y : yRec[k].x;
+                        newLineData.Append(xv, yRec[k].y);
+                    }
+                }
+
                 Color seriesColor = fixedPalette[colorIdx % fixedPalette.Length];
 
                 var newRenderableSeries = new LineRenderableSeriesViewModel
@@ -425,7 +440,7 @@ namespace HoRang2Sea.ViewModels
             if (RenderableSeries.Count == 0 && ChartYItems.Count > 0)
             {
                 Debug.WriteLine($"XYChart: ChartSet() 자동 호출 (ChartYItems={ChartYItems.Count})");
-                ChartSet();
+                ChartSet(BaseMWModel is GenericPortDllModel _gm && _gm.HasRecordedData);
                 return;
             }
             else if (RenderableSeries.Count == 0 && ChartYItems.Count == 0)
