@@ -69,7 +69,7 @@
                             </Grid.ColumnDefinitions>
                             <dx:DXImage Name="image" Source="{dx:DXImage 'SvgImages/PDF Viewer/SearchSettingButton.svg'}" Margin="0" Height="20" Width="20" />
                             <TextBlock Grid.Column="1" Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"  FontSize="20" />
-                            <dxe:TextEdit Grid.Column="2" Text="{Binding Init}" HorizontalAlignment="Right" Width="150"  
+                            <dxe:TextEdit Grid.Column="2" Text="{Binding Init, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Width="150"  
                                           Margin="10,0" FontSize="20" MaskType="RegEx" Mask="[0-9.e\-+]*">
                             </dxe:TextEdit>
                         </Grid>
