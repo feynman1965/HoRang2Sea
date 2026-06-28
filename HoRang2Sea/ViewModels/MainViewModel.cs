@@ -376,12 +376,33 @@ namespace HoRang2Sea.ViewModels
 
                     case SolutionType.FishingBoat:
                         lastOpenedItem = CreatePanelWorkspaceViewModel<FishingBoatModuleViewModel>();
+                        if (lastOpenedItem is FishingBoatModuleViewModel fishingBoatVm)
+                        {
+                            System.Windows.Application.Current?.Dispatcher.BeginInvoke(new System.Action(() =>
+                            {
+                                fishingBoatVm.ShowLayoutSelectionDialog();
+                            }), System.Windows.Threading.DispatcherPriority.Loaded);
+                        }
                         break;
                     case SolutionType.PortGuideShip:
                         lastOpenedItem = CreatePanelWorkspaceViewModel<PortGuideShipModuleViewModel>();
+                        if (lastOpenedItem is PortGuideShipModuleViewModel portGuideShipVm)
+                        {
+                            System.Windows.Application.Current?.Dispatcher.BeginInvoke(new System.Action(() =>
+                            {
+                                portGuideShipVm.ShowLayoutSelectionDialog();
+                            }), System.Windows.Threading.DispatcherPriority.Loaded);
+                        }
                         break;
                     case SolutionType.TrainingShip:
                         lastOpenedItem = CreatePanelWorkspaceViewModel<TrainingShipModuleViewModel>();
+                        if (lastOpenedItem is TrainingShipModuleViewModel trainingShipVm)
+                        {
+                            System.Windows.Application.Current?.Dispatcher.BeginInvoke(new System.Action(() =>
+                            {
+                                trainingShipVm.ShowLayoutSelectionDialog();
+                            }), System.Windows.Threading.DispatcherPriority.Loaded);
+                        }
                         break;
 
                     default:
