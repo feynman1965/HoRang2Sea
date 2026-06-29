@@ -453,8 +453,12 @@
                                     </dxdiag:DiagramDataBindingBehavior.ItemTemplateSelector>
                                 </dxdiag:DiagramDataBindingBehavior>
 
-                                <dxmvvm:EventToCommand SourceName="diagramControl" EventName="MouseDoubleClick" Command="{Binding DiagramDoubleClickedCommand}" 
+                                <dxmvvm:EventToCommand SourceName="diagramControl" EventName="MouseDoubleClick" Command="{Binding DiagramDoubleClickedCommand}"
                                                CommandParameter="{Binding ElementName=diagramControl, Path=SelectedItems}">
+                                </dxmvvm:EventToCommand>
+                                <!-- 단일 클릭(선택)에도 부품 상세를 Property 패널에 표시 -->
+                                <dxmvvm:EventToCommand SourceName="diagramControl" EventName="SelectionChanged" Command="{Binding DiagramDoubleClickedCommand}"
+                                                       CommandParameter="{Binding ElementName=diagramControl, Path=SelectedItems}">
                                 </dxmvvm:EventToCommand>
 
                             </dxmvvm:Interaction.Behaviors>

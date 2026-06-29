@@ -47,6 +47,22 @@ namespace HoRang2Sea.ViewModels
         }
     }
 
+    // Home "Saved Configs" 한 항목 (사용자가 저장한 .hr2v 1개)
+    public class SavedConfigEntry
+    {
+        public string Title { get; set; }        // 사용자가 정한 파일명(확장자 제외) = 목록 제목
+        public string VehicleType { get; set; }  // SolutionType 이름 (예: "FishingBoat")
+        public string FilePath { get; set; }
+        public string SavedDate { get; set; }
+    }
+
+    // Home "Saved Configs" 모델 종류별 그룹
+    public class SavedConfigGroupViewModel
+    {
+        public string TypeName { get; set; }
+        public ObservableCollection<SavedConfigEntry> Items { get; set; }
+    }
+
     public class MainViewModel : ViewModelBase
     {
         public ISplashScreenService SplashScreenService { get { return this.GetService<ISplashScreenService>(); } }
@@ -69,6 +85,17 @@ namespace HoRang2Sea.ViewModels
         ObservableCollection<WorkspaceViewModel> workspaces;
         public RecentItemViewModel[] RecentDocuments { get; protected set; }
         public List<ProjectViewModel> ProjectViewModels { get; protected set; }
+
+        public ICommand OpenSavedConfigCommand { get; private set; }
+        public ICommand LoadProjectCommand { get; private set; }
+
+        // Home 백스테이지에 표시할 "저장된 모델 설정(.hr2v)" 목록 (모델 종류별 그룹)
+        private ObservableCollection<SavedConfigGroupViewModel> savedConfigs;
+        public ObservableCollection<SavedConfigGroupViewModel> SavedConfigs
+        {
+            get => savedConfigs;
+            set { savedConfigs = value; RaisePropertyChanged(nameof(SavedConfigs)); }
+        }
         public MainViewModel()
         {
             SplashScreenService.ShowSplashScreen();
@@ -80,6 +107,11 @@ namespace HoRang2Sea.ViewModels
             Bars = new ReadOnlyCollection<BarModel>(CreateBars());
             // 더미 하드코딩 경로(c:\My Documents\*.rtf) 제거 — 실제 최근 문서가 없으면 빈 목록.
             RecentDocuments = new RecentItemViewModel[] { };
+            LoadProjectCommand = new DelegateCommand(LoadProject);
+            OpenSavedConfigCommand = new DelegateCommand<SavedConfigEntry>(OpenSavedConfig);
+            BackstageOpenedCommand = new DelegateCommand(RefreshSavedConfigs);
+            SavedConfigs = new ObservableCollection<SavedConfigGroupViewModel>();
+            RefreshSavedConfigs();
             ProjectViewModels = new List<ProjectViewModel>()
             {
                 /*new("Nexo","/Resource/Vehiclesflat/3-suv.svg"),*/
@@ -108,7 +140,7 @@ namespace HoRang2Sea.ViewModels
 
         public virtual IBackstageViewService BackstageViewService { get { return null; } }
 
-        public ICommand BackstageOpenedCommand { get; } = new DelegateCommand(() => { });
+        public ICommand BackstageOpenedCommand { get; private set; }
 
         //public PropertyViewModel PropertyViewModel { get; private set; }
         //public MonitorViewModel MonitorViewModel { get; private set; }
@@ -269,34 +301,77 @@ namespace HoRang2Sea.ViewModels
             }
             OpenOrCloseWorkspace(document);
         }
+        // "Save Current Model" — 현재 활성 모델의 설정(.hr2v)을 저장한다(모델별 Save Config 다이얼로그).
         public void SaveProject()
         {
-            SaveFileDialog dialog = new SaveFileDialog() { Filter = filter };
-            var result = dialog.ShowDialog();
-
-            if (result.HasValue && result.Value && !string.IsNullOrEmpty(dialog.FileName))
+            var doc = Workspaces.OfType<DocumentViewModel>().FirstOrDefault(d => d.IsActive)
+                      ?? Workspaces.OfType<DocumentViewModel>().LastOrDefault();
+            if (doc == null)
             {
-                string filename = dialog.FileName;
-                try
-                {
-                    var solution = App.Container.GetInstance<Solution>();
-                    foreach (var DVM in Workspaces.OfType<DocumentViewModel>())
-                    {
-                        DVM.UpdateToModel();
-                    }
-                    solution.SaveFile(filename);
-                    try { SaveLoadLayoutService?.SaveLayout(Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + ".xml")); } catch { }
-                    BackstageViewService?.Close();
+                MessageBox.Show("Open a vehicle model first, then save its configuration.", "Save Model", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            BackstageViewService?.Close();
+            doc.SaveConfig();          // 각 모델 VM의 Save Config 다이얼로그 (파일명=목록 제목)
+            RefreshSavedConfigs();      // 방금 저장한 항목을 Home 목록에 반영
+        }
 
-                    if (System.IO.File.Exists(filename))
-                        MessageBox.Show("Project saved\n" + filename, "Save Project", MessageBoxButton.OK, MessageBoxImage.Information);
-                    else
-                        MessageBox.Show("Failed to create the project file.", "Save Project", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                catch (Exception ex)
+        // Home "Saved Configs" 목록 항목 클릭 → 해당 모델을 열고 config를 적용한다.
+        private void OpenSavedConfig(SavedConfigEntry entry)
+        {
+            if (entry == null || !File.Exists(entry.FilePath)) return;
+            if (!Enum.TryParse<SolutionType>(entry.VehicleType, out var type)) return;
+
+            var item = SolutionItem.Create(entry.Title, "", type);
+            OpenItem(item, showLayoutDialog: false);   // config가 레이아웃을 담고 있으므로 선택 팝업은 생략
+
+            // 방금 열린(또는 동일 제목으로 이미 열려 활성화된) 문서에 config 적용
+            var doc = Workspaces.OfType<DocumentViewModel>().FirstOrDefault(d => d.IsActive);
+            doc?.LoadConfig(entry.FilePath);
+            BackstageViewService?.Close();
+        }
+
+        // %LOCALAPPDATA%/HoRang2/Configs/{type}/*.hr2v 를 스캔해 모델 종류별로 묶는다.
+        public void RefreshSavedConfigs()
+        {
+            var groups = new ObservableCollection<SavedConfigGroupViewModel>();
+            try
+            {
+                var root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "HoRang2", "Configs");
+                foreach (SolutionType type in Enum.GetValues(typeof(SolutionType)))
                 {
-                    MessageBox.Show($"Project save failed: {ex.Message}", "Save Project", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (type == SolutionType.GRID || type == SolutionType.XYCHART) continue;
+                    var dir = Path.Combine(root, type.ToString());
+                    if (!Directory.Exists(dir)) continue;
+                    var files = Directory.GetFiles(dir, "*.hr2v");
+                    if (files.Length == 0) continue;
+
+                    var entries = new ObservableCollection<SavedConfigEntry>();
+                    foreach (var f in files.OrderByDescending(f => File.GetLastWriteTime(f)))
+                    {
+                        entries.Add(new SavedConfigEntry
+                        {
+                            Title = Path.GetFileNameWithoutExtension(f),
+                            VehicleType = type.ToString(),
+                            FilePath = f,
+                            SavedDate = File.GetLastWriteTime(f).ToString("yyyy-MM-dd HH:mm")
+                        });
+                    }
+                    groups.Add(new SavedConfigGroupViewModel { TypeName = GetVehicleDisplayName(type), Items = entries });
                 }
+            }
+            catch { }
+            SavedConfigs = groups;
+        }
+
+        private static string GetVehicleDisplayName(SolutionType type)
+        {
+            switch (type)
+            {
+                case SolutionType.FishingBoat: return "Fishing Boat";
+                case SolutionType.PortGuideShip: return "Port Guide Ship";
+                case SolutionType.TrainingShip: return "Training Ship";
+                default: return type.ToString();
             }
         }
 
@@ -363,7 +438,7 @@ namespace HoRang2Sea.ViewModels
             lastOpenedItem.OpenItemByPath(filePath);
             OpenOrCloseWorkspace(lastOpenedItem);
         }
-        void OpenItem(SolutionItem item)
+        void OpenItem(SolutionItem item, bool showLayoutDialog = true)
         {
             if (ActivateDocument(item.Name)) return;
             if (item.Workspace == null)
@@ -376,7 +451,7 @@ namespace HoRang2Sea.ViewModels
 
                     case SolutionType.FishingBoat:
                         lastOpenedItem = CreatePanelWorkspaceViewModel<FishingBoatModuleViewModel>();
-                        if (lastOpenedItem is FishingBoatModuleViewModel fishingBoatVm)
+                        if (showLayoutDialog && lastOpenedItem is FishingBoatModuleViewModel fishingBoatVm)
                         {
                             System.Windows.Application.Current?.Dispatcher.BeginInvoke(new System.Action(() =>
                             {
@@ -386,7 +461,7 @@ namespace HoRang2Sea.ViewModels
                         break;
                     case SolutionType.PortGuideShip:
                         lastOpenedItem = CreatePanelWorkspaceViewModel<PortGuideShipModuleViewModel>();
-                        if (lastOpenedItem is PortGuideShipModuleViewModel portGuideShipVm)
+                        if (showLayoutDialog && lastOpenedItem is PortGuideShipModuleViewModel portGuideShipVm)
                         {
                             System.Windows.Application.Current?.Dispatcher.BeginInvoke(new System.Action(() =>
                             {
@@ -396,7 +471,7 @@ namespace HoRang2Sea.ViewModels
                         break;
                     case SolutionType.TrainingShip:
                         lastOpenedItem = CreatePanelWorkspaceViewModel<TrainingShipModuleViewModel>();
-                        if (lastOpenedItem is TrainingShipModuleViewModel trainingShipVm)
+                        if (showLayoutDialog && lastOpenedItem is TrainingShipModuleViewModel trainingShipVm)
                         {
                             System.Windows.Application.Current?.Dispatcher.BeginInvoke(new System.Action(() =>
                             {

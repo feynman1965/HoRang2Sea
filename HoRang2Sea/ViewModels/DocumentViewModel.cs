@@ -33,6 +33,9 @@ namespace HoRang2Sea.ViewModels
 
         public virtual void UDPConnect() { }
         public virtual void UDPDisConnect() { }
+        // Home "Saved Configs" / 모델별 Save·Load Config 공용 hook (각 모델 VM이 override).
+        public virtual void SaveConfig() { }
+        public virtual void LoadConfig(string path) { }
         public SolutionItem solutionItem { get; set; }
         public string FilePath { get; protected set; } = "";
         protected override string WorkspaceName { get { return "DocumentHost"; } }

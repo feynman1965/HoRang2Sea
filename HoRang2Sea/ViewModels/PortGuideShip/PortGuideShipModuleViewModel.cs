@@ -794,11 +794,8 @@ namespace HoRang2Sea.ViewModels
                     var seldata = selDatas[0];
                     DiagramItem Items;
 
-                    if (seldata.CustomStyleId.ToString().Equals("columnStyle"))
-                    {
-                        Items = seldata.ParentItem;
-                    }
-                    else if (seldata.CustomStyleId.ToString().Equals("ImageStyle"))
+                    var styleId = seldata.CustomStyleId?.ToString();
+                    if (styleId == "columnStyle" || styleId == "ImageStyle")
                     {
                         Items = seldata.ParentItem;
                     }
@@ -807,7 +804,8 @@ namespace HoRang2Sea.ViewModels
                         Items = seldata;
                     }
 
-                    TableDefinition ItemsData = (TableDefinition)Items.DataContext;
+                    // 단일 클릭(SelectionChanged)에서도 호출되므로, 부품(테이블)이 아닌 항목(커넥터/출력 등) 선택 시 안전하게 무시
+                    if (!(Items?.DataContext is TableDefinition ItemsData)) return;
                     string selTableName = ItemsData.Name;
                     foreach (var Tables in Database.Tables)
                     {
@@ -1152,50 +1150,56 @@ namespace HoRang2Sea.ViewModels
                 InitialDirectory = VehicleSaveData.GetDefaultDir("PortGuideShip")
             };
             if (dialog.ShowDialog() == true)
+                LoadConfig(dialog.FileName);
+        }
+
+        public override void SaveConfig() => OnClickSaveButton();
+
+        // 지정 경로의 .hr2v config를 현재 모델에 적용 (Home "Saved Configs"에서도 호출).
+        public override void LoadConfig(string path)
+        {
+            try
             {
-                try
+                var saveData = VehicleSaveData.Load(path);
                 {
-                    var saveData = VehicleSaveData.Load(dialog.FileName);
+                    var loadedDb = VehicleSaveData.DeserializeDatabase(saveData.DatabaseXml);
+                    if (loadedDb != null && Database != null)
                     {
-                        var loadedDb = VehicleSaveData.DeserializeDatabase(saveData.DatabaseXml);
-                        if (loadedDb != null && Database != null)
+                        foreach (var loadedTable in loadedDb.Tables)
                         {
-                            foreach (var loadedTable in loadedDb.Tables)
+                            var existingTable = Database.Tables.FirstOrDefault(t => t.Name == loadedTable.Name);
+                            if (existingTable == null) continue;
+                            foreach (var loadedCol in loadedTable.Columns)
                             {
-                                var existingTable = Database.Tables.FirstOrDefault(t => t.Name == loadedTable.Name);
-                                if (existingTable == null) continue;
-                                foreach (var loadedCol in loadedTable.Columns)
-                                {
-                                    var existingCol = existingTable.Columns.FirstOrDefault(c => c.Name == loadedCol.Name);
-                                    if (existingCol != null) existingCol.Init = loadedCol.Init;
-                                }
+                                var existingCol = existingTable.Columns.FirstOrDefault(c => c.Name == loadedCol.Name);
+                                if (existingCol != null) existingCol.Init = loadedCol.Init;
                             }
-                            RaisePropertyChanged(nameof(Database));
                         }
+                        RaisePropertyChanged(nameof(Database));
                     }
-                    DesignLayout = saveData.DesignLayout;
-                    ControlLayout = saveData.ControlLayout;
-                    if (!string.IsNullOrEmpty(saveData.DriveModePath) && File.Exists(saveData.DriveModePath))
-                    {
-                        _lastDriveModePath = saveData.DriveModePath;
-                        _uploadedVelocityLines = File.ReadAllLines(saveData.DriveModePath)
-                            .Select(line =>
-                            {
-                                var tokens = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                                if (tokens.Length > 0 && double.TryParse(tokens[^1], out double value))
-                                    return value;
-                                return 0.0;
-                            })
-                            .ToArray();
-                        UpdateVelocityLineDataSeries();
-                    }
-                    UpdateLayoutVisibility();
-                    System.Windows.MessageBox.Show("Loaded", "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
-                catch (Exception ex)
+                DesignLayout = saveData.DesignLayout;
+                ControlLayout = saveData.ControlLayout;
+                if (!string.IsNullOrEmpty(saveData.DriveModePath) && File.Exists(saveData.DriveModePath))
                 {
-                    System.Windows.MessageBox.Show($"Load failed: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    _lastDriveModePath = saveData.DriveModePath;
+                    _uploadedVelocityLines = File.ReadAllLines(saveData.DriveModePath)
+                        .Select(line =>
+                        {
+                            var tokens = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (tokens.Length > 0 && double.TryParse(tokens[^1], out double value))
+                                return value;
+                            return 0.0;
+                        })
+                        .ToArray();
+                    UpdateVelocityLineDataSeries();
                 }
+                UpdateLayoutVisibility();
+                System.Windows.MessageBox.Show("Loaded", "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Load failed: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
         }
 
