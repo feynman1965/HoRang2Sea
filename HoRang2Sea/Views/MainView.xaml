@@ -34,19 +34,23 @@
             </Style>
 
             <ControlTemplate x:Key="HomeControlPaneTemplate" TargetType="{x:Type ContentControl}">
-                <Grid Margin="30,0,30,0">
+                <Grid Margin="40,0,30,0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Home" FontSize="32" FontFamily="Segoe UI Light" Margin="0,12,0,16"/>
+                    <!-- Welcome banner -->
+                    <StackPanel Grid.Row="0" Margin="0,26,0,0">
+                        <TextBlock Text="HoRang2" FontSize="42" FontFamily="Segoe UI Light" Foreground="#2C3E50"/>
+                        <TextBlock Text="Hydrogen Fuel Cell Mobility Simulator" FontSize="15" Foreground="#7F8C8D" Margin="2,2,0,0"/>
+                        <Border Height="2" Margin="0,16,0,0" Background="#E1E7EA"/>
+                    </StackPanel>
 
-                    <!-- Action Buttons -->
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+                    <!-- Quick actions -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,22,0,0">
                         <Button Command="{Binding LoadProjectCommand}" Cursor="Hand" Margin="0,0,12,0"
                                 Background="Transparent" BorderThickness="0" Padding="0">
                             <Border BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="6" Padding="20,14" Background="White">
@@ -58,22 +62,55 @@
                         </Button>
                     </StackPanel>
 
-                    <Separator Grid.Row="2" Margin="0,10" Background="#EEEEEE"/>
+                    <!-- Getting started guide -->
+                    <Border Grid.Row="2" Margin="0,24,0,0" Padding="18,14" CornerRadius="8" Background="#F5F7FA" BorderBrush="#E1E7EA" BorderThickness="1" HorizontalAlignment="Left">
+                        <StackPanel>
+                            <TextBlock Text="Getting started" FontSize="14" FontWeight="SemiBold" Foreground="#2C3E50" Margin="0,0,0,8"/>
+                            <TextBlock Foreground="#566573" FontSize="13" TextWrapping="Wrap">
+                                <Run Text="•  "/><Run Text="New" FontWeight="SemiBold"/><Run Text=" — create a vehicle model."/><LineBreak/>
+                                <Run Text="•  "/><Run Text="Saved" FontWeight="SemiBold"/><Run Text=" — open or manage configurations you saved by name."/><LineBreak/>
+                                <Run Text="•  "/><Run Text="History" FontWeight="SemiBold"/><Run Text=" — recover a recent run (auto-saved, last 20 per model)."/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </ControlTemplate>
 
-                    <!-- Saved Model Configurations Header -->
-                    <TextBlock Grid.Row="3" Text="Saved Model Configurations" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,10" Foreground="#444444"/>
-
-                    <!-- Saved Configs: vehicle-type 별 그룹 인라인 목록 (클릭 시 해당 모델을 열고 config 적용) -->
-                    <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,10">
+            <!-- ===== Config row look (Saved/History 공용 시각 정의는 각 템플릿에 인라인) ===== -->
+            <ControlTemplate x:Key="SavedConfigsControlPaneTemplate" TargetType="{x:Type ContentControl}">
+                <Grid Margin="40,0,30,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Saved Configurations" FontSize="32" FontFamily="Segoe UI Light" Margin="0,18,0,4" Foreground="#2C3E50"/>
+                    <TextBlock Grid.Row="1" Text="Open or delete configurations you saved by name. (Save from a model's ribbon → Save Config.)" FontSize="13" Foreground="#7F8C8D" Margin="0,0,0,14"/>
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,10">
                         <ItemsControl ItemsSource="{Binding SavedConfigs}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="0,0,0,12">
+                                    <StackPanel Margin="0,0,0,14">
                                         <TextBlock Text="{Binding TypeName}" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50" Margin="2,0,0,6"/>
                                         <ItemsControl ItemsSource="{Binding Items}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border Margin="0,2" Padding="12,9" CornerRadius="4" Background="White" BorderThickness="1" BorderBrush="#EEEEEE" Cursor="Hand">
+                                                    <Border Margin="0,2" Padding="12,9">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="Background" Value="White"/>
+                                                                <Setter Property="BorderBrush" Value="#E6E9ED"/>
+                                                                <Setter Property="BorderThickness" Value="1"/>
+                                                                <Setter Property="CornerRadius" Value="5"/>
+                                                                <Setter Property="Cursor" Value="Hand"/>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="#F4F9FD"/>
+                                                                        <Setter Property="BorderBrush" Value="#9BC4E2"/>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
                                                         <dxmvvm:Interaction.Behaviors>
                                                             <dxmvvm:EventToCommand EventName="MouseLeftButtonUp" Command="{Binding DataContext.OpenSavedConfigCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}"/>
                                                         </dxmvvm:Interaction.Behaviors>
@@ -82,10 +119,27 @@
                                                                 <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <dx:DXImage Source="{dx:DXImage SvgImages/DiagramIcons/save.svg}" Width="18" Height="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                                            <dx:DXImage Grid.Column="0" Source="{dx:DXImage SvgImages/DiagramIcons/save.svg}" Width="18" Height="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
                                                             <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="#222222" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                                                            <TextBlock Grid.Column="2" Text="{Binding SavedDate}" FontSize="11" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                                            <TextBlock Grid.Column="2" Text="{Binding SavedDate}" FontSize="11" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="12,0,8,0"/>
+                                                            <Button Grid.Column="3" Cursor="Hand" Width="26" Height="26" Padding="0" Background="Transparent" BorderThickness="0" ToolTip="Delete"
+                                                                    Command="{Binding DataContext.DeleteConfigCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}">
+                                                                <Button.Template>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border x:Name="bd" CornerRadius="13" Background="Transparent">
+                                                                            <TextBlock x:Name="x" Text="✕" FontSize="12" Foreground="#B0B7BD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter TargetName="bd" Property="Background" Value="#FDE8E8"/>
+                                                                                <Setter TargetName="x" Property="Foreground" Value="#E74C3C"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Button.Template>
+                                                            </Button>
                                                         </Grid>
                                                     </Border>
                                                 </DataTemplate>
@@ -98,8 +152,84 @@
                     </ScrollViewer>
                 </Grid>
             </ControlTemplate>
-            
-            
+
+            <ControlTemplate x:Key="HistoryControlPaneTemplate" TargetType="{x:Type ContentControl}">
+                <Grid Margin="40,0,30,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="History" FontSize="32" FontFamily="Segoe UI Light" Margin="0,18,0,4" Foreground="#2C3E50"/>
+                    <TextBlock Grid.Row="1" Text="Automatically captured each time you Run a simulation (latest 20 per model). Click to restore, or delete." FontSize="13" Foreground="#7F8C8D" Margin="0,0,0,14"/>
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,10">
+                        <ItemsControl ItemsSource="{Binding HistoryConfigs}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,14">
+                                        <TextBlock Text="{Binding TypeName}" FontSize="13" FontWeight="SemiBold" Foreground="#2C3E50" Margin="2,0,0,6"/>
+                                        <ItemsControl ItemsSource="{Binding Items}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Margin="0,2" Padding="12,9">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="Background" Value="White"/>
+                                                                <Setter Property="BorderBrush" Value="#E6E9ED"/>
+                                                                <Setter Property="BorderThickness" Value="1"/>
+                                                                <Setter Property="CornerRadius" Value="5"/>
+                                                                <Setter Property="Cursor" Value="Hand"/>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="#F4F9FD"/>
+                                                                        <Setter Property="BorderBrush" Value="#9BC4E2"/>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <dxmvvm:Interaction.Behaviors>
+                                                            <dxmvvm:EventToCommand EventName="MouseLeftButtonUp" Command="{Binding DataContext.OpenSavedConfigCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}"/>
+                                                        </dxmvvm:Interaction.Behaviors>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <dx:DXImage Grid.Column="0" Source="{dx:DXImage SvgImages/Actions/Open2.svg}" Width="18" Height="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="#222222" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                            <TextBlock Grid.Column="2" Text="{Binding SavedDate}" FontSize="11" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="12,0,8,0"/>
+                                                            <Button Grid.Column="3" Cursor="Hand" Width="26" Height="26" Padding="0" Background="Transparent" BorderThickness="0" ToolTip="Delete"
+                                                                    Command="{Binding DataContext.DeleteConfigCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}">
+                                                                <Button.Template>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Border x:Name="bd" CornerRadius="13" Background="Transparent">
+                                                                            <TextBlock x:Name="x" Text="✕" FontSize="12" Foreground="#B0B7BD" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Border>
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter TargetName="bd" Property="Background" Value="#FDE8E8"/>
+                                                                                <Setter TargetName="x" Property="Foreground" Value="#E74C3C"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Button.Template>
+                                                            </Button>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </ControlTemplate>
+
+
             <ControlTemplate x:Key="NewControlPaneTemplate" TargetType="{x:Type ContentControl}">
                 <Grid Margin="40,0,40,0">
                     <Grid.Background>
@@ -248,6 +378,20 @@
                                           Glyph="{iconPacks:ForkAwesomeImage Kind=FileOutline, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}" >
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource NewControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
+                        </dxr:BackstageTabItem.ControlPane>
+                    </dxr:BackstageTabItem>
+
+                    <dxr:BackstageTabItem Content="Saved"  Margin="0 5"
+                                          Glyph="{iconPacks:FontAwesomeImage Kind=SaveRegular, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
+                        <dxr:BackstageTabItem.ControlPane>
+                            <ContentControl Template="{StaticResource SavedConfigsControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
+                        </dxr:BackstageTabItem.ControlPane>
+                    </dxr:BackstageTabItem>
+
+                    <dxr:BackstageTabItem Content="History"  Margin="0 5"
+                                          Glyph="{iconPacks:FontAwesomeImage Kind=HistorySolid, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
+                        <dxr:BackstageTabItem.ControlPane>
+                            <ContentControl Template="{StaticResource HistoryControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
                         </dxr:BackstageTabItem.ControlPane>
                     </dxr:BackstageTabItem>
                     <dxr:BackstageSeparatorItem />

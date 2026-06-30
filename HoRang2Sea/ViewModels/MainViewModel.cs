@@ -87,6 +87,7 @@ namespace HoRang2Sea.ViewModels
         public List<ProjectViewModel> ProjectViewModels { get; protected set; }
 
         public ICommand OpenSavedConfigCommand { get; private set; }
+        public ICommand DeleteConfigCommand { get; private set; }
         public ICommand LoadProjectCommand { get; private set; }
 
         // Home 백스테이지에 표시할 "저장된 모델 설정(.hr2v)" 목록 (모델 종류별 그룹)
@@ -95,6 +96,14 @@ namespace HoRang2Sea.ViewModels
         {
             get => savedConfigs;
             set { savedConfigs = value; RaisePropertyChanged(nameof(SavedConfigs)); }
+        }
+
+        // 백스테이지 "History" 탭: Run 시 자동 저장되는 최근 스냅샷(_history, 최대 20개/모델, 종류별 그룹)
+        private ObservableCollection<SavedConfigGroupViewModel> historyConfigs;
+        public ObservableCollection<SavedConfigGroupViewModel> HistoryConfigs
+        {
+            get => historyConfigs;
+            set { historyConfigs = value; RaisePropertyChanged(nameof(HistoryConfigs)); }
         }
         public MainViewModel()
         {
@@ -109,9 +118,11 @@ namespace HoRang2Sea.ViewModels
             RecentDocuments = new RecentItemViewModel[] { };
             LoadProjectCommand = new DelegateCommand(LoadProject);
             OpenSavedConfigCommand = new DelegateCommand<SavedConfigEntry>(OpenSavedConfig);
-            BackstageOpenedCommand = new DelegateCommand(RefreshSavedConfigs);
+            DeleteConfigCommand = new DelegateCommand<SavedConfigEntry>(DeleteConfig);
+            BackstageOpenedCommand = new DelegateCommand(RefreshAllConfigs);
             SavedConfigs = new ObservableCollection<SavedConfigGroupViewModel>();
-            RefreshSavedConfigs();
+            HistoryConfigs = new ObservableCollection<SavedConfigGroupViewModel>();
+            RefreshAllConfigs();
             ProjectViewModels = new List<ProjectViewModel>()
             {
                 /*new("Nexo","/Resource/Vehiclesflat/3-suv.svg"),*/
@@ -313,7 +324,7 @@ namespace HoRang2Sea.ViewModels
             }
             BackstageViewService?.Close();
             doc.SaveConfig();          // 각 모델 VM의 Save Config 다이얼로그 (파일명=목록 제목)
-            RefreshSavedConfigs();      // 방금 저장한 항목을 Home 목록에 반영
+            RefreshAllConfigs();        // 방금 저장한 항목을 목록에 반영
         }
 
         // Home "Saved Configs" 목록 항목 클릭 → 해당 모델을 열고 config를 적용한다.
@@ -331,8 +342,8 @@ namespace HoRang2Sea.ViewModels
             BackstageViewService?.Close();
         }
 
-        // %LOCALAPPDATA%/HoRang2/Configs/{type}/*.hr2v 를 스캔해 모델 종류별로 묶는다.
-        public void RefreshSavedConfigs()
+        // 저장 폴더를 스캔해 종류별 그룹 목록 생성. history=false → 수동 저장(.hr2v), true → _history 스냅샷.
+        private ObservableCollection<SavedConfigGroupViewModel> BuildConfigGroups(bool history)
         {
             var groups = new ObservableCollection<SavedConfigGroupViewModel>();
             try
@@ -341,7 +352,9 @@ namespace HoRang2Sea.ViewModels
                 foreach (SolutionType type in Enum.GetValues(typeof(SolutionType)))
                 {
                     if (type == SolutionType.GRID || type == SolutionType.XYCHART) continue;
-                    var dir = Path.Combine(root, type.ToString());
+                    var dir = history
+                        ? Path.Combine(root, type.ToString(), "_history")
+                        : Path.Combine(root, type.ToString());
                     if (!Directory.Exists(dir)) continue;
                     var files = Directory.GetFiles(dir, "*.hr2v");
                     if (files.Length == 0) continue;
@@ -361,7 +374,22 @@ namespace HoRang2Sea.ViewModels
                 }
             }
             catch { }
-            SavedConfigs = groups;
+            return groups;
+        }
+
+        public void RefreshSavedConfigs() => SavedConfigs = BuildConfigGroups(history: false);
+        public void RefreshHistoryConfigs() => HistoryConfigs = BuildConfigGroups(history: true);
+        public void RefreshAllConfigs() { RefreshSavedConfigs(); RefreshHistoryConfigs(); }
+
+        // Saved/History 목록의 ×(삭제) — 해당 .hr2v 파일 삭제 후 목록 갱신.
+        private void DeleteConfig(SavedConfigEntry entry)
+        {
+            if (entry == null || string.IsNullOrEmpty(entry.FilePath)) return;
+            var r = MessageBox.Show($"Delete this configuration?\n\n{entry.Title}", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (r != MessageBoxResult.Yes) return;
+            try { if (File.Exists(entry.FilePath)) File.Delete(entry.FilePath); }
+            catch (Exception ex) { MessageBox.Show($"Delete failed: {ex.Message}", "Delete", MessageBoxButton.OK, MessageBoxImage.Error); }
+            RefreshAllConfigs();
         }
 
         private static string GetVehicleDisplayName(SolutionType type)

@@ -36,6 +36,8 @@ namespace HoRang2Sea.ViewModels
         // Home "Saved Configs" / 모델별 Save·Load Config 공용 hook (각 모델 VM이 override).
         public virtual void SaveConfig() { }
         public virtual void LoadConfig(string path) { }
+        // Run 시 현재 입력 스냅샷을 History(_history, 최근 20개)에 자동 저장 (각 모델 VM이 override).
+        public virtual void SaveConfigToHistory() { }
         public SolutionItem solutionItem { get; set; }
         public string FilePath { get; protected set; } = "";
         protected override string WorkspaceName { get { return "DocumentHost"; } }

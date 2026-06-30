@@ -885,6 +885,7 @@ namespace HoRang2Sea.ViewModels
 
         public void OnClickCalculateButton()
         {
+            SaveConfigToHistory();   // Run 시 현재 입력 스냅샷을 History에 기록(직전과 동일하면 skip)
             if (BaseMWModel is TrainingShipMW TrainingShipMW)
             {
                 // 일시정지 상태였으면 재개만 하고 리턴
@@ -1114,14 +1115,7 @@ namespace HoRang2Sea.ViewModels
             {
                 try
                 {
-                    var saveData = new VehicleSaveData
-                    {
-                        VehicleType = "TrainingShip",
-                        DesignLayout = DesignLayout,
-                        ControlLayout = ControlLayout,
-                        DriveModePath = _lastDriveModePath,
-                        DatabaseXml = VehicleSaveData.SerializeDatabase(Database)
-                    };
+                    var saveData = BuildSaveData();
                     saveData.Save(dialog.FileName);
                     VehicleSaveData.RememberDir("TrainingShip", dialog.FileName);
                     System.Windows.MessageBox.Show("Saved", "Save", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
@@ -1131,6 +1125,25 @@ namespace HoRang2Sea.ViewModels
                     System.Windows.MessageBox.Show($"Save failed: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
             }
+        }
+
+        // 현재 입력 상태로 저장 데이터 구성 (수동 Save / History 공용).
+        private VehicleSaveData BuildSaveData()
+        {
+            return new VehicleSaveData
+            {
+                VehicleType = "TrainingShip",
+                DesignLayout = DesignLayout,
+                ControlLayout = ControlLayout,
+                DriveModePath = _lastDriveModePath,
+                DatabaseXml = VehicleSaveData.SerializeDatabase(Database)
+            };
+        }
+
+        // Run 시 현재 입력 스냅샷을 History에 자동 저장(직전과 동일하면 skip, 최근 20개 유지).
+        public override void SaveConfigToHistory()
+        {
+            try { BuildSaveData().SaveToHistory("TrainingShip"); } catch { }
         }
 
         public void OnClickLoadButton()
