@@ -6,7 +6,7 @@
     xmlns:Views="clr-namespace:HoRang2Sea.Views"
     xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
     dx:ThemeManager.ThemeName="Win11Light"
-    Title="HoRang2Sea" Height="800" Width="1000"
+    Title="{Binding DataContext.WindowTitle, ElementName=mainView, FallbackValue='HoRang2 Sea', TargetNullValue='HoRang2 Sea'}" Height="800" Width="1000"
     Icon="{dx:SvgImageSource Uri='/Resource/tigerh2icon.svg'}"
     ShowIcon="False"
     TitleAlignment="Center">
@@ -14,6 +14,6 @@
         <dxb:MainMenuControl VerticalAlignment="Center"/>
     </dx:ThemedWindow.ToolbarItems>
     <Grid>
-        <Views:MainView/>
+        <Views:MainView x:Name="mainView"/>
     </Grid>
 </dx:ThemedWindow>

@@ -38,35 +38,20 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Welcome banner -->
-                    <StackPanel Grid.Row="0" Margin="0,26,0,0">
-                        <TextBlock Text="HoRang2" FontSize="42" FontFamily="Segoe UI Light" Foreground="#2C3E50"/>
-                        <TextBlock Text="Hydrogen Fuel Cell Mobility Simulator" FontSize="15" Foreground="#7F8C8D" Margin="2,2,0,0"/>
-                        <Border Height="2" Margin="0,16,0,0" Background="#E1E7EA"/>
+                    <!-- 좌상단 브랜드 락업 (타이틀바와 중복되는 대형 배너 대신 작게) -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,24,0,0">
+                        <Image Source="{dx:SvgImageSource Uri='/HoRang2Sea;component/Resource/tigerh2icon.svg'}" Width="30" Height="30" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="HoRang2 Sea" FontSize="26" FontFamily="Bahnschrift, Segoe UI" FontWeight="Bold" Foreground="#2C3E50" VerticalAlignment="Center"/>
                     </StackPanel>
 
-                    <!-- Quick actions -->
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,22,0,0">
-                        <Button Command="{Binding LoadProjectCommand}" Cursor="Hand" Margin="0,0,12,0"
-                                Background="Transparent" BorderThickness="0" Padding="0">
-                            <Border BorderThickness="1" BorderBrush="#DDDDDD" CornerRadius="6" Padding="20,14" Background="White">
-                                <StackPanel Orientation="Horizontal">
-                                    <dx:DXImage Source="{dx:DXImage SvgImages/Actions/Open2.svg}" Width="22" Height="22" Margin="0,0,10,0"/>
-                                    <TextBlock Text="Load Project" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="#333333"/>
-                                </StackPanel>
-                            </Border>
-                        </Button>
-                    </StackPanel>
-
-                    <!-- Getting started guide -->
-                    <Border Grid.Row="2" Margin="0,24,0,0" Padding="18,14" CornerRadius="8" Background="#F5F7FA" BorderBrush="#E1E7EA" BorderThickness="1" HorizontalAlignment="Left">
+                    <!-- Getting started: Home의 핵심 콘텐츠 -->
+                    <Border Grid.Row="1" Margin="0,22,0,0" Padding="20,16" CornerRadius="8" Background="#F5F7FA" BorderBrush="#E1E7EA" BorderThickness="1" HorizontalAlignment="Left">
                         <StackPanel>
-                            <TextBlock Text="Getting started" FontSize="14" FontWeight="SemiBold" Foreground="#2C3E50" Margin="0,0,0,8"/>
-                            <TextBlock Foreground="#566573" FontSize="13" TextWrapping="Wrap">
+                            <TextBlock Text="Getting started" FontSize="15" FontWeight="SemiBold" Foreground="#2C3E50" Margin="0,0,0,10"/>
+                            <TextBlock Foreground="#566573" FontSize="13.5" TextWrapping="Wrap" LineHeight="24">
                                 <Run Text="•  "/><Run Text="New" FontWeight="SemiBold"/><Run Text=" — create a vehicle model."/><LineBreak/>
                                 <Run Text="•  "/><Run Text="Saved" FontWeight="SemiBold"/><Run Text=" — open or manage configurations you saved by name."/><LineBreak/>
                                 <Run Text="•  "/><Run Text="History" FontWeight="SemiBold"/><Run Text=" — recover a recent run (auto-saved, last 20 per model)."/>
@@ -356,6 +341,16 @@
                                             <Border CornerRadius="20">
                                                 <Image Source="/Resource/startpage.png" Grid.RowSpan="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top"   Stretch="None" Width="250" />
                                             </Border>
+                                            <!-- 탭 라벨(흰색) 가독성용 어두운 스크림: 위는 이미지 보이게 약하게, 아래로 갈수록 진하게(밝은 노랑 영역 덮음) -->
+                                            <Border CornerRadius="20">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientStop Color="#26263238" Offset="0"/>
+                                                        <GradientStop Color="#73263238" Offset="0.45"/>
+                                                        <GradientStop Color="#D91B2A33" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
 
                                             <ContentControl Content="{Binding}" />
                                             </Grid>
@@ -367,28 +362,28 @@
                     <dxr:BackstageButtonItem Margin="0 30" 
                                              Glyph="{iconPacks:FontAwesomeImage Kind=ArrowAltCircleLeftRegular, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle30}" Placement="Top"/>
                     
-                    <dxr:BackstageTabItem Content="Home"  Margin="0 5"
+                    <dxr:BackstageTabItem Content="Home"  Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:JamIconsImage Kind=Home ,Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource HomeControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
                         </dxr:BackstageTabItem.ControlPane>
                     </dxr:BackstageTabItem>
                     
-                    <dxr:BackstageTabItem Content="New"  Margin="0 5"
+                    <dxr:BackstageTabItem Content="New"  Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:ForkAwesomeImage Kind=FileOutline, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}" >
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource NewControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
                         </dxr:BackstageTabItem.ControlPane>
                     </dxr:BackstageTabItem>
 
-                    <dxr:BackstageTabItem Content="Saved"  Margin="0 5"
+                    <dxr:BackstageTabItem Content="Saved"  Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:FontAwesomeImage Kind=SaveRegular, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource SavedConfigsControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
                         </dxr:BackstageTabItem.ControlPane>
                     </dxr:BackstageTabItem>
 
-                    <dxr:BackstageTabItem Content="History"  Margin="0 5"
+                    <dxr:BackstageTabItem Content="History"  Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:FontAwesomeImage Kind=HistorySolid, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource HistoryControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
@@ -396,7 +391,7 @@
                     </dxr:BackstageTabItem>
                     <dxr:BackstageSeparatorItem />
                     
-                    <dxr:BackstageTabItem Content="About" FontSize="15" Margin="0 5">
+                    <dxr:BackstageTabItem Content="About" FontSize="15" Margin="0 5" FontWeight="Bold">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource InfoControlPaneTemplate}" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False"/>
                         </dxr:BackstageTabItem.ControlPane>

@@ -178,6 +178,17 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
+        // 앱 타이틀바 텍스트: 기본 "HoRang2 Sea", 모델 열면 "HoRang2 Sea — {모델명}".
+        public string WindowTitle
+        {
+            get { return GetValue<string>() ?? "HoRang2 Sea"; }
+            set
+            {
+                if (SetValue(value))
+                    RaisePropertyChanged("WindowTitle");
+            }
+        }
+
 
 
         protected virtual ISaveLoadLayoutService SaveLoadLayoutService { get { return null; } }
@@ -468,6 +479,7 @@ namespace HoRang2Sea.ViewModels
         }
         void OpenItem(SolutionItem item, bool showLayoutDialog = true)
         {
+            WindowTitle = "HoRang2 Sea — " + item.Name;
             if (ActivateDocument(item.Name)) return;
             if (item.Workspace == null)
             {
