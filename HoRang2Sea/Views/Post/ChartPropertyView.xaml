@@ -35,7 +35,7 @@
                       NullText="Search..."/>
 
         <!-- Global Items: 컴포넌트 트리. 잎 더블클릭 → Y축 추가, 우클릭 → X축으로 지정 -->
-        <TreeView Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="5"
+        <TreeView x:Name="GlobalTree" Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="5"
                   ItemsSource="{Binding GroupedChartGlobalItems}"
                   MouseDoubleClick="GlobalTree_MouseDoubleClick"
                   VirtualizingStackPanel.IsVirtualizing="True"

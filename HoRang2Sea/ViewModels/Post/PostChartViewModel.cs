@@ -390,7 +390,8 @@ namespace HoRang2Sea.ViewModels
                     AutoRange = AutoRange.Always,
                     AxisAlignment = AxisAlignment.Left,
                     AxisTitle = Chartitem,
-                    DrawMajorBands = true,
+                    // 0624 피드백 "음영이 선과 맞지 않음": 여러 Y축이 각자 밴드를 겹쳐 그리면 어떤 선과도 안 맞음 → 변수 1개일 때만 밴드.
+                    DrawMajorBands = ChartYItems.Count == 1,
                     BorderThickness = ythick,
                     TextFormatting = "G6", CursorTextFormatting = "G6",
                     Id = YAxis,

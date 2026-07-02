@@ -60,9 +60,37 @@ namespace HoRang2Sea.Views
             if (sender is TreeView tv && tv.SelectedItem is ViewModels.ChartVariableItem item
                 && DataContext is ViewModels.PostTimeChartViewModel vm)
             {
-                if (item.IsAdded) vm.RemoveYItem(item.Name);
-                else vm.AddYItem(item.Name);
+                RunPreservingTreeScroll(tv, () =>
+                {
+                    if (item.IsAdded) vm.RemoveYItem(item.Name);
+                    else vm.AddYItem(item.Name);
+                });
             }
+        }
+
+        // 0624 피드백: 선택/해제 시 트리 컬렉션이 통째로 재생성되며 스크롤이 맨 위로 튐 → 오프셋 저장 후 복원.
+        private void RunPreservingTreeScroll(TreeView tv, Action action)
+        {
+            var sv = FindVisualChild<ScrollViewer>(tv);
+            double offset = sv?.VerticalOffset ?? 0;
+            action();
+            if (sv != null)
+                Dispatcher.BeginInvoke(new Action(() => sv.ScrollToVerticalOffset(offset)),
+                    System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null;
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T t) return t;
+                var result = FindVisualChild<T>(child);
+                if (result != null) return result;
+            }
+            return null;
         }
 
         // 우측 Y 목록에서 항목을 더블클릭 → 제거

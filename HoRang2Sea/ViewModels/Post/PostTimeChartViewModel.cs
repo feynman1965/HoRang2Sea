@@ -145,6 +145,9 @@ namespace HoRang2Sea.ViewModels
                 bool show = !string.IsNullOrEmpty(tab) && r.name == tab;
                 r.series.IsVisible = show;
                 r.axis.Visibility = show ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                // 0624 피드백 "음영이 선과 맞지 않음": 숨긴(Collapsed) 축의 음영밴드가 계속 그려져
+                // 표시 중인 선과 어긋난 음영이 남음 → 표시 중인 축만 밴드를 그린다.
+                if (r.axis is NumericAxisViewModel na) na.DrawMajorBands = show;
             }
         }
 
