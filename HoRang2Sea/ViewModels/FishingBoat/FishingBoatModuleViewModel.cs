@@ -1,4 +1,4 @@
-using DevExpress.ClipboardSource.SpreadsheetML;
+﻿using DevExpress.ClipboardSource.SpreadsheetML;
 using DevExpress.Data.Filtering;
 using DevExpress.Diagram.Core;
 using DevExpress.Mvvm;
@@ -126,9 +126,9 @@ namespace HoRang2Sea.ViewModels
             get
             {
                 if (DesignLayout == 0 && ControlLayout == 0) return "Base";
-                if (DesignLayout == 0 && ControlLayout == 1) return "control layout (Fuzzy control)";
-                if (DesignLayout == 1 && ControlLayout == 0) return "design layout (Series cooling system)";
-                if (DesignLayout == 1 && ControlLayout == 1) return "Integrated layout";
+                if (DesignLayout == 0 && ControlLayout == 1) return "Control Layout (Fuzzy Control)";
+                if (DesignLayout == 1 && ControlLayout == 0) return "Design Layout (Series Cooling System)";
+                if (DesignLayout == 1 && ControlLayout == 1) return "Integrated Layout";
                 return "Unknown";
             }
         }

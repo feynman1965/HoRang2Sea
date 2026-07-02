@@ -1,4 +1,4 @@
-using HoRang2Sea.Models;
+﻿using HoRang2Sea.Models;
 using System.Linq;
 
 namespace HoRang2Sea.ViewModels
@@ -222,7 +222,7 @@ namespace HoRang2Sea.ViewModels
             System.Windows.Controls.Grid.SetColumn(btn1, 0);
 
             var btn2 = CreateLayoutButton(
-                "control layout (Fuzzy control)",
+                "Control Layout (Fuzzy Control)",
                 "",
                 0, 1,
                 System.Windows.Media.Color.FromRgb(46, 204, 113)); // Green
@@ -230,7 +230,7 @@ namespace HoRang2Sea.ViewModels
             System.Windows.Controls.Grid.SetColumn(btn2, 1);
 
             var btn3 = CreateLayoutButton(
-                "design layout (Series cooling system)",
+                "Design Layout (Series Cooling System)",
                 "",
                 1, 0,
                 System.Windows.Media.Color.FromRgb(155, 89, 182)); // Purple
@@ -238,7 +238,7 @@ namespace HoRang2Sea.ViewModels
             System.Windows.Controls.Grid.SetColumn(btn3, 0);
 
             var btn4 = CreateLayoutButton(
-                "Integrated layout",
+                "Integrated Layout",
                 "",
                 1, 1,
                 System.Windows.Media.Color.FromRgb(230, 126, 34)); // Orange
