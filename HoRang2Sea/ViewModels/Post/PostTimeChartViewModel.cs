@@ -599,6 +599,14 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
+        // 축 자동범위 토글: 사용자 줌/팬 시 false(수동 고정 — 스냅백 방지), Auto 버튼으로 복귀.
+        public void SetAxesAutoRange(bool auto)
+        {
+            var mode = auto ? AutoRange.Always : AutoRange.Never;
+            foreach (var ax in XAxes.OfType<NumericAxisViewModel>()) ax.AutoRange = mode;
+            foreach (var ax in YAxes.OfType<NumericAxisViewModel>()) ax.AutoRange = mode;
+        }
+
         public void PauseChart()
         {
             try

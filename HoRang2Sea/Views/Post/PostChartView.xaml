@@ -67,6 +67,15 @@
                 <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Properties" Command="{Binding OnChartPropertyCommand}" Width="21" Height="21">
                     <ext:ToolbarIcon Width="13" Kind="ViewDashboardOutline" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
                 </Button>
+                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Fit to view (reset zoom)" Click="FitChart_Click" Width="21" Height="21" Margin="0,4,0,0">
+                    <ext:ToolbarIcon Width="13" Kind="ArrowExpandAll" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                </Button>
+                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Auto range (follow data)" Click="AutoRange_Click" Width="21" Height="21" Margin="0,4,0,0">
+                    <ext:ToolbarIcon Width="13" Kind="Autorenew" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                </Button>
+                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Axis ranges (type min/max)" Click="AxisRange_Click" Width="21" Height="21" Margin="0,4,0,0">
+                    <ext:ToolbarIcon Width="13" Kind="Tune" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
+                </Button>
             </StackPanel>
 
 
@@ -75,6 +84,8 @@
                                    YAxes="{s:AxesBinding YAxes}"
                                    XAxes="{s:AxesBinding XAxes}"
                                    s:VisualXcceleratorEngine.IsEnabled="True"
+                                   PreviewMouseDown="Chart_UserInteractDown"
+                                   PreviewMouseWheel="Chart_UserInteractWheel"
                                    ChartTitle="Monitor Chart" Margin="0,10,0,10"
                                    Background="White" >
 
@@ -84,7 +95,8 @@
                                                  RubberBandFill="#33FFFFFF" RubberBandStroke="#AAFFFFFF"
                                                  RubberBandStrokeDashArray="2 2"/>
                         <s:ZoomPanModifier ExecuteOn="MouseRightButton" ClipModeX="None" />
-                        <s:XAxisDragModifier DragMode="Pan"/>
+                        <s:XAxisDragModifier DragMode="Scale"/>
+                        <s:YAxisDragModifier DragMode="Scale"/>
                         <s:MouseWheelZoomModifier/>
                         <s:ZoomExtentsModifier ExecuteOn="MouseDoubleClick" />
                         <s:LegendModifier ShowLegend="True" Orientation="Horizontal"
