@@ -227,7 +227,10 @@
                     </Grid.RowDefinitions>
                     
                     
-                    <TextBlock Style="{StaticResource PageHeaderStyle}" Text="New" />
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="New" FontSize="32" FontFamily="Segoe UI Light" Margin="0,18,0,4" Foreground="#2C3E50"/>
+                        <TextBlock Text="Select a vessel to create a new simulation model." FontSize="13" Foreground="#7F8C8D" Margin="0,0,0,14"/>
+                    </StackPanel>
                     <ItemsControl Grid.Row="1" ItemsSource="{Binding ProjectViewModels}" Margin="0 30 0 0">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -362,28 +365,28 @@
                     <dxr:BackstageButtonItem Margin="0 30" 
                                              Glyph="{iconPacks:FontAwesomeImage Kind=ArrowAltCircleLeftRegular, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle30}" Placement="Top"/>
                     
-                    <dxr:BackstageTabItem Content="Home"  Margin="0 5" FontWeight="Bold"
+                    <dxr:BackstageTabItem Content="Home"  FontSize="15" Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:JamIconsImage Kind=Home ,Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource HomeControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
                         </dxr:BackstageTabItem.ControlPane>
                     </dxr:BackstageTabItem>
                     
-                    <dxr:BackstageTabItem Content="New"  Margin="0 5" FontWeight="Bold"
+                    <dxr:BackstageTabItem Content="New"  FontSize="15" Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:ForkAwesomeImage Kind=FileOutline, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}" >
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource NewControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
                         </dxr:BackstageTabItem.ControlPane>
                     </dxr:BackstageTabItem>
 
-                    <dxr:BackstageTabItem Content="Saved"  Margin="0 5" FontWeight="Bold"
+                    <dxr:BackstageTabItem Content="Saved"  FontSize="15" Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:FontAwesomeImage Kind=SaveRegular, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource SavedConfigsControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
                         </dxr:BackstageTabItem.ControlPane>
                     </dxr:BackstageTabItem>
 
-                    <dxr:BackstageTabItem Content="History"  Margin="0 5" FontWeight="Bold"
+                    <dxr:BackstageTabItem Content="History"  FontSize="15" Margin="0 5" FontWeight="Bold"
                                           Glyph="{iconPacks:FontAwesomeImage Kind=HistorySolid, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource HistoryControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />

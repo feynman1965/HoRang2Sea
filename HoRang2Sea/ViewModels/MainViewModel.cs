@@ -479,7 +479,7 @@ namespace HoRang2Sea.ViewModels
         }
         void OpenItem(SolutionItem item, bool showLayoutDialog = true)
         {
-            WindowTitle = "HoRang2 Sea — " + item.Name;
+            WindowTitle = "HoRang2 Sea";
             if (ActivateDocument(item.Name)) return;
             if (item.Workspace == null)
             {
