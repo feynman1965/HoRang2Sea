@@ -345,6 +345,8 @@ namespace HoRang2Sea.ViewModels
                 timer = 0;
                 Debug.WriteLine($"XYChart 새로 시작: timer = 0");
             }
+            // 시뮬 중 변수 추가(backfill) 시 timer 리셋으로 새 점이 원점부터 덮여 그려지는 문제(해양대 0624) → 기록 끝 시각으로 이어감.
+            double backfillLastX = -1;
 
             string XAxis = "";
 
@@ -416,6 +418,7 @@ namespace HoRang2Sea.ViewModels
                     {
                         double xv = (xRec != null) ? xRec[k].y : yRec[k].x;
                         newLineData.Append(xv, yRec[k].y);
+                        if (yRec[k].x > backfillLastX) backfillLastX = yRec[k].x;   // 기록 마지막 시각 추적 (timer 이어가기용)
                     }
                 }
 
@@ -432,6 +435,13 @@ namespace HoRang2Sea.ViewModels
 
                 RenderableSeries.Add(newRenderableSeries);
                 colorIdx++;
+            }
+
+            // backfill 로 기존 기록을 채웠으면 timer를 기록 끝 시각+간격으로 복원 → 시뮬 중 변수 추가해도 시간축이 이어짐
+            if (backfill && backfillLastX >= 0)
+            {
+                timer = backfillLastX + 0.1;
+                Debug.WriteLine($"✅ backfill 후 timer 이어가기: {timer:F3}");
             }
         }
 
