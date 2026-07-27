@@ -10,82 +10,79 @@
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVis"/>
+    </UserControl.Resources>
+    <Grid Margin="4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Labels -->
-        <Label Grid.Column="0" Grid.Row="0"
-               Content="Global Items  (double-click → add/remove Y, right-click → X, ✓=added)" Foreground="Gray" FontSize="14"/>
-        <Label Grid.Column="1" Grid.Row="0"
-               Content="X Axis Item  (double-click → remove)" Foreground="Gray" FontSize="14"/>
+        <!-- ===== 왼쪽: Global Items (컴포넌트 트리) ===== -->
+        <DockPanel Grid.Column="0" Margin="5">
+            <TextBlock DockPanel.Dock="Top" Margin="2,2,2,4"
+                       Text="Global Items  (double-click → add,  ✓ = added)"
+                       Foreground="Gray" FontSize="13" TextTrimming="CharacterEllipsis"/>
+            <dxe:TextEdit DockPanel.Dock="Top" Margin="2,0,2,4" Height="26"
+                          Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                          NullText="Search..."/>
+            <TreeView x:Name="GlobalTree"
+                      ItemsSource="{Binding GroupedChartGlobalItems}"
+                      MouseDoubleClick="GlobalTree_MouseDoubleClick"
+                      VirtualizingStackPanel.IsVirtualizing="True"
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"
+                      BorderBrush="#D0D0D0" BorderThickness="1"
+                      ToolTip="Double-click a variable to add it. In y-x, turn on 'Set X-axis' then double-click to set the X axis.">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="True"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.Resources>
+                    <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+                    <HierarchicalDataTemplate DataType="{x:Type vm:ChartVariableGroup}" ItemsSource="{Binding Items}">
+                        <TextBlock Text="{Binding GroupName}" FontWeight="SemiBold" Foreground="#444444"/>
+                    </HierarchicalDataTemplate>
+                    <DataTemplate DataType="{x:Type vm:ChartVariableItem}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="14"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="✓" Foreground="#1E8449" FontWeight="Bold"
+                                       Visibility="{Binding IsAdded, Converter={StaticResource BoolToVis}}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                        </Grid>
+                    </DataTemplate>
+                </TreeView.Resources>
+            </TreeView>
+        </DockPanel>
 
-        <!-- Search Box under Global Items -->
-        <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5"
-                      Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                      NullText="Search..."/>
+        <!-- ===== 오른쪽: X축(y-x 전용) + Y축 ===== -->
+        <DockPanel Grid.Column="1" Margin="5">
+            <!-- X축 섹션: y-x 모드(UseXAxisVariable)에서만 표시 -->
+            <StackPanel DockPanel.Dock="Top"
+                        Visibility="{Binding UseXAxisVariable, Converter={StaticResource BoolVis}}">
+                <ToggleButton x:Name="XModeToggle" Margin="2,2,2,4" Height="28" Cursor="Hand"
+                              Content="Set X-axis  (ON: double-click a variable)"
+                              ToolTip="When ON, double-clicking a variable in the tree sets it as the X axis. When OFF, double-click adds it to the Y axis."/>
+                <TextBlock Margin="2,0,2,2" Text="X Axis  (double-click → remove)"
+                           Foreground="Gray" FontSize="13"/>
+                <dxe:ListBoxEdit x:Name="XItemsList" ItemsSource="{Binding ChartXItems}"
+                                 Height="52" Margin="2,0,2,8"
+                                 MouseDoubleClick="XItemsList_MouseDoubleClick"
+                                 dx:ListBoxDragDropBehavior.AllowDragDrop="True"
+                                 dx:ListBoxDragDropBehavior.DragRecordOver="OnXDragRecordOver"/>
+            </StackPanel>
 
-        <!-- Global Items: 컴포넌트 트리. 잎 더블클릭 → Y축 추가, 우클릭 → X축으로 지정 -->
-        <TreeView x:Name="GlobalTree" Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="5"
-                  ItemsSource="{Binding GroupedChartGlobalItems}"
-                  MouseDoubleClick="GlobalTree_MouseDoubleClick"
-                  VirtualizingStackPanel.IsVirtualizing="True"
-                  VirtualizingStackPanel.VirtualizationMode="Recycling"
-                  BorderBrush="#D0D0D0" BorderThickness="1"
-                  ToolTip="Double-click a variable → add to Y axis / right-click → set as X axis">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="IsExpanded" Value="True"/>
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.Resources>
-                <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-                <HierarchicalDataTemplate DataType="{x:Type vm:ChartVariableGroup}" ItemsSource="{Binding Items}">
-                    <TextBlock Text="{Binding GroupName}" FontWeight="SemiBold" Foreground="#444444"/>
-                </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type vm:ChartVariableItem}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="14"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="✓" Foreground="#1E8449" FontWeight="Bold"
-                                   Visibility="{Binding IsAdded, Converter={StaticResource BoolToVis}}"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Name}">
-                            <TextBlock.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Set as X axis" Click="SetX_Click"/>
-                                </ContextMenu>
-                            </TextBlock.ContextMenu>
-                        </TextBlock>
-                    </Grid>
-                </DataTemplate>
-            </TreeView.Resources>
-        </TreeView>
-
-        <!-- X Axis ListBox (1개) -->
-        <dxe:ListBoxEdit x:Name="XItemsList" ItemsSource="{Binding ChartXItems}" Grid.Column="1" Grid.Row="2" Margin="5"
-                         MouseDoubleClick="XItemsList_MouseDoubleClick"
-                         dx:ListBoxDragDropBehavior.AllowDragDrop="True"
-                         dx:ListBoxDragDropBehavior.DragRecordOver="OnXDragRecordOver" />
-
-        <!-- Y Axis Label -->
-        <Label Grid.Column="1" Grid.Row="3"
-               Content="Y Axis Item  (double-click → remove)" Foreground="Gray" FontSize="14"/>
-
-        <!-- Y Axis ListBox -->
-        <dxe:ListBoxEdit x:Name="YItemsList" ItemsSource="{Binding ChartYItems}" Grid.Column="1" Grid.Row="4" Margin="5"
-                         MouseDoubleClick="YItemsList_MouseDoubleClick"
-                         dx:ListBoxDragDropBehavior.AllowDragDrop="True"
-                         dx:ListBoxDragDropBehavior.DragRecordOver="OnYDragRecordOver" />
+            <!-- Y축 섹션: 남은 공간을 위→아래로 꽉 채움 -->
+            <TextBlock DockPanel.Dock="Top" Margin="2,0,2,2"
+                       Text="Y Axis  (double-click → remove)" Foreground="Gray" FontSize="13"/>
+            <dxe:ListBoxEdit x:Name="YItemsList" ItemsSource="{Binding ChartYItems}" Margin="2,0,2,2"
+                             MouseDoubleClick="YItemsList_MouseDoubleClick"
+                             dx:ListBoxDragDropBehavior.AllowDragDrop="True"
+                             dx:ListBoxDragDropBehavior.DragRecordOver="OnYDragRecordOver"/>
+        </DockPanel>
     </Grid>
 </UserControl>

@@ -1,4 +1,4 @@
-﻿using DevExpress.Xpf.Editors;
+using DevExpress.Xpf.Editors;
 using HoRang2Sea.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace HoRang2Sea.Views
 
         private void OnDragRecordOver(object sender, DevExpress.Xpf.Core.DragRecordOverEventArgs e)
         {
-            // ChartXItems == 1 return
+             // ChartXItems == 1 return
             if (e.IsFromOutside && typeof(String).IsAssignableFrom(e.GetRecordType()))
             {
                 e.Effects = DragDropEffects.Move;
@@ -72,7 +72,9 @@ namespace HoRang2Sea.Views
             }
         }
 
-        // 트리 변수(잎) 더블클릭 → Y축 토글(추가됨이면 제거, 아니면 추가). 트리에선 안 빠지고 ✓ 표시만 바뀜.
+        // 트리 변수(잎) 더블클릭:
+        //  - y-x 모드에서 'Set X-axis' 토글이 켜져 있으면 → X축으로 지정
+        //  - 그 외 → Y축 토글(추가됨이면 제거, 아니면 추가). 트리에선 안 빠지고 ✓ 표시만 바뀜.
         private void GlobalTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender is TreeView tv && tv.SelectedItem is ChartVariableItem item
@@ -80,19 +82,16 @@ namespace HoRang2Sea.Views
             {
                 RunPreservingTreeScroll(tv, () =>
                 {
-                    if (item.IsAdded) vm.RemoveYItem(item.Name);
-                    else vm.AddYItem(item.Name);
+                    if (vm.UseXAxisVariable && XModeToggle.IsChecked == true)
+                    {
+                        vm.SetXItem(item.Name);
+                    }
+                    else
+                    {
+                        if (item.IsAdded) vm.RemoveYItem(item.Name);
+                        else vm.AddYItem(item.Name);
+                    }
                 });
-            }
-        }
-
-        // 트리에서 우클릭 → "X축으로 지정"
-        private void SetX_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem mi && mi.DataContext is ChartVariableItem item
-                && DataContext is PostChartViewModel vm)
-            {
-                RunPreservingTreeScroll(GlobalTree, () => vm.SetXItem(item.Name));
             }
         }
 

@@ -145,6 +145,9 @@ namespace HoRang2Sea.ViewModels
                     ChartGlobalItems.Add(prev);
             }
 
+            // X 모드에서 이미 Y로 추가된 변수를 X로 지정할 때 이중 등록 방지
+            if (ChartYItems.Contains(name)) ChartYItems.Remove(name);
+
             ChartXItems.Add(name);
             if (ChartGlobalItems != null) ChartGlobalItems.Remove(name);
             UpdateFilteredList();
@@ -214,6 +217,9 @@ namespace HoRang2Sea.ViewModels
 
         public DocumentViewModel ParentViewModel { get; set; }
         public double timer { get; set; }
+
+        // 인스턴스별 모드: false = 시간축 강제(y-t multi 겹침), true = X변수 사용(y-x). 기본 false(기존 동작 보존).
+        public bool UseXAxisVariable { get; set; } = false;
 
         private BaseModel BaseMWModel
         {
@@ -351,7 +357,7 @@ namespace HoRang2Sea.ViewModels
             string XAxis = "";
 
             //X축 0개인 경우, (Timer)
-            if (ChartXItems.Count == 0)
+            if (!UseXAxisVariable || ChartXItems.Count == 0)
             {
                 XAxis = "TimeX";
             }
@@ -412,7 +418,7 @@ namespace HoRang2Sea.ViewModels
                 {
                     var yRec = recModel.GetRecordedSeries(Chartitem);
                     System.Collections.Generic.List<(double x, double y)> xRec =
-                        (ChartXItems.Count > 0) ? recModel.GetRecordedSeries(ChartXItems[0]) : null;
+                        (UseXAxisVariable && ChartXItems.Count > 0) ? recModel.GetRecordedSeries(ChartXItems[0]) : null;
                     int n = (xRec != null) ? System.Math.Min(yRec.Count, xRec.Count) : yRec.Count;
                     for (int k = 0; k < n; k++)
                     {
@@ -474,7 +480,7 @@ namespace HoRang2Sea.ViewModels
                             double xvalue = 0;
 
                             //X axis 미선택 시 , timer로 작동 
-                            if (ChartXItems.Count == 0)
+                            if (!UseXAxisVariable || ChartXItems.Count == 0)
                             {
                                 xvalue = timer;
                             }
@@ -514,7 +520,7 @@ namespace HoRang2Sea.ViewModels
                             double xvalue = 0;
 
                             //X axis 미선택 시 , timer로 작동 
-                            if (ChartXItems.Count == 0)
+                            if (!UseXAxisVariable || ChartXItems.Count == 0)
                             {
                                 xvalue = timer;
                             }
@@ -553,7 +559,7 @@ namespace HoRang2Sea.ViewModels
                             double xvalue = 0;
 
                             //X axis 미선택 시 , timer로 작동 
-                            if (ChartXItems.Count == 0)
+                            if (!UseXAxisVariable || ChartXItems.Count == 0)
                             {
                                 xvalue = timer;
                             }

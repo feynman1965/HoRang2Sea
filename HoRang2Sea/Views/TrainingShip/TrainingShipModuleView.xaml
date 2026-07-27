@@ -492,8 +492,12 @@
                                      IsChecked="{Binding IsYTChartActive, Mode=TwoWay}"
                                      Style="{StaticResource SegmentedFirstStyle}"
                                      Padding="14,4" FontSize="12"/>
-                        <RadioButton Content="x-y"
+                        <RadioButton Content="y-t(multi)"
                                      IsChecked="{Binding IsXYChartActive, Mode=TwoWay}"
+                                     Style="{StaticResource SegmentedFirstStyle}"
+                                     Padding="14,4" FontSize="12"/>
+                        <RadioButton Content="y-x"
+                                     IsChecked="{Binding IsYXChartActive, Mode=TwoWay}"
                                      Style="{StaticResource SegmentedLastStyle}"
                                      Padding="14,4" FontSize="12"/>
                     </StackPanel>
@@ -504,6 +508,9 @@
                     </ContentControl>
                     <ContentControl Visibility="{Binding IsXYChartActive, Converter={StaticResource BoolToVisConverter}}">
                         <local:PostChartView DataContext="{Binding XYChartViewModel}"/>
+                    </ContentControl>
+                    <ContentControl Visibility="{Binding IsYXChartActive, Converter={StaticResource BoolToVisConverter}}">
+                        <local:PostChartView DataContext="{Binding YXChartViewModel}"/>
                     </ContentControl>
                 </Grid>
             </DockPanel>

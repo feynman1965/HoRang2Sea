@@ -322,7 +322,7 @@ namespace HoRang2Sea.ViewModels
                 {
                     _isYTChartActive = value;
                     RaisePropertyChanged(nameof(IsYTChartActive));
-                    if (value && IsXYChartActive) IsXYChartActive = false;
+                    if (value) { IsXYChartActive = false; IsYXChartActive = false; }
                 }
             }
         }
@@ -337,7 +337,22 @@ namespace HoRang2Sea.ViewModels
                 {
                     _isXYChartActive = value;
                     RaisePropertyChanged(nameof(IsXYChartActive));
-                    if (value && IsYTChartActive) IsYTChartActive = false;
+                    if (value) { IsYTChartActive = false; IsYXChartActive = false; }
+                }
+            }
+        }
+
+        private bool _isYXChartActive = false;
+        public bool IsYXChartActive
+        {
+            get => _isYXChartActive;
+            set
+            {
+                if (_isYXChartActive != value)
+                {
+                    _isYXChartActive = value;
+                    RaisePropertyChanged(nameof(IsYXChartActive));
+                    if (value) { IsYTChartActive = false; IsXYChartActive = false; }
                 }
             }
         }
@@ -346,6 +361,7 @@ namespace HoRang2Sea.ViewModels
         public PostGridViewModel GridViewModel { get; private set; }
         public PostTimeChartViewModel ChartViewModel { get; private set; }
         public PostChartViewModel XYChartViewModel { get; private set; }
+        public PostChartViewModel YXChartViewModel { get; private set; }
 
         // SciChart에서 사용할 데이터 시리즈
         private XyDataSeries<double, double> _velocityLineDataSeries;
@@ -664,6 +680,7 @@ namespace HoRang2Sea.ViewModels
             GridViewModel = new PostGridViewModel("Grid Properties", this);
             ChartViewModel = new PostTimeChartViewModel("Time Chart", this);
             XYChartViewModel = new PostChartViewModel("XY Chart", this);
+            YXChartViewModel = new PostChartViewModel("YX Chart", this) { UseXAxisVariable = true };
         }
 
 
@@ -974,7 +991,7 @@ namespace HoRang2Sea.ViewModels
 
                         if (XYChartViewModel != null)
                         {
-                            XYChartViewModel.ResetPauseState();
+                            XYChartViewModel.ResetPauseState(); YXChartViewModel?.ResetPauseState();
                             Debug.WriteLine("FishingBoat: XYChart 재개");
                         }
                     }
@@ -1018,7 +1035,7 @@ namespace HoRang2Sea.ViewModels
 
                     if (XYChartViewModel != null)
                     {
-                        XYChartViewModel.ClearChart();
+                        XYChartViewModel.ClearChart(); YXChartViewModel?.ClearChart();
                         Debug.WriteLine("FishingBoat: XYChart 초기화 완료");
                     }
                 }
@@ -1099,7 +1116,7 @@ namespace HoRang2Sea.ViewModels
 
                         if (XYChartViewModel != null)
                         {
-                            XYChartViewModel.PauseChart();
+                            XYChartViewModel.PauseChart(); YXChartViewModel?.PauseChart();
                             Debug.WriteLine("FishingBoat: XYChart 일시정지");
                         }
                     }
@@ -1134,7 +1151,7 @@ namespace HoRang2Sea.ViewModels
 
                         if (XYChartViewModel != null)
                         {
-                            XYChartViewModel.ClearChart();
+                            XYChartViewModel.ClearChart(); YXChartViewModel?.ClearChart();
                             Debug.WriteLine("FishingBoat: XYChart 초기화 완료");
                         }
                     }
@@ -1368,7 +1385,7 @@ namespace HoRang2Sea.ViewModels
 
                 if (XYChartViewModel != null)
                 {
-                    XYChartViewModel.ChartUpdate();
+                    XYChartViewModel.ChartUpdate(); YXChartViewModel?.ChartUpdate();
                 }
             }
             catch (Exception ex)

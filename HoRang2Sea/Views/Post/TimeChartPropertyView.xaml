@@ -11,7 +11,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
@@ -23,8 +23,8 @@
         </Grid.ColumnDefinitions>
 
         <!-- Global Items 레이블 (더블클릭 토글: 추가/제거, ✓=추가됨) -->
-        <Label  Grid.Column="0" Grid.Row="0"
-                Content="Global Items  (double-click → add/remove, ✓=added)" Foreground="Gray" FontSize="14"/>
+        <Label  Grid.Column="0" Grid.Row="0" Padding="5,3"
+                Content="Global Items  (double-click → add/remove, ✓=added)" Foreground="Gray" FontSize="13"/>
 
         <!-- 검색어 입력 -->
         <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5" Height="25"
@@ -64,8 +64,8 @@
         </TreeView>
 
         <!-- Y Axis Item 레이블 (더블클릭으로 제거) -->
-        <Label  Grid.Column="1" Grid.Row="0"
-                Content="Y Axis Item  (double-click → remove)" Foreground="Gray" FontSize="14"/>
+        <Label  Grid.Column="1" Grid.Row="0" Padding="5,3"
+                Content="Y Axis Item  (double-click → remove)" Foreground="Gray" FontSize="13"/>
 
         <!-- Y Axis Items 리스트 -->
         <dxe:ListBoxEdit x:Name="YItemsList" ItemsSource="{Binding ChartYItems}"
