@@ -412,15 +412,20 @@ namespace HoRang2Sea.Models
 
             // GUI 그리드의 모든 입력값을 해당 DLL 포트에 반영 (Ground와 동일 방식, Sea 고유 포트맵).
             // 속도 프로파일(port 64)은 매 step RunWithCancellation에서 채우므로 skip.
-            // Mode(482)/Design(483)는 이 DLL에 포트 없어 silent no-op, Control(65)은 반영됨.
+            // 레이아웃 포트(65)는 아래에서 Layout 선택값으로 덮어쓰므로 여기서도 skip.
             for (int i = 0; i < PortGuideShipMWInputs.Count; i++)
             {
                 if (InputPortMap.TryGetValue(i, out int port))
                 {
                     if (port == 64) continue;   // 속도 프로파일 = 매 step 주입
+                    if (port == 65) continue;   // 레이아웃 = Layout 선택 다이얼로그가 결정
                     SetInputPort(port, PortGuideShipMWInputs[i].Value);
                 }
             }
+
+            // 해양대 안내(2026-04-29): In65 = 기준 레이아웃(1) / 설계 레이아웃(2) 전환.
+            // 기존에는 그리드 값(Init 0, max 1)이 실려 전환값 2에 도달할 수 없어 설계 레이아웃이 적용되지 않았음.
+            SetInputPort(65, DesignLayout == 1 ? 2.0 : 1.0);
         }
     }
 }
