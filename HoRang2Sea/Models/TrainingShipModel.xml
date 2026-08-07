@@ -9,7 +9,7 @@
     </TableDefinition>
     <TableDefinition Name="Stack" PositionX="650" PositionY="700" >
       <Columns>
-        <ColumnDefinition TableName="Stack" Name="Ambient Temperature" Init="298.15" min="243.15" max="303.15" digit="2" unit="K"/>
+        <ColumnDefinition TableName="Stack" Name="Ambient Temperature" Init="293" min="243.15" max="303.15" digit="2" unit="K"/>
         <ColumnDefinition TableName="Stack" Name="Stack Channel Length" Init="0.583" min="0.200" max="1.000" digit="3" unit="m"/>
         <ColumnDefinition TableName="Stack" Name="Stack Initial Temperature" Init="343.15" min="323.15" max="353.15" digit="2" unit="K"/>
         <ColumnDefinition TableName="Stack" Name="Length Of Cell" Init="0.195" min="0.001" max="0.400" digit="3" unit="m"/>
@@ -79,7 +79,7 @@
         <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Efficiency" Init="0.8" min="0.0" max="1.0" digit="1" unit=""/>
         <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Inlet Pressure" Init="1.0" min="1.0" max="1.5" digit="1" unit="bar"/>
         <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Outlet Pressure" Init="2.9" min="2.0" max="3.0" digit="1" unit="bar"/>
-        <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Maximum Flow Rate" Init="48" min="40" max="60" digit="0" unit="kg/s"/>
+        <ColumnDefinition TableName="Fresh Water Pump" Name="Fresh Water Pump Maximum Flow Rate" Init="94" min="40" max="60" digit="0" unit="kg/s"/>
       </Columns>
     </TableDefinition>
     <TableDefinition Name="Sea Water Pump" PositionX="-300" PositionY="1400">
@@ -87,7 +87,7 @@
         <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Efficiency" Init="0.61" min="0.00" max="1.00" digit="2" unit=""/>
         <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Inlet Pressure" Init="1.0" min="1.0" max="1.5" digit="1" unit="bar"/>
         <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Outlet Pressure" Init="2.9" min="2.0" max="3.0" digit="1" unit="bar"/>
-        <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Maximum Flow Rate" Init="48" min="40" max="60" digit="0" unit="kg/s"/>
+        <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Pump Maximum Flow Rate" Init="200" min="40" max="60" digit="0" unit="kg/s"/>
         <ColumnDefinition TableName="Sea Water Pump" Name="Sea Water Temperature" Init="25" min="25" max="50" digit="0" unit="℃"/>
       </Columns>
     </TableDefinition>
@@ -96,7 +96,7 @@
 
     <TableDefinition Name="Heat Exchanger" PositionX="-500" PositionY="500">
       <Columns>
-        <ColumnDefinition TableName="Heat Exchanger" Name="Heat Exchanger Active Area" Init="55" min="0" max="80" digit="0" unit="m2"/>
+        <ColumnDefinition TableName="Heat Exchanger" Name="Heat Exchanger Active Area" Init="215" min="0" max="80" digit="0" unit="m2"/>
         <ColumnDefinition TableName="Heat Exchanger" Name="Heat Exchanger Overall Heat Transfer Coefficient" Init="2100" min="1900" max="2200" digit="0" unit="W/m2K"/>
         <ColumnDefinition TableName="Heat Exchanger" Name="Heat Exchanger Temperature Setting" Init="65" min="60" max="80" digit="0" unit="℃"/>
       </Columns>
