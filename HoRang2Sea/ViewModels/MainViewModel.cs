@@ -105,6 +105,43 @@ namespace HoRang2Sea.ViewModels
             get => historyConfigs;
             set { historyConfigs = value; RaisePropertyChanged(nameof(HistoryConfigs)); }
         }
+
+        // 백스테이지 "Settings" 탭: 결과 기록 간격 (step). 1 step = 1 ms.
+        private static readonly int[] RecordIntervalChoices = { 10, 100, 500, 1000 };
+
+        public int RecordIntervalIndex
+        {
+            get
+            {
+                int cur = Models.AppSettings.Current.RecordStepInterval;
+                int idx = Array.IndexOf(RecordIntervalChoices, cur);
+                return idx < 0 ? 1 : idx;   // 목록에 없는 값이면 기본(0.1초) 위치를 보여준다
+            }
+            set
+            {
+                if (value < 0 || value >= RecordIntervalChoices.Length) return;
+                var s = Models.AppSettings.Current;
+                if (s.RecordStepInterval == RecordIntervalChoices[value]) return;
+                s.RecordStepInterval = RecordIntervalChoices[value];
+                s.Save();
+                RaisePropertyChanged(nameof(RecordIntervalIndex));
+                RaisePropertyChanged(nameof(RecordIntervalHint));
+            }
+        }
+
+        /// <summary>선택한 간격이 메모리를 얼마나 쓰는지 대략 알려준다(가장 무거운 모델 기준).</summary>
+        public string RecordIntervalHint
+        {
+            get
+            {
+                int iv = Models.AppSettings.Current.RecordStepInterval;
+                if (iv < 1) iv = 1;
+                // 가장 무거운 축(출력 210개, 200만 step)을 기준으로 한 어림치
+                double mb = 2_000_000.0 / iv * (210 + 1) * 8 / 1024 / 1024;
+                return $"Rough memory use for the heaviest model (2,000,000 steps, 210 outputs): about {mb:N0} MB per run.";
+            }
+        }
+
         public MainViewModel()
         {
             SplashScreenService.ShowSplashScreen();

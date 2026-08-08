@@ -281,6 +281,33 @@
             </ControlTemplate>
             
             
+            <ControlTemplate x:Key="SettingsControlPaneTemplate" TargetType="{x:Type ContentControl}">
+                <StackPanel Margin="40,0,40,0">
+                    <TextBlock Style="{StaticResource PageHeaderStyle}" Text="Settings" />
+
+                    <TextBlock Text="Result Recording" FontSize="16" FontWeight="SemiBold" Foreground="#2C3E50" Margin="0,18,0,6"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="#555555" FontSize="13" Margin="0,0,0,10"
+                               Text="How often simulation results are stored for charts and CSV export. One simulation step is 1 ms, so 100 steps = 0.1 s. A smaller interval keeps more detail but uses much more memory on long runs."/>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,0,0">
+                        <TextBlock Text="Interval" VerticalAlignment="Center" FontSize="14" Width="70"/>
+                        <dxe:ComboBoxEdit Width="210" IsTextEditable="False" VerticalAlignment="Center"
+                                          SelectedIndex="{Binding RecordIntervalIndex, Mode=TwoWay}">
+                            <dxe:ComboBoxEditItem Content="0.01 s  (10 steps)"/>
+                            <dxe:ComboBoxEditItem Content="0.1 s  (100 steps)  — default"/>
+                            <dxe:ComboBoxEditItem Content="0.5 s  (500 steps)"/>
+                            <dxe:ComboBoxEditItem Content="1 s  (1000 steps)"/>
+                        </dxe:ComboBoxEdit>
+                    </StackPanel>
+
+                    <TextBlock TextWrapping="Wrap" Foreground="#8A6D3B" FontSize="12.5" Margin="0,12,0,0"
+                               Text="{Binding RecordIntervalHint}"/>
+
+                    <TextBlock TextWrapping="Wrap" Foreground="#777777" FontSize="12" Margin="0,16,0,0"
+                               Text="Takes effect from the next simulation run. The setting is stored per user."/>
+                </StackPanel>
+            </ControlTemplate>
+
             <ControlTemplate x:Key="InfoControlPaneTemplate" TargetType="{x:Type ContentControl}">
                 <StackPanel Margin="40,0,0,0">
                     <TextBlock Style="{StaticResource PageHeaderStyle}" Text="About" />
@@ -394,6 +421,13 @@
                     </dxr:BackstageTabItem>
                     <dxr:BackstageSeparatorItem />
                     
+                    <dxr:BackstageTabItem Content="Settings" FontSize="15" Margin="0 5" FontWeight="Bold"
+                                          Glyph="{iconPacks:FontAwesomeImage Kind=CogSolid, Brush=White}" GlyphStyle="{StaticResource myGlyphStyle}">
+                        <dxr:BackstageTabItem.ControlPane>
+                            <ContentControl Template="{StaticResource SettingsControlPaneTemplate}" SnapsToDevicePixels="True" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False" />
+                        </dxr:BackstageTabItem.ControlPane>
+                    </dxr:BackstageTabItem>
+
                     <dxr:BackstageTabItem Content="About" FontSize="15" Margin="0 5" FontWeight="Bold">
                         <dxr:BackstageTabItem.ControlPane>
                             <ContentControl Template="{StaticResource InfoControlPaneTemplate}" Focusable="False" FocusVisualStyle="{x:Null}" IsTabStop="False"/>

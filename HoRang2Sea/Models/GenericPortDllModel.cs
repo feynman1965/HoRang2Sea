@@ -29,9 +29,18 @@ namespace HoRang2Sea.Models
             }
         }
 
+        /// <summary>
+        /// 결과 기록 간격(시뮬 step). DLL step = 1 ms 이므로 100 = 0.1초.
+        /// 차트는 이 간격으로만 그리고 CSV도 이 간격이 최소 해상도이므로 전 step을 보관할 필요가 없다.
+        /// AppSettings 에서 변경 가능.
+        /// </summary>
+        public static int RecordStepInterval = 100;
+
         public void RecordStep(int step, double[] outputValues)
         {
             if (!_isRecording) return;
+            int iv = RecordStepInterval < 1 ? 1 : RecordStepInterval;
+            if (step % iv != 0) return;   // 기본 0.1초(100 step) 간격만 보관
             var row = new double[outputValues.Length + 1];
             row[0] = step;
             Array.Copy(outputValues, 0, row, 1, outputValues.Length);
@@ -68,7 +77,10 @@ namespace HoRang2Sea.Models
                 {
                     if (row.Length <= idx) continue;
                     int step = (int)row[0];
-                    if (step % 100 != 0) continue;   // 라이브 차트와 동일하게 100스텝마다
+                    // 기록 자체가 RecordStepInterval 간격이라 추가 필터는 불필요하지만,
+                    // 과거 저장분/설정 변경 직후를 대비해 한 번 더 거른다.
+                    int ivc = RecordStepInterval < 1 ? 1 : RecordStepInterval;
+                    if (step % ivc != 0) continue;
                     result.Add((step * 0.001, row[idx]));
                 }
             }

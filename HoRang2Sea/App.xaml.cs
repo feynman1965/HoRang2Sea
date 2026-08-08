@@ -30,6 +30,9 @@ namespace HoRang2Sea
         {
             SetupDllDirectories();
             SetSciChartLicense();
+
+            // 저장된 앱 설정 적용 (결과 기록 간격 등)
+            _ = HoRang2Sea.Models.AppSettings.Current;
         }
 
         private void SetupDllDirectories()
