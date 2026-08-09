@@ -107,7 +107,7 @@ namespace HoRang2Sea.ViewModels
         }
 
         // 백스테이지 "Settings" 탭: 결과 기록 간격 (step). 1 step = 1 ms.
-        private static readonly int[] RecordIntervalChoices = { 10, 100, 500, 1000 };
+        private static readonly int[] RecordIntervalChoices = { 1, 10, 100, 500, 1000 };
 
         public int RecordIntervalIndex
         {
@@ -115,7 +115,7 @@ namespace HoRang2Sea.ViewModels
             {
                 int cur = Models.AppSettings.Current.RecordStepInterval;
                 int idx = Array.IndexOf(RecordIntervalChoices, cur);
-                return idx < 0 ? 1 : idx;   // 목록에 없는 값이면 기본(0.1초) 위치를 보여준다
+                return idx < 0 ? 2 : idx;   // 목록에 없는 값이면 기본(0.1초) 위치를 보여준다
             }
             set
             {

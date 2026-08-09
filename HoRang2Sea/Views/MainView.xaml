@@ -293,6 +293,7 @@
                         <TextBlock Text="Interval" VerticalAlignment="Center" FontSize="14" Width="70"/>
                         <dxe:ComboBoxEdit Width="210" IsTextEditable="False" VerticalAlignment="Center"
                                           SelectedIndex="{Binding RecordIntervalIndex, Mode=TwoWay}">
+                            <dxe:ComboBoxEditItem Content="0.001 s  (every step)  — full resolution"/>
                             <dxe:ComboBoxEditItem Content="0.01 s  (10 steps)"/>
                             <dxe:ComboBoxEditItem Content="0.1 s  (100 steps)  — default"/>
                             <dxe:ComboBoxEditItem Content="0.5 s  (500 steps)"/>
