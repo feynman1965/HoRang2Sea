@@ -5,6 +5,11 @@ namespace HoRang2Sea.ViewModels
 {
     public partial class PortGuideShipModuleViewModel
     {
+        // 해양대 Control 레이아웃은 2026년 중 제공 예정. 현재 DLL(In65)은 기준=1 / 설계=2
+        // 두 가지만 지원하므로 Control·Integrated 버튼은 눌러도 아무 변화가 없다.
+        // 제공되면 이 값을 true 로 바꾸고 ControlLayout → 해당 In 포트 배선만 추가하면 된다.
+        private const bool ShowControlLayoutOptions = false;
+
         private bool _layoutDialogOpen = false;
         public void ShowLayoutSelectionDialog()
         {
@@ -244,6 +249,14 @@ namespace HoRang2Sea.ViewModels
                 System.Windows.Media.Color.FromRgb(230, 126, 34)); // Orange
             System.Windows.Controls.Grid.SetRow(btn4, 1);
             System.Windows.Controls.Grid.SetColumn(btn4, 1);
+
+            if (!ShowControlLayoutOptions)
+            {
+                // 동작하지 않는 선택지를 노출하지 않는다 (Control / Integrated)
+                btn2.Visibility = System.Windows.Visibility.Collapsed;
+                btn4.Visibility = System.Windows.Visibility.Collapsed;
+                buttonGrid.ColumnDefinitions[1].Width = new System.Windows.GridLength(0);
+            }
 
             buttonGrid.Children.Add(btn1);
             buttonGrid.Children.Add(btn2);
