@@ -118,10 +118,10 @@ namespace HoRang2Sea.ViewModels
         {
             get
             {
-                if (DesignLayout == 0 && ControlLayout == 0) return "Base";
-                if (DesignLayout == 0 && ControlLayout == 1) return "Control Layout (Fuzzy Control)";
-                if (DesignLayout == 1 && ControlLayout == 0) return "Design Layout (Series Cooling System)";
-                if (DesignLayout == 1 && ControlLayout == 1) return "Integrated Layout";
+                if (DesignLayout == 0 && ControlLayout == 0) return "Base Layout (Parallel Cooling System - Fuel Efficient Mode)";
+                if (DesignLayout == 0 && ControlLayout == 1) return "Control Layout (Parallel Cooling System - Power Priority Mode)";
+                if (DesignLayout == 1 && ControlLayout == 0) return "Design Layout (Series Cooling System - Fuel Efficient Mode)";
+                if (DesignLayout == 1 && ControlLayout == 1) return "Integrated Layout (Series Cooling System - Power Priority Mode)";
                 return "Unknown";
             }
         }

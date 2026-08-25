@@ -36,18 +36,29 @@ namespace HoRang2Sea.Models
         public static ManualResetEvent manualEvent = new ManualResetEvent(true);
         private double[] _driveModes;
         private CancellationTokenSource _cancellationTokenSource;
+        private string _loadedDll;   // 현재 로드된 레이아웃 DLL 파일명
 
-        private const string DLL_FILE_NAME = "Electric_2MW_250703_hydro_win64.dll";
-        private const string FUNCTION_PREFIX = "Electric_2MW_250703_hydro";
-        private const int MAX_INPUT_PORT = 65;
+        // 2026-08-25 해양대 개편: 레이아웃 4종이 각각 별도 DLL로 분리됐다(선박당 4바이너리).
+        // 예전처럼 In65 값으로 전환하지 않고, Layout 선택에 맞는 DLL을 골라 로드한다.
+        //   Design  0=기준(Parallel Cooling) / 1=설계(Series Cooling)
+        //   Control 0=연비 우선(EffControl)   / 1=출력 우선(PowerControl)
+        private static readonly Dictionary<(int Design, int Control), (string Dll, string Prefix)> LayoutDlls = new()
+        {
+            { (0, 0), ("PGS_Standard_EffControl.dll", "Electric_2MW_260617_hydro_Parellel_control") },
+            { (1, 0), ("PGS_Design_EffControl.dll", "Electric_2MW_260617_hydro_Serial_control") },
+            { (0, 1), ("PGS_Standard_PowerControl.dll", "Electric_2MW_260617_hydro_Parellel") },
+            { (1, 1), ("PGS_Design_PowerControl.dll", "Electric_2MW_260617_hydro_Serial") },
+        };
+
+        private const int MAX_INPUT_PORT = 64;   // 260825판에서 In65(DM_Control_mode) 제거
         private const int MAX_OUTPUT_PORT = 55;
 
         // Input index -> port number mapping (sequential 1-65)
         private static readonly Dictionary<int, int> InputPortMap = new()
         {
-            // XML 컬럼 순서 → 실제 DLL 포트 (FGS.xlsx 권위 매핑 + ctypes 직접 검증 기준).
-            // idx0=Propellerpitch → In63 (이 DLL에서 무효 포트), idx1=Slip = 속도 프로파일 → In64 (DM_Speed_Profile, 매 step 주입).
-            // idx2~63 = 물리 파라미터(Ambient~Intercooler Area) → In1~In62 (Excel 포트와 1:1).
+            // XML 컬럼 순서 → 실제 DLL 포트. 260825판 기준 입력은 In1~In64 뿐이다.
+            // idx0=Propeller pitch → In63, idx1=Speed profile → In64(매 step 주입),
+            // idx2~63 = 물리 파라미터(Ambient~Intercooler area) → In1~In62 (Excel 포트와 1:1).
             { 0, 63 }, { 1, 64 },
             { 2, 1 }, { 3, 2 }, { 4, 3 }, { 5, 4 }, { 6, 5 }, { 7, 6 }, { 8, 7 }, { 9, 8 }, { 10, 9 }, { 11, 10 },
             { 12, 11 }, { 13, 12 }, { 14, 13 }, { 15, 14 }, { 16, 15 }, { 17, 16 }, { 18, 17 }, { 19, 18 }, { 20, 19 }, { 21, 20 },
@@ -55,11 +66,7 @@ namespace HoRang2Sea.Models
             { 32, 31 }, { 33, 32 }, { 34, 33 }, { 35, 34 }, { 36, 35 }, { 37, 36 }, { 38, 37 }, { 39, 38 }, { 40, 39 }, { 41, 40 },
             { 42, 41 }, { 43, 42 }, { 44, 43 }, { 45, 44 }, { 46, 45 }, { 47, 46 }, { 48, 47 }, { 49, 48 }, { 50, 49 }, { 51, 50 },
             { 52, 51 }, { 53, 52 }, { 54, 53 }, { 55, 54 }, { 56, 55 }, { 57, 56 }, { 58, 57 }, { 59, 58 }, { 60, 59 }, { 61, 60 },
-            { 62, 61 }, { 63, 62 },
-            // Layout: Mode/Design는 이 DLL에 포트 없어 silent no-op, Control_Layout만 port 65(DM_Control_mode)에 실제 매핑.
-            { 64, 482 }, // Mode (port 482 not in DLL — silent no-op)
-            { 65, 483 }, // Design_Layout (port 483 not in DLL — silent no-op)
-            { 66, 65 }   // Control_Layout (port 65 = DM_Control_mode)
+            { 62, 61 }, { 63, 62 }
         };
 
         // Output index -> port number mapping (sequential 1-55)
@@ -74,6 +81,7 @@ namespace HoRang2Sea.Models
         };
 
         // Port initial values (from PGS_initial_value.txt: port_number -> value)
+        // FS/PGS/TS_initial_value.txt (해양대 260825판) 의 port -> value
         private static readonly Dictionary<int, double> _defaultInputValues = new()
         {
             { 1, 298.15 }, { 2, 0.583 }, { 3, 343.15 }, { 4, 0.195 }, { 5, 0.195 },
@@ -88,14 +96,14 @@ namespace HoRang2Sea.Models
             { 46, 0.254 }, { 47, 0.8 }, { 48, 1.0 }, { 49, 2.9 }, { 50, 16.0 },
             { 51, 0.61 }, { 52, 1.0 }, { 53, 2.9 }, { 54, 34.0 }, { 55, 25.0 },
             { 56, 45.0 }, { 57, 2100.0 }, { 58, 65.0 }, { 59, 0.1 }, { 60, 0.5 },
-            { 61, 298.15 }, { 62, 1.5 }, { 63, 25.0 }, { 64, 0.01 }, { 65, 1.0 }
+            { 61, 298.15 }, { 62, 1.5 }, { 63, 1.5 }, { 64, 0.01 }
         };
 
         public List<PortGuideShipMWDataModel> PortGuideShipMWInputs = new()
         {
-            //mode  ( 개수 : 2 )
+            //Drive mode  ( 개수 : 2 )
             new("Propeller pitch"),
-            new("Slip"),
+            new("Speed profile"),
 
             //Stack  ( 개수 : 18 )
             new("Ambient temperature"),
@@ -173,16 +181,10 @@ namespace HoRang2Sea.Models
             new("Intercooler inlet coolant temperature"),
             new("Intercooler area"),
 
-            //Layout (Sea DLL은 mode2/port 65 단일 layout만 활성화. Mode/Design은 시각용)
-            new("Mode"),
-            new("Design_Layout"),
-            new("Control_Layout"),
         };
 
         public List<PortGuideShipMWDataModel> PortGuideShipMWOuts = new()
         {
-            //PortGuideShipMode  ( 개수 : 3 )
-
             //Stack  ( 개수 : 5 )
             new("Inlet current density", "A/cm2", "Stack"),
             new("Stack voltage", "V", "Stack"),
@@ -258,6 +260,11 @@ namespace HoRang2Sea.Models
             new("Battery output voltage", "V", "Battery"),
             new("Battery output current", "A", "Battery"),
             new("Battery output power", "kW", "Battery"),
+
+            //Drive mode  ( 개수 : 3 )  — 포트 53~55. 정의는 있었으나 표시항목이 없어 앱이 읽지 않던 자리.
+            new("System speed profile", "-", "Drive mode"),
+            new("Displacement", "m", "Drive mode"),
+            new("Fuel efficiency", "m/kg", "Drive mode"),
         };
 
         public PortGuideShipMW()
@@ -388,11 +395,28 @@ namespace HoRang2Sea.Models
 
         public void InitValue()
         {
+            // 선택된 Layout에 해당하는 DLL을 고른다. 미등록 조합이면 기준 레이아웃으로 떨어뜨린다.
+            if (!LayoutDlls.TryGetValue((DesignLayout, ControlLayout), out var target))
+                target = LayoutDlls[(0, 0)];
+
+            // 이미 다른 레이아웃 DLL이 올라가 있으면 내리고 새로 올린다.
+            if (IsinitValue && _loadedDll != target.Dll)
+            {
+                try { CallTerminate(); } catch (Exception ex) { Debug.WriteLine($"terminate() 실패: {ex.Message}"); }
+                UnloadDll();
+                IsinitValue = false;
+                _loadedDll = null;
+            }
+
             if (!IsinitValue)
             {
-                if (!LoadDll(DLL_FILE_NAME, FUNCTION_PREFIX, MAX_INPUT_PORT, MAX_OUTPUT_PORT))
+                if (!LoadDll(target.Dll, target.Prefix, MAX_INPUT_PORT, MAX_OUTPUT_PORT))
                 {
-                    Debug.WriteLine("DLL 로드 실패");
+                    // 레이아웃 DLL을 못 여는 경우가 실제로 있다(예: step 함수 심볼이 다른 빌드).
+                    // 조용히 넘어가면 시뮬이 도는 것처럼 보이므로 상태줄에 어느 파일인지 남긴다.
+                    Debug.WriteLine($"DLL 로드 실패: {target.Dll}");
+                    App.Container.GetInstance<MainViewModel>().Status =
+                        $"Failed to load layout model ({target.Dll}) - check ModelDLLs folder";
                     return;
                 }
 
@@ -400,6 +424,7 @@ namespace HoRang2Sea.Models
                 catch (Exception ex) { Debug.WriteLine($"initialize() 실패: {ex.Message}"); return; }
 
                 IsinitValue = true;
+                _loadedDll = target.Dll;
                 var mv = App.Container.GetInstance<MainViewModel>();
                 mv.Status = "PortGuideShip Running";
             }
@@ -412,20 +437,15 @@ namespace HoRang2Sea.Models
 
             // GUI 그리드의 모든 입력값을 해당 DLL 포트에 반영 (Ground와 동일 방식, Sea 고유 포트맵).
             // 속도 프로파일(port 64)은 매 step RunWithCancellation에서 채우므로 skip.
-            // 레이아웃 포트(65)는 아래에서 Layout 선택값으로 덮어쓰므로 여기서도 skip.
             for (int i = 0; i < PortGuideShipMWInputs.Count; i++)
             {
                 if (InputPortMap.TryGetValue(i, out int port))
                 {
                     if (port == 64) continue;   // 속도 프로파일 = 매 step 주입
-                    if (port == 65) continue;   // 레이아웃 = Layout 선택 다이얼로그가 결정
                     SetInputPort(port, PortGuideShipMWInputs[i].Value);
                 }
             }
 
-            // 해양대 안내(2026-04-29): In65 = 기준 레이아웃(1) / 설계 레이아웃(2) 전환.
-            // 기존에는 그리드 값(Init 0, max 1)이 실려 전환값 2에 도달할 수 없어 설계 레이아웃이 적용되지 않았음.
-            SetInputPort(65, DesignLayout == 1 ? 2.0 : 1.0);
         }
     }
 }
