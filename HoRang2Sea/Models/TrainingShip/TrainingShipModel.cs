@@ -345,6 +345,15 @@ namespace HoRang2Sea.Models
                 Debug.WriteLine("TrainingShip Calculate 시작");
                 CalculateThread = new Thread(() => RunWithCancellation(token));
                 InitValue();
+
+                // DLL 을 못 올렸으면 스레드를 띄우지 않는다. 띄우면 step 이 null 이라
+                // 조용히 no-op 하면서 출력 0 을 그려 시뮬이 도는 것처럼 보인다.
+                if (!IsinitValue)
+                {
+                    CalculateThread = null;
+                    return;
+                }
+
                 CalculateThread.Start();
             }
         }
