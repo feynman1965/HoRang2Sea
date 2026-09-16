@@ -44,10 +44,10 @@ namespace HoRang2Sea.Models
         //   Control 0=연비 우선(EffControl)   / 1=출력 우선(PowerControl)
         private static readonly Dictionary<(int Design, int Control), (string Dll, string Prefix)> LayoutDlls = new()
         {
-            { (0, 0), ("PGS_Standard_EffControl.dll", "Electric_2MW_260617_hydro_Parellel_control") },
-            { (1, 0), ("PGS_Design_EffControl.dll", "Electric_2MW_260617_hydro_Serial_control") },
-            { (0, 1), ("PGS_Standard_PowerControl.dll", "Electric_2MW_260617_hydro_Parellel") },
-            { (1, 1), ("PGS_Design_PowerControl.dll", "Electric_2MW_260617_hydro_Serial") },
+            { (0, 0), ("PGS_260910_Base_win64.dll", "PGS_260910_Base") },
+            { (1, 0), ("PGS_260910_Design_win64.dll", "PGS_260910_Design") },
+            { (0, 1), ("PGS_260910_Control_win64.dll", "PGS_260910_Control") },
+            { (1, 1), ("PGS_260910_Integrated_win64.dll", "PGS_260910_Integrated") },
         };
 
         private const int MAX_INPUT_PORT = 64;   // 260825판에서 In65(DM_Control_mode) 제거
@@ -241,13 +241,13 @@ namespace HoRang2Sea.Models
             new("Heat exchanger sea water outlet temperature", "\u2103", "Heat Exchanger"),
 
             //Induction Motor  ( 개수 : 2 )
-            new("Motor RPM", "Nm", "Induction Motor"),
+            new("Motor RPM", "RPM", "Induction Motor"),
             new("Electric power", "kW", "Induction Motor"),
 
             //Converter  ( 개수 : 3 )
             new("Duty ratio", "-", "Converter"),
             new("Converter voltage", "V", "Converter"),
-            new("Converter current", "I", "Converter"),
+            new("Converter current", "A", "Converter"),
 
             //Intercooler  ( 개수 : 4 )
             new("Intercooler outlet air mass flow rate", "kg/s", "Intercooler"),

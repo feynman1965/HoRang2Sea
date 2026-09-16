@@ -44,10 +44,10 @@ namespace HoRang2Sea.Models
         //   Control 0=연비 우선(EffControl)   / 1=출력 우선(PowerControl)
         private static readonly Dictionary<(int Design, int Control), (string Dll, string Prefix)> LayoutDlls = new()
         {
-            { (0, 0), ("TS_Standard_EffControl.dll", "Electric_9MW_260618_hydro_Parellel_control") },
-            { (1, 0), ("TS_Design_EffControl.dll", "Electric_9MW_260618_hydro_Serial_control") },
-            { (0, 1), ("TS_Standard_PowerControl.dll", "Electric_9MW_260618_hydro_Parellel") },
-            { (1, 1), ("TS_Design_PowerControl.dll", "Electric_9MW_260618_hydro_Serial") },
+            { (0, 0), ("TS_260910_Base_win64.dll", "TS_260910_Base") },
+            { (1, 0), ("TS_260910_Design_win64.dll", "TS_260910_Design") },
+            { (0, 1), ("TS_260910_Control_win64.dll", "TS_260910_Control") },
+            { (1, 1), ("TS_260910_Integrated_win64.dll", "TS_260910_Integrated") },
         };
 
         private const int MAX_INPUT_PORT = 64;   // 260825판에서 In65(DM_Control_mode) 제거
@@ -84,7 +84,7 @@ namespace HoRang2Sea.Models
         // FS/PGS/TS_initial_value.txt (해양대 260825판) 의 port -> value
         private static readonly Dictionary<int, double> _defaultInputValues = new()
         {
-            { 1, 293.0 }, { 2, 0.583 }, { 3, 343.15 }, { 4, 0.195 }, { 5, 0.195 },
+            { 1, 298.15 }, { 2, 0.583 }, { 3, 343.15 }, { 4, 0.195 }, { 5, 0.195 },
             { 6, 0.0025 }, { 7, 0.000042 }, { 8, 0.0002 }, { 9, 0.003 }, { 10, 0.001 },
             { 11, 0.001 }, { 12, 0.002 }, { 13, 0.001 }, { 14, 32.0 }, { 15, 380.0 },
             { 16, 404.0 }, { 17, 1.5 }, { 18, 2.5 }, { 19, 0.0415 }, { 20, 0.0165 },
@@ -241,13 +241,13 @@ namespace HoRang2Sea.Models
             new("Heat exchanger sea water outlet temperature", "\u2103", "Heat Exchanger"),
 
             //Induction Motor  ( 개수 : 2 )
-            new("Motor RPM", "Nm", "Induction Motor"),
+            new("Motor RPM", "RPM", "Induction Motor"),
             new("Electric power", "kW", "Induction Motor"),
 
             //Converter  ( 개수 : 3 )
             new("Duty ratio", "-", "Converter"),
             new("Converter voltage", "V", "Converter"),
-            new("Converter current", "I", "Converter"),
+            new("Converter current", "A", "Converter"),
 
             //Intercooler  ( 개수 : 4 )
             new("Intercooler outlet air mass flow rate", "kg/s", "Intercooler"),

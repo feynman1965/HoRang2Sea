@@ -9,7 +9,7 @@
     </TableDefinition>
     <TableDefinition Name="Stack" PositionX="650" PositionY="700" >
       <Columns>
-        <ColumnDefinition TableName="Stack" Name="Ambient Temperature" Init="293" min="243.15" max="303.15" digit="2" unit="K"/>
+        <ColumnDefinition TableName="Stack" Name="Ambient Temperature" Init="298.15" min="243.15" max="303.15" digit="2" unit="K"/>
         <ColumnDefinition TableName="Stack" Name="Stack Channel Length" Init="0.583" min="0.200" max="1.000" digit="3" unit="m"/>
         <ColumnDefinition TableName="Stack" Name="Stack Initial Temperature" Init="343.15" min="323.15" max="353.15" digit="2" unit="K"/>
         <ColumnDefinition TableName="Stack" Name="Length Of Cell" Init="0.195" min="0.001" max="0.400" digit="3" unit="m"/>
