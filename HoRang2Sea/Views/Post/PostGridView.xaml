@@ -37,7 +37,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Vertical">
-            <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Properties" Command="{Binding OnGridPropertyCommand}" Width="21" Height="21">
+            <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Select Variables (Import Data)" Command="{Binding OnGridPropertyCommand}" Width="21" Height="21">
                 <ext:ToolbarIcon Width="13" Kind="ViewDashboardOutline" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
             </Button>
         </StackPanel>

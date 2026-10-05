@@ -24,12 +24,12 @@
 
         <!-- Global Items 레이블 (더블클릭 토글: 추가/제거, ✓=추가됨) -->
         <Label  Grid.Column="0" Grid.Row="0" Padding="5,3"
-                Content="Global Items  (double-click → add/remove, ✓=added)" Foreground="Gray" FontSize="13"/>
+                Content="Available Outputs  (double-click → add/remove, ✓ = added)" Foreground="Gray" FontSize="13"/>
 
         <!-- 검색어 입력 -->
         <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5" Height="25"
                       Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                      NullText="Search Global Items..." />
+                      NullText="Search outputs..." />
 
         <!-- Global Items: 컴포넌트 트리 (접두어 그룹화). 잎(변수) 더블클릭 → Y축 추가 -->
         <TreeView Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Margin="5"
@@ -65,7 +65,7 @@
 
         <!-- Y Axis Item 레이블 (더블클릭으로 제거) -->
         <Label  Grid.Column="1" Grid.Row="0" Padding="5,3"
-                Content="Y Axis Item  (double-click → remove)" Foreground="Gray" FontSize="13"/>
+                Content="Y-Axis Variables  (each opens its own tab; double-click → remove)" Foreground="Gray" FontSize="13"/>
 
         <!-- Y Axis Items 리스트 -->
         <dxe:ListBoxEdit x:Name="YItemsList" ItemsSource="{Binding ChartYItems}"

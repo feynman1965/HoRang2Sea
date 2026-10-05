@@ -24,11 +24,41 @@ namespace HoRang2Sea.ViewModels
         }
         protected override void OnDispose()
         {
+            StopSimulation();   // 탭을 닫으면 계산 스레드와 DLL 도 정리한다(이전에는 탭을 닫아도 계산이 계속 돌았다, 2026-10-05)
             UpdateToModel();
             if (solutionItem.mymodel != null)
             {
                 solutionItem.mymodel.IsClosed = true;
             }
+        }
+
+        // ── 실행 상태 (2026-10-05) ──
+        private GenericPortDllModel RunModel => solutionItem?.mymodel?.BaseMWModel as GenericPortDllModel;
+        /// <summary>이 탭의 계산이 실행 또는 일시정지 중인지.</summary>
+        public bool IsSimulationActive => RunModel?.IsSimulationActive == true;
+        /// <summary>계산을 멈추고 DLL 을 내린다(그래프 · 멈춘 위치 · 기록은 남김).</summary>
+        public void StopSimulation() { try { RunModel?.StopCalculation(keepResults: true); } catch { } }
+
+        /// <summary>실행 · 일시정지 중이면 알리고 true(그 동작을 하지 않음). 실행 중에 바꾼 프로파일 · 설정 · 모드는
+        /// 이번 실행에 들어가지 않아 화면과 실제가 달라지므로 막는다(2026-10-05).</summary>
+        protected bool BlockWhileRunning(string action)
+        {
+            if (!IsSimulationActive) return false;
+            System.Windows.MessageBox.Show(System.Windows.Application.Current?.MainWindow,
+                $"A simulation is running. Stop it before {action}.",
+                "Simulation running", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            return true;
+        }
+
+        protected override bool ConfirmClose()
+        {
+            if (!IsSimulationActive) return true;
+            var r = System.Windows.MessageBox.Show(System.Windows.Application.Current?.MainWindow,
+                $"A simulation is running in '{DisplayName}'.\n\nStop it and close the tab? Results that were not exported will be lost.",
+                "Close", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
+            if (r != System.Windows.MessageBoxResult.Yes) return false;
+            StopSimulation();
+            return true;
         }
 
         public virtual void UDPConnect() { }

@@ -12,6 +12,15 @@ namespace HoRang2Sea.Models
 {
     public class GenericPortDllModel : BaseModel
     {
+        #region Run state (모델별로 구현, 2026-10-05)
+        /// <summary>계산 스레드가 살아 있는지(실행 또는 일시정지). 탭 · 창을 닫을 때, 레이아웃을 바꿀 때 확인한다.</summary>
+        public virtual bool IsSimulationActive => false;
+
+        /// <summary>계산을 멈추고 DLL 을 내린다. keepResults = true 면 멈춘 위치(Step)와 마지막 출력값을 남긴다
+        /// (Stop 버튼 · 탭 닫기 — 이전에는 Stop 이 차트 · 진행 · 출력값을 모두 0으로 지웠다). 새 Run 은 0 step 부터 다시 시작한다.</summary>
+        public virtual void StopCalculation(bool keepResults = false) { }
+        #endregion
+
         #region CSV Result Recording
         private readonly object _csvLock = new();
         private List<double[]> _csvResults = new();
@@ -87,8 +96,8 @@ namespace HoRang2Sea.Models
             return result;
         }
 
-        // CSV 저장 다이얼로그의 마지막 사용 폴더 (기본값 = exe 폴더). Export 성공 시 갱신.
-        public static string LastExportDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        // CSV 저장 다이얼로그의 마지막 사용 폴더 (기본값 = 문서 폴더 — 설치 폴더(Program Files)는 쓰기가 막힐 수 있다). Export 성공 시 갱신.
+        public static string LastExportDirectory = HoRang2Sea.Services.AppPaths.DefaultExportDir;
 
         public void ExportToCsv(string filePath)
         {
@@ -139,20 +148,27 @@ namespace HoRang2Sea.Models
             }
 
             // 전체 CSV를 메모리에 쌓지 않고 파일로 한 줄씩 스트리밍 기록 (대용량 기록 시 OutOfMemory 방지)
-            int baseStep = startStep < 0 ? 0 : startStep;
-            var fields = new string[selIndices.Count];
+            // 열: Step, Time_s(= Step × 0.001, DLL step 1 ms), 선택한 출력들
+            // 간격은 시작 이후 첫 기록 행부터 센다(시작 step 이 기록 간격의 배수가 아니면 이전에는 빈 CSV 가 나왔다)
+            int baseStep = -1;
+            var outHeaders = new List<string>(selHeaders);
+            outHeaders.Insert(1, "Time_s");
+            var fields = new string[selIndices.Count + 1];
             using (var writer = new StreamWriter(filePath, false, Encoding.UTF8, 1 << 20))
             {
-                writer.WriteLine(string.Join(",", selHeaders));
+                writer.WriteLine(string.Join(",", outHeaders));
                 for (int i = 0; i < snapshot.Count; i++)
                 {
                     int step = (int)snapshot[i][0];
                     if (startStep >= 0 && step < startStep) continue;
                     if (endStep >= 0 && step > endStep) break;
+                    if (baseStep < 0) baseStep = step;
                     if ((step - baseStep) % stepInterval != 0) continue;
                     var row = snapshot[i];
-                    for (int j = 0; j < selIndices.Count; j++)
-                        fields[j] = row[selIndices[j]].ToString("G", CultureInfo.InvariantCulture);
+                    fields[0] = row[0].ToString("G", CultureInfo.InvariantCulture);
+                    fields[1] = (row[0] * 0.001).ToString("0.###", CultureInfo.InvariantCulture);
+                    for (int j = 1; j < selIndices.Count; j++)
+                        fields[j + 1] = row[selIndices[j]].ToString("G", CultureInfo.InvariantCulture);
                     writer.WriteLine(string.Join(",", fields));
                 }
             }
@@ -167,36 +183,99 @@ namespace HoRang2Sea.Models
         #region NaN Detection
         private bool _nanWarningShown = false;
         public bool NaNDetected { get; private set; } = false;
+        /// <summary>NaN/Inf 가 처음 나온 step(멈춘 위치). 없으면 -1.</summary>
+        public int NaNStep { get; private set; } = -1;
 
         protected bool CheckNaN(double[] outputValues, List<string> outputNames, int step)
         {
             if (_nanWarningShown) return true;
+            List<string> bad = null;
             for (int i = 0; i < outputValues.Length; i++)
             {
                 if (double.IsNaN(outputValues[i]) || double.IsInfinity(outputValues[i]))
-                {
-                    _nanWarningShown = true;
-                    NaNDetected = true;
-                    string varName = (i < outputNames.Count) ? outputNames[i] : $"Out[{i}]";
-                    System.Windows.Application.Current?.Dispatcher.Invoke(new Action(() =>
-                    {
-                        System.Windows.MessageBox.Show(
-                            System.Windows.Application.Current.MainWindow,
-                            $"Output '{varName}' is NaN/Inf at step {step}.\n\nPlease check the input variable settings.\n(The parameter values may not be appropriate for this model.)\n\nThe simulation will be stopped.",
-                            "Input Variable Warning",
-                            System.Windows.MessageBoxButton.OK,
-                            System.Windows.MessageBoxImage.Warning);
-                    }));
-                    return true;
-                }
+                    (bad ??= new List<string>()).Add(i < outputNames.Count ? outputNames[i] : $"Out[{i}]");
             }
-            return false;
+            if (bad == null) return false;
+
+            _nanWarningShown = true;
+            NaNDetected = true;
+            NaNStep = step;
+            string names = string.Join(", ", bad.Take(8)) + (bad.Count > 8 ? $" … (+{bad.Count - 8} more)" : "");
+            string file = LastRunInputFile;
+            System.Windows.Application.Current?.Dispatcher.Invoke(new Action(() =>
+            {
+                System.Windows.MessageBox.Show(
+                    System.Windows.Application.Current.MainWindow,
+                    $"The model output became NaN/Inf at t = {step * 0.001:F3} s (step {step}).\n\nOutputs: {names}\n\n" +
+                    "The simulation stopped here. Results up to this point are kept - you can view them in the charts and export them to CSV.\n\n" +
+                    "If the inputs are within the workbook ranges and the profile is reasonable, please report this time to the model provider" +
+                    (file != null ? $" together with the run-input file:\n{file}" : "."),
+                    "Simulation stopped (NaN/Inf)",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Warning);
+            }));
+            return true;
         }
 
         protected void ResetNaNWarning()
         {
             _nanWarningShown = false;
             NaNDetected = false;
+            NaNStep = -1;
+        }
+        #endregion
+
+        #region Run input log · missing ports (2026-10-05)
+        /// <summary>이번 Run 의 프로파일 출처(파일 이름 또는 "… (default)"). VM 이 Calculate 전에 넣는다.</summary>
+        public string ProfileSource { get; set; } = "";
+        /// <summary>마지막 Run 의 실행 입력 기록 파일(%LOCALAPPDATA%\HoRang2\RunInputs\{model}\{model}_latest.txt).</summary>
+        public string LastRunInputFile { get; private set; }
+        private Dictionary<int, double> _logInputs;
+        private static readonly HashSet<string> _missingPortWarned = new();
+
+        /// <summary>InitValue 에서 입력을 쓰기 시작할 때 부른다. 이후 SetInputPort 로 쓴 값이 기록된다.</summary>
+        protected void BeginInputLog() => _logInputs = new Dictionary<int, double>();
+
+        /// <summary>B그룹 작업 rpm · torque 처럼 속도 외에 매 step 넣는 프로파일의 출처(포트 → 파일 이름). VM 이 Calculate 전에 넣는다.</summary>
+        public Dictionary<int, string> ExtraProfileSources { get; } = new();
+
+        /// <summary>InitValue 끝에서 부른다. 앱이 DLL 에 쓴 값과 DLL 에 없는 포트를 파일로 남기고,
+        /// 없는 포트(0이 아닌 값을 쓰려던 입력, 읽으려는 출력)가 있으면 DLL 마다 한 번 알린다.
+        /// extraProfiles: 속도 말고도 매 step 넣는 프로파일(포트, 값) — 출처는 ExtraProfileSources.</summary>
+        protected void EndInputLog(string appName, string model, string layout, IEnumerable<int> outputPortsUsed, int profilePort, double[] profile,
+                                   params (int Port, double[] Values)[] extraProfiles)
+        {
+            var written = _logInputs ?? new Dictionary<int, double>();
+            _logInputs = null;
+            var profiles = new List<HoRang2Sea.Services.RunInputLog.Profile> { new(profilePort, profile, ProfileSource) };
+            foreach (var x in extraProfiles)
+                profiles.Add(new(x.Port, x.Values, ExtraProfileSources.TryGetValue(x.Port, out var src) ? src : "-"));
+            var missIn = written.Where(kv => !_inputPorts.ContainsKey(kv.Key) && kv.Value != 0).Select(kv => kv.Key).ToList();
+            foreach (var p in profiles)
+                if (p.Port > 0 && p.Values != null && p.Values.Any(v => v != 0) && !_inputPorts.ContainsKey(p.Port)) missIn.Add(p.Port);
+            missIn = missIn.Distinct().OrderBy(p => p).ToList();
+            var missOut = outputPortsUsed.Distinct().Where(p => !_outputPorts.ContainsKey(p)).OrderBy(p => p).ToList();
+            LastRunInputFile = HoRang2Sea.Services.RunInputLog.Write(appName, model, _dllFileName, _functionPrefix, layout,
+                                                                     written, missIn, missOut, profiles);
+            if ((missIn.Count > 0 || missOut.Count > 0) && _missingPortWarned.Add(_dllFileName ?? model))
+            {
+                System.Windows.MessageBox.Show(
+                    $"The model DLL '{_dllFileName}' does not have some ports the app uses.\n\n" +
+                    (missIn.Count > 0 ? $"Inputs (values not applied): {string.Join(", ", missIn)}\n" : "") +
+                    (missOut.Count > 0 ? $"Outputs (shown as 0): {string.Join(", ", missOut)}\n" : "") +
+                    "\nThe run continues. Please send this to the model provider" +
+                    (LastRunInputFile != null ? $" together with the run-input file:\n{LastRunInputFile}" : "."),
+                    "Model ports", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+            }
+        }
+
+        /// <summary>DLL 을 못 열었을 때 — 상태줄만으로는 지나치기 쉬워 창으로 알린다.</summary>
+        protected static void ShowDllLoadFailed(string dllFile, string model)
+        {
+            System.Windows.MessageBox.Show(
+                $"The model DLL could not be loaded, so the simulation was not started.\n\nModel: {model}\nFile: ModelDLLs\\{dllFile}\n\n" +
+                "Reinstall the program, or check that the file exists and is the 64-bit Release build from the model provider.",
+                "Model DLL", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
         }
         #endregion
 
@@ -333,10 +412,14 @@ namespace HoRang2Sea.Models
             _terminateFunc = Marshal.GetDelegateForFunctionPointer<VoidDelegate>(termPtr);
 
             // Resolve input ports
+            // 포트 심볼은 보통 In1/Out1 이지만, 충남대 2026-09-15 재빌드(시외버스·트랙터)처럼
+            // 접두어가 붙어 Tractor_DLL_In1 로 나오는 DLL 도 있다 → 둘 다 찾는다(세 앱 공통, 2026-10-05).
             _inputPorts.Clear();
             for (int i = 1; i <= maxInputPort; i++)
             {
                 var ptr = GetProcAddress(_hDll, $"In{i}");
+                if (ptr == IntPtr.Zero)
+                    ptr = GetProcAddress(_hDll, $"{functionPrefix}_In{i}");
                 if (ptr != IntPtr.Zero)
                     _inputPorts[i] = ptr;
             }
@@ -346,6 +429,8 @@ namespace HoRang2Sea.Models
             for (int i = 1; i <= maxOutputPort; i++)
             {
                 var ptr = GetProcAddress(_hDll, $"Out{i}");
+                if (ptr == IntPtr.Zero)
+                    ptr = GetProcAddress(_hDll, $"{functionPrefix}_Out{i}");
                 if (ptr != IntPtr.Zero)
                     _outputPorts[i] = ptr;
             }
@@ -379,6 +464,7 @@ namespace HoRang2Sea.Models
 
         protected void SetInputPort(int port, double value)
         {
+            if (_logInputs != null) _logInputs[port] = value;   // 실행 입력 기록(InitValue 동안만)
             if (_inputPorts.TryGetValue(port, out var ptr))
             {
                 var bytes = BitConverter.GetBytes(value);
@@ -453,5 +539,13 @@ namespace HoRang2Sea.Models
         }
 
         protected bool IsDllLoaded => _hDll != IntPtr.Zero;
+
+        /// <summary>
+        /// Set a specific input port value directly. Used by ViewModel to pass GUI-edited values.
+        /// </summary>
+        public void SetInputPortPublic(int port, double value)
+        {
+            SetInputPort(port, value);
+        }
     }
 }

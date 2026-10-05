@@ -22,7 +22,7 @@
         <!-- ===== 왼쪽: Global Items (컴포넌트 트리) ===== -->
         <DockPanel Grid.Column="0" Margin="5">
             <TextBlock DockPanel.Dock="Top" Margin="2,2,2,4"
-                       Text="Global Items  (double-click → add,  ✓ = added)"
+                       Text="Available Outputs  (double-click → add,  ✓ = added)"
                        Foreground="Gray" FontSize="13" TextTrimming="CharacterEllipsis"/>
             <dxe:TextEdit DockPanel.Dock="Top" Margin="2,0,2,4" Height="26"
                           Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
@@ -67,7 +67,7 @@
                 <ToggleButton x:Name="XModeToggle" Margin="2,2,2,4" Height="28" Cursor="Hand"
                               Content="Set X-axis  (ON: double-click a variable)"
                               ToolTip="When ON, double-clicking a variable in the tree sets it as the X axis. When OFF, double-click adds it to the Y axis."/>
-                <TextBlock Margin="2,0,2,2" Text="X Axis  (double-click → remove)"
+                <TextBlock Margin="2,0,2,2" Text="X Axis  (double-click → remove; empty = time)"
                            Foreground="Gray" FontSize="13"/>
                 <dxe:ListBoxEdit x:Name="XItemsList" ItemsSource="{Binding ChartXItems}"
                                  Height="52" Margin="2,0,2,8"
@@ -78,7 +78,7 @@
 
             <!-- Y축 섹션: 남은 공간을 위→아래로 꽉 채움 -->
             <TextBlock DockPanel.Dock="Top" Margin="2,0,2,2"
-                       Text="Y Axis  (double-click → remove)" Foreground="Gray" FontSize="13"/>
+                       Text="Y Axis  (max 4, double-click → remove)" Foreground="Gray" FontSize="13"/>
             <dxe:ListBoxEdit x:Name="YItemsList" ItemsSource="{Binding ChartYItems}" Margin="2,0,2,2"
                              MouseDoubleClick="YItemsList_MouseDoubleClick"
                              dx:ListBoxDragDropBehavior.AllowDragDrop="True"

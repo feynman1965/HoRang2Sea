@@ -25,10 +25,13 @@ namespace HoRang2Sea.ViewModels
         {
             var dialog = new System.Windows.Window
             {
-                Title = "Select Layout - PortGuideShip",
+                Title = "Select Layout - Port Guide Ship",
                 Width = 700,
                 Height = 680, SizeToContent = System.Windows.SizeToContent.WidthAndHeight,
-                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
+                // 주 창 위 가운데에 띄우고 작업 표시줄에 따로 안 나오게(이전에는 주 창 뒤로 숨을 수 있었다, 2026-10-05)
+                Owner = System.Windows.Application.Current?.MainWindow,
+                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+                ShowInTaskbar = false,
                 ResizeMode = System.Windows.ResizeMode.NoResize,
                 WindowStyle = System.Windows.WindowStyle.SingleBorderWindow,
                 Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 247, 250))
@@ -196,10 +199,14 @@ namespace HoRang2Sea.ViewModels
 
                 button.Click += (s, e) =>
                 {
-                    // 시뮬레이션 실행 중이거나 일시정지 상태면 먼저 정지
-                    if (BaseMWModel is PortGuideShipMW mw && mw.CalculateThread != null && (mw.CalculateThread.IsAlive || mw.IsPause))
+                    // 같은 레이아웃을 다시 고르면 아무것도 하지 않는다(이전에는 실행 중이던 계산을 말없이 멈췄다, 2026-10-05)
+                    if (designValue == DesignLayout && controlValue == ControlLayout) { dialog.Close(); return; }
+                    // 실행 · 일시정지 중이면 묻고 멈춘다(결과는 다음 Run 까지 남김)
+                    if (BaseMWModel is PortGuideShipMW mw && mw.IsSimulationActive)
                     {
-                        mw.StopCalculation();
+                        if (System.Windows.MessageBox.Show(dialog, "A simulation is running. Stop it and change the layout?\n\nThe current results stay on screen until the next Run.",
+                                "Change Layout", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question) != System.Windows.MessageBoxResult.Yes) return;
+                        mw.StopCalculation(keepResults: true);
                     }
 
                     DesignLayout = designValue;
@@ -256,7 +263,7 @@ namespace HoRang2Sea.ViewModels
             };
             container.Children.Add(headerStack);
             container.Children.Add(buttonGrid);
-            container.LayoutTransform = new System.Windows.Media.ScaleTransform(0.66, 0.66);
+            container.LayoutTransform = new System.Windows.Media.ScaleTransform(0.8, 0.8);   // 0.66 이면 설명 글자가 약 9 px 였다
 
             mainGrid.Children.Add(container);
             dialog.Content = mainGrid;

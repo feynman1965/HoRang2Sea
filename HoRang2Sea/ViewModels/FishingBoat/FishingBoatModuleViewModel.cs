@@ -84,7 +84,9 @@ namespace HoRang2Sea.ViewModels
         // -------- 기본 값 관련 ---------
 
         private int LinesLength = 4000000;
-        private double maxVelocity = 100.0;
+        private double maxVelocity = 1.0;   // 기본 프로파일 파일이 없을 때만 쓰는 예비 사다리꼴(속도 비율 0 ~ 1). 이전 100 은 범위 밖이었다
+        private const string DefaultProfileFile = "FishingBoat_Step.txt";   // 프로파일을 고르지 않으면 이 기본 항해 프로파일을 쓴다(2026-10-05)
+        private string ProfileSourceLabel => _lastDriveModePath != null ? System.IO.Path.GetFileName(_lastDriveModePath) : $"{DefaultProfileFile} (default)";
 
         // -------------------------------
 
@@ -163,51 +165,6 @@ namespace HoRang2Sea.ViewModels
                     return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(246, 245, 248));
                 return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 246, 248));
             }
-        }
-
-        // 레이아웃별 입력값 조정이 필요한 파라미터 목록
-        // XML: FishingBoatModel.xml 파라미터명과 정확히 일치해야 함
-        private static readonly HashSet<string> LayoutAdjustedParams = new HashSet<string>
-        {
-            "Ambient Temperature",    // Stack - min="243.15" max="303.15"
-            "Number Of Cell",         // Stack - min="1" max="1000"
-            "Active Area Of Cell",    // Stack - min="100" max="1600"
-            "Inlet Temperature"       // Blower - min="268.00" max="328.00"
-        };
-
-        // 레이아웃에 따른 입력값 조정 (min/max 범위 내 % 기반 조정)
-        private const double LayoutAdjustmentPercent = 0.25; // 25% 이동
-
-        private double GetLayoutAdjustedValue(double initValue, double minValue, double maxValue, string paramName)
-        {
-            // 조정 대상 파라미터가 아니면 그대로 반환
-            if (!LayoutAdjustedParams.Contains(paramName))
-                return initValue;
-
-            // Default (D0, C0): 그대로
-            if (DesignLayout == 0 && ControlLayout == 0)
-                return initValue;
-
-            double adjustedValue = initValue;
-
-            // Control (D0, C1): max 방향으로 25% 이동
-            if (DesignLayout == 0 && ControlLayout == 1)
-            {
-                adjustedValue = initValue + LayoutAdjustmentPercent * (maxValue - initValue);
-            }
-            // Design (D1, C0): min 방향으로 25% 이동
-            else if (DesignLayout == 1 && ControlLayout == 0)
-            {
-                adjustedValue = initValue - LayoutAdjustmentPercent * (initValue - minValue);
-            }
-            // Full (D1, C1): 그대로 (출력 multiplier만 적용)
-            else
-            {
-                return initValue;
-            }
-
-            // min/max 범위 내로 클램핑
-            return Math.Max(minValue, Math.Min(maxValue, adjustedValue));
         }
 
         private void UpdateLayoutVisibility()
@@ -384,14 +341,13 @@ namespace HoRang2Sea.ViewModels
 
             if (_uploadedVelocityLines == null || _uploadedVelocityLines.Length == 0 || _uploadedVelocityLines.All(value => value == 0))
             {
-                SetDefaultVelocity();
+                SetDefaultVelocity();   // 이전에는 여기서 차트를 다시 그리지 않아 화면과 실제 프로파일이 달랐다
             }
-            else
             {
                 // 데이터 시리즈 초기화
                 if (VelocityLineDataSeries == null)
                 {
-                    VelocityLineDataSeries = new XyDataSeries<double, double> { SeriesName = "Velocity Profile" };
+                    VelocityLineDataSeries = new XyDataSeries<double, double> { SeriesName = "Speed Profile" };
                 }
                 else
                 {
@@ -414,6 +370,10 @@ namespace HoRang2Sea.ViewModels
 
         public void SetDefaultVelocity()
         {
+            // 합리적인 기본 프로파일(DefaultProfiles\{DefaultProfileFile}). 파일이 없을 때만 아래 예비 사다리꼴
+            var def = ProfileFile.ReadDefault(DefaultProfileFile);
+            if (def != null) { _uploadedVelocityLines = def; return; }
+
             _uploadedVelocityLines = new double[LinesLength];
 
             int firstQuater = (int)Math.Floor(LinesLength / 4.0);
@@ -437,40 +397,22 @@ namespace HoRang2Sea.ViewModels
 
         public void UploadVelocityFile()
         {
+            if (BlockWhileRunning("loading a profile")) return;
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-                Title = "Select a Profile Text File",
+                Title = "Select Speed Profile (ratio 0 to 1; one value per line at 0.001 s, or two columns: time s, value)",
                 InitialDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultProfiles")
             };
+            if (openFileDialog.ShowDialog() != true) return;   // 고르지 않으면 지금 프로파일 그대로
 
-            if (openFileDialog.ShowDialog() == true)
-            {
-                _lastDriveModePath = openFileDialog.FileName;
-                _uploadedVelocityLines = null;
-                _uploadedVelocityLines = File.ReadAllLines(openFileDialog.FileName)
-                             .Select(line =>
-                             {
-                                 var tokens = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                                 if (tokens.Length > 0 && double.TryParse(tokens[^1], out double value))
-                                 {
-                                     return value;
-                                 }
-                                 return 0.0; // if fails
-                             })
-                             .ToArray();
-                UpdateVelocityLineDataSeries();
-            }
-            else
-            {
-
-                // 파일입력 없을 때 default
-                if (_uploadedVelocityLines == null || _uploadedVelocityLines.All(value => value == 0))
-                {
-                    SetDefaultVelocity();
-                    UpdateVelocityLineDataSeries();
-                }
-            }
+            // 검사 · 보간 · 범위 안내(RunSupport.ProfileFile). 못 읽으면 지금 프로파일을 그대로 둔다
+            // (2026-10-05 — 이전에는 못 읽은 줄을 0으로 넣고, 시간 열이 있어도 한 줄 = 1 ms 로 읽었다)
+            var values = ProfileFile.ReadForUi(openFileDialog.FileName, ProfileKind.SpeedRatio);
+            if (values == null) return;
+            _lastDriveModePath = openFileDialog.FileName;
+            _uploadedVelocityLines = values;
+            UpdateVelocityLineDataSeries();
         }
         public double[] GetUploadedVelocityLines()
         {
@@ -478,7 +420,9 @@ namespace HoRang2Sea.ViewModels
         }
         public void RemoveText()
         {
+            if (BlockWhileRunning("removing the profile")) return;
             _uploadedVelocityLines = null;
+            _lastDriveModePath = null;   // 설정 저장 시 지운 파일 경로가 남지 않게
             SetDefaultVelocity();
             UpdateVelocityLineDataSeries();
         }
@@ -644,7 +588,7 @@ namespace HoRang2Sea.ViewModels
             SelectLayoutCommand = new DelegateCommand(ShowLayoutSelectionDialog);
 
             // 데이터 시리즈 초기화
-            VelocityLineDataSeries = new XyDataSeries<double, double> { SeriesName = "Velocity Profile" };
+            VelocityLineDataSeries = new XyDataSeries<double, double> { SeriesName = "Speed Profile" };
 
             // 데이터 시리즈 적용
             SetDefaultVelocity();
@@ -932,7 +876,7 @@ namespace HoRang2Sea.ViewModels
                 }
                 else
                 {
-                    SimStateText = "Stopped";
+                    SimStateText = mw.NaNDetected ? "Stopped (NaN)" : "Stopped";
                     SimStatusBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0x78, 0x90, 0x9C));
                 }
                 _simTimer?.Stop();
@@ -946,7 +890,6 @@ namespace HoRang2Sea.ViewModels
 
         public void OnClickCalculateButton()
         {
-            SaveConfigToHistory();   // Run 시 현재 입력 스냅샷을 History에 기록(직전과 동일하면 skip)
             if (BaseMWModel is FishingBoatMW FishingBoatMW)
             {
                 // 일시정지 상태였으면 재개만 하고 리턴
@@ -1026,6 +969,7 @@ namespace HoRang2Sea.ViewModels
 
                 Debug.WriteLine($"FishingBoat input list length : {FishingBoatMWInputs.Count}");
                 // Index-based value mapping (skip profile items, stop at MWInputs.Count) — Ground 패턴으로 통일
+                var badCells = new List<string>();   // 숫자가 아닌 칸(그대로 돌리면 뒤 입력이 한 포트씩 밀린다)
                 int i = 0;
                 bool inputsFull = false;
                 foreach (var Table in Database.Tables)
@@ -1040,14 +984,13 @@ namespace HoRang2Sea.ViewModels
                         if (i >= FishingBoatMWInputs.Count) { inputsFull = true; break; }
 
                         double result = 0;
-                        if (!Double.TryParse(Column.Init, out result))
-                            continue;
-
-                        double adjustedValue = result;
-                        if (Double.TryParse(Column.Min, out double minVal) && Double.TryParse(Column.Max, out double maxVal))
+                        if (!GridInput.TryParse(Column.Init, out result))
                         {
-                            adjustedValue = GetLayoutAdjustedValue(result, minVal, maxVal, Column.Name);
+                            badCells.Add($"{Table.Name} / {Column.Name}: '{Column.Init}'");
+                            continue;
                         }
+
+                        double adjustedValue = result;   // 레이아웃과 상관없이 그리드 값 그대로 DLL 에(2026-10-05 — 이전에는 Design · Control 에서 일부 칸을 25% 옮겼다)
 
                         FishingBoatMWInputs[i].Value = adjustedValue;
                         Debug.WriteLine($"[{i}] XML '{Column.Name}' -> Input '{FishingBoatMWInputs[i].Name}' = {adjustedValue}");
@@ -1055,6 +998,7 @@ namespace HoRang2Sea.ViewModels
                     }
                 }
                 Debug.WriteLine($"FishingBoat input list length : {FishingBoatMWInputs.Count}, mapped: {i}");
+                if (badCells.Count > 0) { GridInput.ShowInvalid(badCells); return; }
                 FishingBoatMW.FishingBoatMWInputs = FishingBoatMWInputs;
 
                 // ViewModel의 레이아웃 설정을 Model로 전달 (그래프 패턴 변경용)
@@ -1062,6 +1006,8 @@ namespace HoRang2Sea.ViewModels
                 FishingBoatMW.ControlLayout = ControlLayout;
                 Debug.WriteLine($"FishingBoat: Layout 설정 - Design={DesignLayout}, Control={ControlLayout}");
 
+                FishingBoatMW.ProfileSource = ProfileSourceLabel;
+                SaveConfigToHistory();   // 실제로 실행을 시작할 때만 History 에 남긴다(직전과 같으면 건너뜀)
                 FishingBoatMW.Calculate();
                 StartSimMonitor();
             }
@@ -1107,32 +1053,9 @@ namespace HoRang2Sea.ViewModels
             {
                 if (FishingBoatMW.CalculateThread != null && FishingBoatMW.CalculateThread.IsAlive)
                 {
-                    Debug.WriteLine("FishingBoat: 정지");
-
-                    FishingBoatMW.StopCalculation();
+                    // 계산만 멈춘다. 그래프 · 멈춘 위치 · 출력값은 다음 Run 까지 남긴다(이전에는 Stop 이 모두 지웠다, 2026-10-05)
+                    FishingBoatMW.StopCalculation(keepResults: true);
                     MainViewModel.Status = "Calculation Stopped";
-
-                    // 그래프 완전 초기화
-                    try
-                    {
-                        Debug.WriteLine("FishingBoat: 그래프 초기화");
-
-                        if (ChartViewModel != null)
-                        {
-                            ChartViewModel.ClearChart();
-                            Debug.WriteLine("FishingBoat: TimeChart 초기화 완료");
-                        }
-
-                        if (XYChartViewModel != null)
-                        {
-                            XYChartViewModel.ClearChart(); YXChartViewModel?.ClearChart();
-                            Debug.WriteLine("FishingBoat: XYChart 초기화 완료");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"FishingBoat: 그래프 초기화 실패: {ex.Message}");
-                    }
                 }
                 else
                 {
@@ -1179,7 +1102,7 @@ namespace HoRang2Sea.ViewModels
                     var saveData = BuildSaveData();
                     saveData.Save(dialog.FileName);
                     VehicleSaveData.RememberDir("FishingBoat", dialog.FileName);
-                    System.Windows.MessageBox.Show("Saved", "Save", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show("Save complete", "Save", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
@@ -1209,6 +1132,7 @@ namespace HoRang2Sea.ViewModels
 
         public void OnClickLoadButton()
         {
+            if (BlockWhileRunning("loading a configuration")) return;
             var dialog = new Microsoft.Win32.OpenFileDialog
             {
                 Filter = "Vehicle Config (*.hr2v)|*.hr2v|All files (*.*)|*.*",
@@ -1222,11 +1146,34 @@ namespace HoRang2Sea.ViewModels
         public override void SaveConfig() => OnClickSaveButton();
 
         // 지정 경로의 .hr2v config를 현재 모델에 적용 (Home "Saved Configs"에서도 호출).
+        // 설정에 저장된 프로파일 복원. 경로가 없으면 기본 프로파일, 파일이 없거나 못 읽으면 알리고 기본 프로파일(2026-10-05 —
+        // 이전에는 경로가 없으면 지금 화면의 프로파일이 그대로 남아 불러온 설정과 실제 실행이 달랐다).
+        private void RestoreProfile(string path)
+        {
+            double[] values = null;
+            if (!string.IsNullOrEmpty(path))
+            {
+                if (File.Exists(path)) values = ProfileFile.ReadForUi(path, ProfileKind.SpeedRatio, quiet: true);
+                else System.Windows.MessageBox.Show($"The profile saved in this configuration was not found:\n{path}\n\nThe default profile ({DefaultProfileFile}) is used.",
+                                                    "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+            }
+            _lastDriveModePath = values != null ? path : null;
+            _uploadedVelocityLines = values;
+            UpdateVelocityLineDataSeries();   // null 이면 기본 프로파일을 그린다
+        }
+
         public override void LoadConfig(string path)
         {
             try
             {
                 var saveData = VehicleSaveData.Load(path);
+                if (!string.IsNullOrEmpty(saveData.VehicleType) && saveData.VehicleType != "FishingBoat")
+                {
+                    // 다른 모델의 설정(이전에는 이름이 같은 칸만 덮고 "Load complete" 를 띄웠다, 2026-10-05)
+                    System.Windows.MessageBox.Show($"This configuration is for another model ({saveData.VehicleType}) and was not loaded.",
+                        "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                    return;
+                }
                 {
                     var loadedDb = VehicleSaveData.DeserializeDatabase(saveData.DatabaseXml);
                     if (loadedDb != null && Database != null)
@@ -1246,22 +1193,9 @@ namespace HoRang2Sea.ViewModels
                 }
                 DesignLayout = saveData.DesignLayout;
                 ControlLayout = saveData.ControlLayout;
-                if (!string.IsNullOrEmpty(saveData.DriveModePath) && File.Exists(saveData.DriveModePath))
-                {
-                    _lastDriveModePath = saveData.DriveModePath;
-                    _uploadedVelocityLines = File.ReadAllLines(saveData.DriveModePath)
-                        .Select(line =>
-                        {
-                            var tokens = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                            if (tokens.Length > 0 && double.TryParse(tokens[^1], out double value))
-                                return value;
-                            return 0.0;
-                        })
-                        .ToArray();
-                    UpdateVelocityLineDataSeries();
-                }
+                RestoreProfile(saveData.DriveModePath);
                 UpdateLayoutVisibility();
-                System.Windows.MessageBox.Show("Loaded", "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                System.Windows.MessageBox.Show("Load complete", "Load", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
@@ -1295,7 +1229,7 @@ namespace HoRang2Sea.ViewModels
                         try
                         {
                             model.ExportToCsv(__exPath, __exSi, __exSs, __exEs, __exVars);
-                            __exDisp?.Invoke(() => System.Windows.MessageBox.Show("CSV saved", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information));
+                            __exDisp?.Invoke(() => System.Windows.MessageBox.Show("CSV export complete", "Export", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information));
                         }
                         catch (System.Exception __exEx)
                         {

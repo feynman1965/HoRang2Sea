@@ -55,7 +55,7 @@
 
                 <dxg:GridControl.Columns>
                     <dxg:GridColumn Fixed="Left" Header="Show"
-                                        FixedWidth="True" Width="20" AllowResizing="False"
+                                        FixedWidth="True" Width="44" AllowResizing="False"
                                         ShowInColumnChooser="False" AllowFocus="False"
                                         AllowSorting="False" AllowColumnFiltering="False" AllowGrouping="False"
                                         AllowMoving="False" AllowConditionalFormattingMenu="False" AllowPrinting="False"
@@ -71,7 +71,7 @@
                         </dxg:GridColumn.CellTemplate>
                     </dxg:GridColumn>
                     <dxg:GridColumn FieldName="Name" AllowEditing="False"/>
-                    <dxg:GridColumn FieldName="Init">
+                    <dxg:GridColumn FieldName="Init" Header="Value">
                         <dxg:GridColumn.EditSettings>
                             <dxe:TextEditSettings DisplayFormat="d" MaskType="RegEx" Mask="[0-9.e\-+]*"/>
                         </dxg:GridColumn.EditSettings>
@@ -84,7 +84,7 @@
                     <dxg:GridColumn FieldName="Unit" AllowEditing="False"/>
                     <dxg:GridColumn FieldName="Min" AllowEditing="False"/>
                     <dxg:GridColumn FieldName="Max" AllowEditing="False"/>
-                    <dxg:GridColumn FieldName="Digit" AllowEditing="False"/>
+                    <dxg:GridColumn FieldName="Digit" AllowEditing="False" Visible="False" ShowInColumnChooser="False"/>
                 </dxg:GridControl.Columns>
 
                 <dxg:GridControl.View >

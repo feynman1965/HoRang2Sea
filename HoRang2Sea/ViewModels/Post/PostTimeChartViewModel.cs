@@ -318,7 +318,7 @@ namespace HoRang2Sea.ViewModels
 
                 UICommand rOkCommand = new UICommand()
                 {
-                    Caption = "Ok",
+                    Caption = "OK",
                     IsDefault = true,
                     Command = new DelegateCommand(() =>
                     {

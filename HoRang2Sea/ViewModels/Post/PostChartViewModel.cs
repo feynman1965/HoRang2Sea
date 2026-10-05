@@ -113,7 +113,13 @@ namespace HoRang2Sea.ViewModels
         {
             if (string.IsNullOrEmpty(name)) return;
             if (ChartYItems.Contains(name)) return;
-            if (ChartYItems.Count >= 4) return;
+            if (ChartYItems.Count >= 4)
+            {
+                // 이전에는 말없이 무시했다(2026-10-05)
+                System.Windows.MessageBox.Show("This chart shows up to 4 variables. Remove one first (double-click it in the Y Axis list).",
+                    "Select Variables", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                return;
+            }
 
             ChartYItems.Add(name);
             if (ChartGlobalItems != null) ChartGlobalItems.Remove(name);
@@ -285,7 +291,7 @@ namespace HoRang2Sea.ViewModels
 
                 UICommand rOkCommand = new UICommand()
                 {
-                    Caption = "Ok",
+                    Caption = "OK",
                     IsDefault = true,
                     Command = new DelegateCommand(() =>
                     {

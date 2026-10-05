@@ -33,10 +33,10 @@ namespace HoRang2Sea
 
         public SolutionItem NewFishingBoatProject()
         {
-            string ItemName = string.Format("FishingBoat Project {0}", FishingBoatID++);
+            string ItemName = string.Format("Fishing Boat {0}", FishingBoatID++);
             while (Items.Any(item => item.Name == ItemName))
             {
-                ItemName = string.Format("FishingBoat Project {0}", FishingBoatID++);
+                ItemName = string.Format("Fishing Boat {0}", FishingBoatID++);
             }
             SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.FishingBoat);
             Items.Add(item);  //타입추가하기.
@@ -48,10 +48,10 @@ namespace HoRang2Sea
         }
         public SolutionItem NewPortGuideShipProject()
         {
-            string ItemName = string.Format("PortGuideShip Project {0}", PortGuideShipID++);
+            string ItemName = string.Format("Port Guide Ship {0}", PortGuideShipID++);
             while (Items.Any(item => item.Name == ItemName))
             {
-                ItemName = string.Format("PortGuideShip Project {0}", PortGuideShipID++);
+                ItemName = string.Format("Port Guide Ship {0}", PortGuideShipID++);
             }
             SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.PortGuideShip);
             Items.Add(item);  //타입추가하기.
@@ -64,10 +64,10 @@ namespace HoRang2Sea
         }
         public SolutionItem NewTrainingShipProject()
         {
-            string ItemName = string.Format("TrainingShip Project {0}", TrainingShipID++);
+            string ItemName = string.Format("Training Ship {0}", TrainingShipID++);
             while (Items.Any(item => item.Name == ItemName))
             {
-                ItemName = string.Format("TrainingShip Project {0}", TrainingShipID++);
+                ItemName = string.Format("Training Ship {0}", TrainingShipID++);
             }
             SolutionItem item = SolutionItem.Create(ItemName, "pack://application:,,,/DevExpress.Images.v25.1;component/SvgImages/Dashboards/InsertTreeView.svg", SolutionType.TrainingShip);
             Items.Add(item);  //타입추가하기.

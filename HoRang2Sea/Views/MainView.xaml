@@ -70,7 +70,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="Saved Configurations" FontSize="32" FontFamily="Segoe UI Light" Margin="0,18,0,4" Foreground="#2C3E50"/>
-                    <TextBlock Grid.Row="1" Text="Open or delete configurations you saved by name. (Save from a model's ribbon → Save Config.)" FontSize="13" Foreground="#7F8C8D" Margin="0,0,0,14"/>
+                    <TextBlock Grid.Row="1" Text="Open or delete configurations you saved by name. (Save from a model's ribbon → Save Config.)" FontSize="13" Foreground="#5F6B73" Margin="0,0,0,14"/>
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,10">
                         <ItemsControl ItemsSource="{Binding SavedConfigs}">
                             <ItemsControl.ItemTemplate>
@@ -108,7 +108,7 @@
                                                             </Grid.ColumnDefinitions>
                                                             <dx:DXImage Grid.Column="0" Source="{dx:DXImage SvgImages/DiagramIcons/save.svg}" Width="18" Height="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
                                                             <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="#222222" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                                                            <TextBlock Grid.Column="2" Text="{Binding SavedDate}" FontSize="11" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="12,0,8,0"/>
+                                                            <TextBlock Grid.Column="2" Text="{Binding SavedDate}" FontSize="11" Foreground="#6B7780" VerticalAlignment="Center" Margin="12,0,8,0"/>
                                                             <Button Grid.Column="3" Cursor="Hand" Width="26" Height="26" Padding="0" Background="Transparent" BorderThickness="0" ToolTip="Delete"
                                                                     Command="{Binding DataContext.DeleteConfigCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}">
                                                                 <Button.Template>
@@ -146,7 +146,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="History" FontSize="32" FontFamily="Segoe UI Light" Margin="0,18,0,4" Foreground="#2C3E50"/>
-                    <TextBlock Grid.Row="1" Text="Automatically captured each time you Run a simulation (latest 20 per model). Click to restore, or delete." FontSize="13" Foreground="#7F8C8D" Margin="0,0,0,14"/>
+                    <TextBlock Grid.Row="1" Text="Automatically captured each time you Run a simulation (latest 20 per model). Click to restore, or delete." FontSize="13" Foreground="#5F6B73" Margin="0,0,0,14"/>
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,10">
                         <ItemsControl ItemsSource="{Binding HistoryConfigs}">
                             <ItemsControl.ItemTemplate>
@@ -184,7 +184,7 @@
                                                             </Grid.ColumnDefinitions>
                                                             <dx:DXImage Grid.Column="0" Source="{dx:DXImage SvgImages/Actions/Open2.svg}" Width="18" Height="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
                                                             <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" Foreground="#222222" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                                                            <TextBlock Grid.Column="2" Text="{Binding SavedDate}" FontSize="11" Foreground="#AAAAAA" VerticalAlignment="Center" Margin="12,0,8,0"/>
+                                                            <TextBlock Grid.Column="2" Text="{Binding SavedDate}" FontSize="11" Foreground="#6B7780" VerticalAlignment="Center" Margin="12,0,8,0"/>
                                                             <Button Grid.Column="3" Cursor="Hand" Width="26" Height="26" Padding="0" Background="Transparent" BorderThickness="0" ToolTip="Delete"
                                                                     Command="{Binding DataContext.DeleteConfigCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}">
                                                                 <Button.Template>
@@ -229,7 +229,7 @@
                     
                     <StackPanel Grid.Row="0">
                         <TextBlock Text="New" FontSize="32" FontFamily="Segoe UI Light" Margin="0,18,0,4" Foreground="#2C3E50"/>
-                        <TextBlock Text="Select a vessel to create a new simulation model." FontSize="13" Foreground="#7F8C8D" Margin="0,0,0,14"/>
+                        <TextBlock Text="Select a vessel to create a new simulation model." FontSize="13" Foreground="#5F6B73" Margin="0,0,0,14"/>
                     </StackPanel>
                     <ItemsControl Grid.Row="1" ItemsSource="{Binding ProjectViewModels}" Margin="0 30 0 0">
                         <ItemsControl.ItemsPanel>
@@ -317,8 +317,9 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="200"/>
                         </Grid.RowDefinitions>
-                        <MediaElement Grid.Row="0" Name="myMediaElement" Source="InfoMovie.mp4" LoadedBehavior="Play"  Margin="10,10,50,50" Visibility="Visible" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                        </MediaElement>
+                        <!-- InfoMovie.mp4(161 MB, 소리 재생) 대신 정적 그림 — Ground 와 같게(2026-10-05) -->
+                        <Image Grid.Row="0" Source="pack://application:,,,/HoRang2Sea;component/Resource/MainImage.png" Margin="10,10,50,50" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock Grid.Row="1" Text="{Binding AppVersionText}" FontSize="13" Foreground="#5F6B73" Margin="10,0,0,0"/>
                         <!--
                             <MediaElement.Triggers>
                                 <EventTrigger RoutedEvent="MediaElement.Loaded">

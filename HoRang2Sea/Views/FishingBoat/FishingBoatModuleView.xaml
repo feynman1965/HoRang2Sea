@@ -224,24 +224,22 @@
                            >
             <dxr:RibbonPage Caption="Monitor">
                 <dxr:RibbonPageGroup Caption="Player" ShowCaptionButton="False" SmallGlyph="{iconPacks:FontistoImage Kind=Equalizer}">
-                    <dxb:BarButtonItem Name="bPlay"
+                    <dxb:BarButtonItem Name="bPlay" Hint="Start the simulation, or resume it after Pause"
                                        Content="Run"
                                        Glyph="{iconPacks:IoniconsImage Kind=PlayiOS,Brush=DarkBlue}" 
                                        Command="{Binding OnClickCalculateButtonCommand}"
-                                       Hint=""
                                        RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bPause"
+                    <dxb:BarButtonItem Name="bPause" Hint="Pause the simulation"
                                        Content="Pause"
                                        Command="{Binding OnClickPauseButtonCommand}"
                                        Glyph="{iconPacks:IoniconsImage Kind=PauseiOS,Brush=DarkSlateBlue}" GlyphSize="Custom" CustomGlyphSize="13,13"
                                        RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bNextStep"
+                    <dxb:BarButtonItem Name="bNextStep" Hint="Advance one step (1 ms) while paused"
                                        Content="Step Forward"
                                        Command="{Binding OnClickNextStepButtonCommand}"
                                        Glyph="{iconPacks:IoniconsImage Kind=SkipForwardiOS,Brush=DarkBlue}" GlyphSize="Custom" CustomGlyphSize="13,13"
-                                       Hint=""
                                        RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Name="bStop"
+                    <dxb:BarButtonItem Name="bStop" Hint="End the run. The charts and results stay until the next Run."
                                        Content="Stop"
                                        Command="{Binding OnClickStopButtonCommand}"
                                        Glyph="{iconPacks:IoniconsImage Kind=SquareOutlineMD,Brush=Crimson}" GlyphSize="Custom" CustomGlyphSize="14,14"

@@ -60,7 +60,7 @@
             <!--<dxb:BarContainerControl x:Name="ChartBar" Width="35" HorizontalAlignment="Left" Margin="0,5,0,0" Grid.Row="0"/>-->
 
             <StackPanel Orientation="Vertical">
-                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Properties" Command="{Binding OnChartPropertyCommand}" Width="21" Height="21">
+                <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="Select Variables (Import Data)" Command="{Binding OnChartPropertyCommand}" Width="21" Height="21">
                     <ext:ToolbarIcon Width="13" Kind="ViewDashboardOutline" Margin="-10" Style="{StaticResource ToolbarButtonIconStyle}"/>
                 </Button>
                 <Button Style="{StaticResource DefaultButtonStyle}" ToolTip="View larger (Pop Out)" Click="PopOutChart_Click" Width="21" Height="21" Margin="0,4,0,0">
@@ -142,6 +142,7 @@
                     </ListBox.ItemContainerStyle>
                 </ListBox>
 
+                <Grid>   <!-- 변수를 고르지 않았을 때 안내를 차트 위에 겹친다(2026-10-05) -->
                 <s:SciChartSurface x:Name="sciChart"
                                    RenderableSeries="{s:SeriesBinding RenderableSeries}"
                                    ChartTitle="Monitor Chart"
@@ -158,7 +159,7 @@
                 <s:SciChartSurface.ChartModifier>
                     <s:ModifierGroup>
                         <s:RubberBandXyZoomModifier ExecuteOn="MouseLeftButton"
-                                                 RubberBandFill="#33FFFFFF" RubberBandStroke="#AAFFFFFF"
+                                                 RubberBandFill="#334682B4" RubberBandStroke="#AA4682B4"
                                                  RubberBandStrokeDashArray="2 2"/>
                         <s:ZoomPanModifier ExecuteOn="MouseRightButton" ClipModeX="None" />
                         <s:XAxisDragModifier DragMode="Scale"/>
@@ -173,6 +174,22 @@
                     </s:ModifierGroup>
                 </s:SciChartSurface.ChartModifier>
             </s:SciChartSurface>
+                <TextBlock Text="No variables selected. Click the first button on the left (Select Variables) and double-click outputs to add them."
+                           HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" MaxWidth="380"
+                           Foreground="#607D8B" FontSize="13" IsHitTestVisible="False">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RenderableSeries.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                </Grid>
             </DockPanel>
 
 

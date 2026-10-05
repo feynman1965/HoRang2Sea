@@ -30,10 +30,11 @@ namespace HoRang2Sea.Models
     public class PortGuideShipMW : PortGuideShipMWModel
     {
         public Thread CalculateThread { get; set; }
+        public override bool IsSimulationActive => CalculateThread != null && CalculateThread.IsAlive;
         public bool IsinitValue { get; set; }
         public int Step { get; set; }
         public bool IsPause { get; set; }
-        public static ManualResetEvent manualEvent = new ManualResetEvent(true);
+        public ManualResetEvent manualEvent = new ManualResetEvent(true);   // 프로젝트마다 따로(같은 모델을 둘 열면 일시정지가 서로 걸리던 문제, 2026-10-05)
         private double[] _driveModes;
         private CancellationTokenSource _cancellationTokenSource;
         private string _loadedDll;   // 현재 로드된 레이아웃 DLL 파일명
@@ -262,9 +263,9 @@ namespace HoRang2Sea.Models
             new("Battery output power", "kW", "Battery"),
 
             //Drive mode  ( 개수 : 3 )  — 포트 53~55. 정의는 있었으나 표시항목이 없어 앱이 읽지 않던 자리.
-            new("System speed profile", "-", "Drive mode"),
-            new("Displacement", "m", "Drive mode"),
-            new("Fuel efficiency", "m/kg", "Drive mode"),
+            new("System speed profile", "-", "PortGuideShipProfile"),
+            new("Displacement", "m", "PortGuideShipProfile"),
+            new("Fuel efficiency", "m/kg", "PortGuideShipProfile"),
         };
 
         public PortGuideShipMW()
@@ -314,7 +315,7 @@ namespace HoRang2Sea.Models
                         }
                     }
 
-                    if (CheckNaN(outputValues, outputNames, Step)) { Step = 0; break; }
+                    if (CheckNaN(outputValues, outputNames, Step)) break;   // Step 은 멈춘 위치로 둔다(진행 표시 · 안내)
                     RecordStep(Step, outputValues);
 
                     if (Step % 100 == 0)
@@ -329,7 +330,8 @@ namespace HoRang2Sea.Models
             finally
             {
                 var mv = App.Container.GetInstance<MainViewModel>();
-                mv.Status = "PortGuideShip Finished";
+                mv.Status = NaNDetected ? $"PortGuideShip stopped: NaN/Inf at {NaNStep * 0.001:F3} s"
+                          : token.IsCancellationRequested ? "PortGuideShip Stopped" : "PortGuideShip Finished";
             }
         }
 
@@ -343,6 +345,7 @@ namespace HoRang2Sea.Models
             if (CalculateThread == null || !CalculateThread.IsAlive)
             {
                 Debug.WriteLine("PortGuideShip Calculate 시작");
+                Step = 0;   // 새 실행은 처음부터(Stop 은 멈춘 위치를 남긴다)
                 CalculateThread = new Thread(() => RunWithCancellation(token));
                 InitValue();
 
@@ -358,7 +361,7 @@ namespace HoRang2Sea.Models
             }
         }
 
-        public void StopCalculation()
+        public override void StopCalculation(bool keepResults = false)
         {
             Debug.WriteLine("PortGuideShip StopCalculation 시작");
             _cancellationTokenSource?.Cancel();
@@ -366,8 +369,12 @@ namespace HoRang2Sea.Models
 
             if (CalculateThread != null && CalculateThread.IsAlive) CalculateThread.Join();
 
-            Step = 0; IsPause = false; IsinitValue = false;
-            foreach (var output in PortGuideShipMWOuts) output.Value = 0;
+            IsPause = false; IsinitValue = false;
+            if (!keepResults)   // Stop 버튼 · 탭 닫기는 멈춘 위치와 마지막 출력값을 남긴다(2026-10-05)
+            {
+                Step = 0;
+                foreach (var output in PortGuideShipMWOuts) output.Value = 0;
+            }
 
             CallTerminate();
             UnloadDll();
@@ -426,6 +433,7 @@ namespace HoRang2Sea.Models
                     Debug.WriteLine($"DLL 로드 실패: {target.Dll}");
                     App.Container.GetInstance<MainViewModel>().Status =
                         $"Failed to load layout model ({target.Dll}) - check ModelDLLs folder";
+                    ShowDllLoadFailed(target.Dll, "PortGuideShip");
                     return;
                 }
 
@@ -437,6 +445,9 @@ namespace HoRang2Sea.Models
                 var mv = App.Container.GetInstance<MainViewModel>();
                 mv.Status = "PortGuideShip Running";
             }
+
+            // 실행 입력 기록 시작(이후 SetInputPort 값이 RunInputs 파일에 남는다)
+            BeginInputLog();
 
             // Set all input values from defaults (TXT)
             foreach (var kvp in _defaultInputValues)
@@ -454,6 +465,10 @@ namespace HoRang2Sea.Models
                     SetInputPort(port, PortGuideShipMWInputs[i].Value);
                 }
             }
+
+            // 앱이 DLL 에 쓴 값 · DLL 에 없는 포트를 남긴다(속도 프로파일은 port 64 에 매 step)
+            EndInputLog("HoRang2Sea", "PortGuideShip", $"Design {DesignLayout} / Control {ControlLayout} ({_loadedDll})",
+                        OutputPortMap.Values, 64, _driveModes);
 
         }
     }

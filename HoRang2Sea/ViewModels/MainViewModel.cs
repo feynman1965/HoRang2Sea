@@ -129,6 +129,22 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
+        /// <summary>About 에 보이는 버전(csproj Version + 빌드한 커밋 앞 7자리).</summary>
+        public string AppVersionText
+        {
+            get
+            {
+                var asm = System.Reflection.Assembly.GetEntryAssembly();
+                string info = asm?.GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
+                                  .OfType<System.Reflection.AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion ?? "";
+                int plus = info.IndexOf('+');
+                string ver = plus >= 0 ? info.Substring(0, plus) : info;
+                string build = plus >= 0 ? info.Substring(plus + 1) : "";
+                if (build.Length > 7) build = build.Substring(0, 7);
+                return $"HoRang2 Sea  ·  Version {ver}" + (build.Length > 0 ? $" (build {build})" : "");
+            }
+        }
+
         /// <summary>선택한 간격이 메모리를 얼마나 쓰는지 대략 알려준다(가장 무거운 모델 기준).</summary>
         public string RecordIntervalHint
         {
@@ -136,9 +152,9 @@ namespace HoRang2Sea.ViewModels
             {
                 int iv = Models.AppSettings.Current.RecordStepInterval;
                 if (iv < 1) iv = 1;
-                // 가장 무거운 축(출력 210개, 200만 step)을 기준으로 한 어림치
-                double mb = 2_000_000.0 / iv * (210 + 1) * 8 / 1024 / 1024;
-                return $"Rough memory use for the heaviest model (2,000,000 steps, 210 outputs): about {mb:N0} MB per run.";
+                // 이 앱에서 가장 긴 기본 프로파일 · 출력 수를 기준으로 한 어림치
+                double mb = 2_100_000.0 / iv * (55 + 1) * 8 / 1024 / 1024;
+                return $"Rough memory use for the heaviest model (2,100,000 steps, 55 outputs): about {mb:N1} MB per run.";
             }
         }
 
@@ -381,7 +397,16 @@ namespace HoRang2Sea.ViewModels
             if (entry == null || !File.Exists(entry.FilePath)) return;
             if (!Enum.TryParse<SolutionType>(entry.VehicleType, out var type)) return;
 
-            var item = SolutionItem.Create(entry.Title, "", type);
+            // 계산 객체가 붙은 새 프로젝트로 연다(2026-10-05 — 이전에는 SolutionItem 만 만들어 Run 이 아무것도 하지 않았다)
+            var solution = App.Container.GetInstance<Solution>();
+            SolutionItem item = type switch
+            {
+                SolutionType.FishingBoat => solution.NewFishingBoatProject(),
+                SolutionType.PortGuideShip => solution.NewPortGuideShipProject(),
+                SolutionType.TrainingShip => solution.NewTrainingShipProject(),
+                _ => null
+            };
+            if (item == null) return;
             OpenItem(item, showLayoutDialog: false);   // config가 레이아웃을 담고 있으므로 선택 팝업은 생략
 
             // 방금 열린(또는 동일 제목으로 이미 열려 활성화된) 문서에 config 적용

@@ -21,14 +21,14 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0"
-               Content="Global Items  (double-click → add/remove, ✓=added)" Foreground="Gray" FontSize="14"/>
+               Content="Available Outputs  (double-click → add/remove, ✓ = added)" Foreground="Gray" FontSize="14"/>
         <Label Grid.Column="1" Grid.Row="0"
-               Content="This Items  (double-click → remove)" Foreground="Gray" FontSize="14"/>
+               Content="Shown in Grid  (double-click → remove)" Foreground="Gray" FontSize="14"/>
 
         <!-- DevExpress TextEdit 사용 -->
         <dxe:TextEdit Grid.Column="0" Grid.Row="1" Margin="5" Height="25"
                       Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                      NullText="Search Global Items..." />
+                      NullText="Search outputs..." />
 
         <!-- Global Items: 컴포넌트 트리 (접두어 그룹화). 잎(변수) 더블클릭 → This Items 추가/제거 -->
         <TreeView Grid.Column="0" Grid.Row="2" Margin="5"

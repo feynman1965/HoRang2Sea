@@ -98,14 +98,22 @@ namespace HoRang2Sea
         }
         object Resolve(Type type, object key, string name) => type == null ? null : Container.GetInstance(type);
 
+        // 로그는 %LOCALAPPDATA%\HoRang2\Logs(설치 폴더 Program Files 는 쓰기가 막혀 있어 이전에는 로그도 창도 안 남았다).
+        // 로그 쓰기가 실패해도 창은 띄운다.
         private void LogException(string source, Exception ex)
         {
+            string logPath = HoRang2Sea.Services.AppPaths.ErrorLogPath("Sea");
+            bool logged = false;
             try
             {
-                string logPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error_log.txt");
                 string message = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {source}\n{ex?.ToString()}\n\n";
                 System.IO.File.AppendAllText(logPath, message);
-                MessageBox.Show($"An error occurred.\n{ex?.Message}\n\nSee error_log.txt for details.",
+                logged = true;
+            }
+            catch { }
+            try
+            {
+                MessageBox.Show($"An error occurred.\n{ex?.Message}" + (logged ? $"\n\nDetails were saved to:\n{logPath}" : ""),
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch { }

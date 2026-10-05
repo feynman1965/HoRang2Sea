@@ -43,18 +43,18 @@ namespace HoRang2Sea.Views
         // ── Help: 순차 설명서 말풍선 가이드 ──────────────────────────────
         private static readonly (string Title, string Body)[] HelpSteps = new[]
         {
-            ("1. Select a model",
-             "Open a model from the Start page or the Solution Explorer on the left. Each model opens in its own document tab."),
+            ("1. Open a model",
+             "Click Menu (top left) and choose New, then pick a model. Saved and History reopen configurations you saved or ran before. Each model opens in its own tab."),
             ("2. Set the inputs",
-             "In Input mode, check the component diagram and load the input profile with the Load button. Edit any input values in the grid if needed."),
+             "Pick the layout in the window that opens (or click the coloured pill on the bottom status bar). Load a speed profile (ratio 0 to 1) with Load Profile; without one, the model's default profile is used. Edit input values in the grid if needed - keep them within Min and Max."),
             ("3. Run the simulation",
-             "Use Run, Pause, Step Forward and Stop on the ribbon to control the run. Values you edit in the input grid are applied to the model."),
+             "Run starts or resumes the run, Pause holds it, Step Forward advances one step (1 ms) while paused, and Stop ends it - the results stay on screen until the next Run. Inputs changed during a run apply from the next Run."),
             ("4. See the results",
-             "Use the Input / Graph toggle to switch to the charts. The Graph view has y-t (time) and x-y tabs; pick the variables you want from the component tree and each one appears as its own tab."),
+             "Switch to Graph and choose y-t, y-t (multi) or y-x. Click the first button on the left of the chart (Select Variables) and double-click outputs to add them."),
             ("5. Active layout",
-             "The coloured pill on the bottom status bar shows the current Design / Control layout. Click it (or Select Layout on the ribbon) to switch configurations — the pill pulses when it changes."),
+             "The coloured pill on the bottom status bar shows the current layout. Click it to switch; if a simulation is running you are asked first."),
             ("6. Export results",
-             "Use Export CSV to save the recorded simulation results to a file. The exported values match exactly what is shown on screen."),
+             "Export CSV saves the recorded results (Step, Time_s and the outputs you choose). Each Run also saves the input values sent to the model in %LOCALAPPDATA%\\HoRang2\\RunInputs\\<model>."),
         };
 
         private Window _helpGuideWindow;
@@ -155,7 +155,6 @@ namespace HoRang2Sea.Views
                 Background = Brushes.Transparent,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ShowInTaskbar = false,
-                Topmost = true,
                 ResizeMode = ResizeMode.NoResize,
                 WindowStartupLocation = WindowStartupLocation.Manual,
                 Owner = Window.GetWindow(this),

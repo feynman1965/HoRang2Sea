@@ -56,7 +56,7 @@ namespace HoRang2Sea.Views
             // ---- 0: 총 step ----
             var totalLabel = new TextBlock
             {
-                Text = $"Total recorded steps: {totalSteps}",
+                Text = $"Recorded rows: {totalSteps:N0}  (one row every {HoRang2Sea.Models.GenericPortDllModel.RecordStepInterval * 0.001:0.###} s; 1 step = 1 ms)",
                 FontWeight = FontWeights.Bold,
                 Margin = new Thickness(0, 0, 0, 10)
             };
@@ -64,7 +64,7 @@ namespace HoRang2Sea.Views
             root.Children.Add(totalLabel);
 
             // ---- 1: 시간 범위 ----
-            var rangeBox = new GroupBox { Header = "Time Range (optional)", Margin = new Thickness(0, 0, 0, 8) };
+            var rangeBox = new GroupBox { Header = "Step Range (optional, 1 step = 1 ms)", Margin = new Thickness(0, 0, 0, 8) };
             var rangeGrid = MakeFormGrid();
             AddFormRow(rangeGrid, 0, "Start step (blank = from beginning)", out _startStepBox, "");
             AddFormRow(rangeGrid, 1, "End step (blank = to end)", out _endStepBox, "");
@@ -104,7 +104,7 @@ namespace HoRang2Sea.Views
                 Margin = new Thickness(4, 6, 4, 2)
             };
             var timeInner = MakeFormGrid();
-            AddFormRow(timeInner, 0, "Steps per second (DLL usually 100)", out _stepsPerSecondBox, "100");
+            AddFormRow(timeInner, 0, "Steps per second (model step 1 ms = 1000)", out _stepsPerSecondBox, "1000");
             timeInner.Margin = new Thickness(24, 0, 4, 6);
             timeInner.SetBinding(IsEnabledProperty, new Binding("IsChecked") { Source = _modeTimeCheck });
             var timeStack = new StackPanel();
