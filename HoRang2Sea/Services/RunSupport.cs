@@ -256,43 +256,52 @@ namespace HoRang2Sea.Services
     {
         private const int Keep = 30;
 
-        /// <summary>매 step 넣는 프로파일 하나(포트 · 값 · 출처 = 파일 이름 또는 "… (default)").</summary>
+        /// <summary>매 step 넣는 프로파일 하나(포트 · 값 · 출처 = 파일 이름 또는 "… (default)" · 파일 전체 경로).</summary>
         public sealed class Profile
         {
             public int Port;
             public double[] Values;
             public string Source;
-            public Profile(int port, double[] values, string source) { Port = port; Values = values; Source = source; }
+            public string FilePath;
+            public Profile(int port, double[] values, string source, string filePath = null) { Port = port; Values = values; Source = source; FilePath = filePath; }
         }
 
+        /// <summary>실행 입력 기록. 설치 폴더의 HR2Tester 가 이 파일로 같은 조건을 다시 돌린다 — 줄 형식을 바꾸면 HR2Tester 도 같이 고칠 것.
+        /// steps · profile path · output 줄과 프로파일 값 파일(model_latest_profiles.bin)은 2026-10-06 추가.</summary>
         public static string Write(string appName, string model, string dllFile, string prefix, string layout,
                                    IDictionary<int, double> written, IList<int> missingInputs, IList<int> missingOutputs,
-                                   IList<Profile> profiles)
+                                   IList<Profile> profiles, IList<(int Port, string Name)> outputs = null)
         {
             try
             {
                 string dir = AppPaths.RunInputsDir(model);
                 var inv = CultureInfo.InvariantCulture;
+                var used = (profiles ?? new List<Profile>()).Where(p => p?.Values != null && p.Values.Length > 0).ToList();
                 var sb = new StringBuilder();
                 sb.AppendLine($"# {appName} run inputs - the values the app wrote to the model DLL for this run");
                 sb.AppendLine($"# time\t{DateTime.Now:yyyy-MM-dd HH:mm:ss}");
                 sb.AppendLine($"# model\t{model}");
                 sb.AppendLine($"# dll\t{dllFile} (prefix {prefix})");
                 sb.AppendLine($"# layout\t{layout}");
+                if (used.Count > 0)
+                    sb.AppendLine($"# steps\t{used[0].Values.Length} (0.001 s each, the length of the first profile)");
                 // 첫 프로파일은 "profile", 그 밖(B그룹 rpm · torque)은 "profile (port N)"
                 bool first = true;
-                foreach (var p in profiles ?? new List<Profile>())
+                foreach (var p in used)
                 {
-                    if (p?.Values == null || p.Values.Length == 0) continue;
                     sb.AppendLine($"# {(first ? "profile" : $"profile (port {p.Port})")}\t{p.Source} | port {p.Port} every step | {p.Values.Length} points, " +
                                   $"{((p.Values.Length - 1) * ProfileFile.StepSeconds).ToString("F3", inv)} s | " +
                                   $"min {p.Values.Min().ToString("G6", inv)} | max {p.Values.Max().ToString("G6", inv)}");
+                    if (!string.IsNullOrEmpty(p.FilePath))
+                        sb.AppendLine($"# {(first ? "profile path" : $"profile path (port {p.Port})")}\t{p.FilePath}");
                     first = false;
                 }
                 if (missingInputs != null && missingInputs.Count > 0)
                     sb.AppendLine($"# inputs not in DLL (value not applied)\t{string.Join(", ", missingInputs)}");
                 if (missingOutputs != null && missingOutputs.Count > 0)
                     sb.AppendLine($"# outputs not in DLL (read as 0)\t{string.Join(", ", missingOutputs)}");
+                foreach (var o in outputs ?? new List<(int Port, string Name)>())
+                    sb.AppendLine($"# output\t{o.Port}\t{o.Name}");
                 sb.AppendLine("# port\tvalue");
                 foreach (var kv in written.OrderBy(k => k.Key))
                     sb.AppendLine($"{kv.Key}\t{kv.Value.ToString("R", inv)}");
@@ -300,6 +309,8 @@ namespace HoRang2Sea.Services
                 string latest = Path.Combine(dir, $"{model}_latest.txt");
                 File.WriteAllText(latest, text, new UTF8Encoding(false));
                 File.WriteAllText(Path.Combine(dir, $"{model}_{DateTime.Now:yyyyMMdd_HHmmss}.txt"), text, new UTF8Encoding(false));
+                // 이번 실행에 넣은 프로파일 값 그대로(HR2Tester 가 같은 값으로 돌린다). 커서 최신 한 벌만 둔다.
+                try { WriteProfiles(Path.Combine(dir, $"{model}_latest_profiles.bin"), used); } catch { }
                 foreach (var old in new DirectoryInfo(dir).GetFiles($"{model}_2*.txt").OrderByDescending(f => f.Name).Skip(Keep))
                 {
                     try { old.Delete(); } catch { }
@@ -307,6 +318,21 @@ namespace HoRang2Sea.Services
                 return latest;
             }
             catch { return null; }
+        }
+
+        /// <summary>프로파일 값 파일: "HR2PROF1"(8바이트), 개수(int32), 그 뒤 프로파일마다 포트(int32) · 길이(int32) · 값(double × 길이). 리틀 엔디언.</summary>
+        public static void WriteProfiles(string path, IList<Profile> profiles)
+        {
+            using var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read);
+            using var bw = new BinaryWriter(fs);
+            bw.Write(Encoding.ASCII.GetBytes("HR2PROF1"));
+            bw.Write(profiles.Count);
+            foreach (var p in profiles)
+            {
+                bw.Write(p.Port);
+                bw.Write(p.Values.Length);
+                foreach (var v in p.Values) bw.Write(v);
+            }
         }
     }
 }

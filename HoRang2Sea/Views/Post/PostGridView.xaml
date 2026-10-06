@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:HoRang2Sea.Views"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
@@ -63,7 +64,21 @@
             <dxg:GridControl.Columns>
                 <dxg:GridColumn FieldName="Name"/>
                 <dxg:GridColumn FieldName="Unit"/>
-                <dxg:GridColumn FieldName="Value"/>
+                <dxg:GridColumn FieldName="Value">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="G6"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Min" Header="Min">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="G6"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn FieldName="Max" Header="Max">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="G6"/>
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
             </dxg:GridControl.Columns>
         </dxg:GridControl>
 

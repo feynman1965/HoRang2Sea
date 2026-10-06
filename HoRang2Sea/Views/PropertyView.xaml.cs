@@ -28,6 +28,12 @@ namespace HoRang2Sea.Views
             gridControl.GroupBy("Name");
         }
 
+        // 프로파일 자리처럼 앱이 정하는 칸(XML readonly="true")은 고칠 수 없게 한다(2026-10-06 — 고쳐도 첫 step 전에 프로파일이 덮어썼다).
+        private void TableView_ShowingEditor(object sender, DevExpress.Xpf.Grid.ShowingEditorEventArgs e)
+        {
+            if (e.Row is HoRang2Sea.Models.ColumnDefinition cd && cd.ReadOnly) e.Cancel = true;
+        }
+
         private Point startPoint;
         private bool isDragging;
 

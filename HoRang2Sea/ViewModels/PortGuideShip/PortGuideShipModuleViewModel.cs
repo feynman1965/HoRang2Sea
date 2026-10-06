@@ -128,7 +128,19 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
-        public System.Windows.Media.SolidColorBrush LayoutAccentColor => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 120, 140));
+        public System.Windows.Media.SolidColorBrush LayoutAccentColor
+        {
+            get   // 레이아웃 창과 같은 계열 색(2026-10-06 — 이전에는 레이아웃과 상관없이 한 색)
+            {
+                if (DesignLayout == 0 && ControlLayout == 1)
+                    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(80, 130, 100)); // Muted Green
+                if (DesignLayout == 1 && ControlLayout == 0)
+                    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(120, 100, 130)); // Slate Purple
+                if (DesignLayout == 1 && ControlLayout == 1)
+                    return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(140, 110, 80)); // Bronze
+                return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(100, 120, 140)); // Steel Blue
+            }
+        }
         public System.Windows.Media.SolidColorBrush LayoutBackgroundColor => new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 246, 248));
 
         private void UpdateLayoutVisibility()
@@ -138,6 +150,7 @@ namespace HoRang2Sea.ViewModels
             RaisePropertyChanged(nameof(IsLayout_D1_C0_Visible));
             RaisePropertyChanged(nameof(IsLayout_D1_C1_Visible));
             RaisePropertyChanged(nameof(CurrentLayoutName));
+            RaisePropertyChanged(nameof(LayoutAccentColor));
         }
 
         // -------- Panel Visibility 프로퍼티 -------
@@ -564,6 +577,9 @@ namespace HoRang2Sea.ViewModels
             ChartViewModel = new PostTimeChartViewModel("Time Chart", this);
             XYChartViewModel = new PostChartViewModel("XY Chart", this);
             YXChartViewModel = new PostChartViewModel("YX Chart", this) { UseXAxisVariable = true };
+            // 그래프 첫 화면 기본 변수(2026-10-06 — 이전에는 비어 있었다). Import Data 에서 바꿀 수 있다.
+            foreach (var __n in new[] { "System speed profile", "Stack net power", "Battery SOC(State Of Charge)" })
+                if (!ChartViewModel.ChartYItems.Contains(__n)) ChartViewModel.ChartYItems.Add(__n);
         }
 
 
@@ -971,6 +987,19 @@ namespace HoRang2Sea.ViewModels
                 Debug.WriteLine($"PortGuideShip: Layout 설정 - Design={DesignLayout}, Control={ControlLayout}");
 
                 PortGuideShipMW.ProfileSource = ProfileSourceLabel;
+                PortGuideShipMW.ProfileSourcePath = _lastDriveModePath;   // HR2Tester 가 같은 파일을 다시 읽는다(2026-10-06)
+                try   // 차트 제목 = 레이아웃 · 프로파일, 값 그리드 Min · Max 는 실행마다 새로 센다(2026-10-06)
+                {
+                    var __g = BaseMWModel as GenericPortDllModel;
+                    string __src = __g?.ProfileSource ?? "";
+                    if (__src.StartsWith("(work mode") && __g.ExtraProfileSources.Count > 0) __src = "Work · " + string.Join(" / ", __g.ExtraProfileSources.Values);
+                    string __title = CurrentLayoutName + (__src.Length > 0 ? " · " + __src : "");
+                    if (ChartViewModel != null) ChartViewModel.ChartTitleText = __title;
+                    if (XYChartViewModel != null) XYChartViewModel.ChartTitleText = __title;
+                    if (YXChartViewModel != null) YXChartViewModel.ChartTitleText = __title;
+                    GridViewModel?.ResetStats();
+                }
+                catch { }
                 SaveConfigToHistory();   // 실제로 실행을 시작할 때만 History 에 남긴다(직전과 같으면 건너뜀)
                 PortGuideShipMW.Calculate();
                 StartSimMonitor();
@@ -1091,7 +1120,7 @@ namespace HoRang2Sea.ViewModels
         // Run 시 현재 입력 스냅샷을 History에 자동 저장(직전과 동일하면 skip, 최근 20개 유지).
         public override void SaveConfigToHistory()
         {
-            try { BuildSaveData().SaveToHistory("PortGuideShip"); } catch { }
+            try { var __d = BuildSaveData(); __d.Summary = ChartViewModel?.ChartTitleText; __d.SaveToHistory("PortGuideShip"); } catch { }
         }
 
         public void OnClickLoadButton()

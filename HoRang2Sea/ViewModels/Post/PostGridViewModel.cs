@@ -264,6 +264,13 @@ namespace HoRang2Sea.ViewModels
             }
         }
 
+        /// <summary>새 실행 — 값 그리드의 Min · Max(이번 실행)를 비운다(2026-10-06).</summary>
+        public void ResetStats()
+        {
+            if (listsource == null) return;
+            foreach (var g in listsource) g?.ResetStats();
+        }
+
         public void GridSet()
         {
             if (System.Windows.Application.Current?.Dispatcher.CheckAccess() == false)

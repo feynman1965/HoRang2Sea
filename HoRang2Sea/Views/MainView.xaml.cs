@@ -31,6 +31,7 @@ namespace HoRang2Sea.Views
             DataContext = App.Container.GetInstance<MainViewModel>();
 
             InitializeComponent();
+            Current = this;   // 시작 화면 HELP 가 도움말을 띄운다(2026-10-06)
         }
 
         private void myCustomControl_Loaded(object sender, RoutedEventArgs e)
@@ -63,6 +64,9 @@ namespace HoRang2Sea.Views
         {
             ShowHelpGuide();
         }
+
+        internal static MainView Current { get; private set; }
+        internal void ShowHelp() => ShowHelpGuide();
 
         private void ShowHelpGuide()
         {

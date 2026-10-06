@@ -313,7 +313,7 @@
                                    RenderableSeries="{s:SeriesBinding RenderableSeries}"
                                    YAxes="{s:AxesBinding YAxes}"
                                    XAxes="{s:AxesBinding XAxes}"
-                                   ChartTitle="Monitor Chart" Margin="0,10,0,10">
+                                   ChartTitle="" Margin="0,10,0,10">
 
                 <s:SciChartSurface.ChartModifier>
                     <s:ModifierGroup>

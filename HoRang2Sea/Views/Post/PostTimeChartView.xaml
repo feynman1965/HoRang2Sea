@@ -145,7 +145,7 @@
                 <Grid>   <!-- 변수를 고르지 않았을 때 안내를 차트 위에 겹친다(2026-10-05) -->
                 <s:SciChartSurface x:Name="sciChart"
                                    RenderableSeries="{s:SeriesBinding RenderableSeries}"
-                                   ChartTitle="Monitor Chart"
+                                   ChartTitle="{Binding ChartTitleText}"
                                    s:VisualXcceleratorEngine.IsEnabled="True"
                                    PreviewMouseDown="Chart_UserInteractDown"
                                    PreviewMouseWheel="Chart_UserInteractWheel"

@@ -390,6 +390,12 @@ namespace HoRang2Sea.ViewModels
             // 시뮬 중 변수 추가(backfill) 시 timer가 0으로 리셋되면 새 점들이 원점부터 기존 데이터 위에 덮여 그려짐(해양대 0624).
             // → backfill 후 기록의 마지막 시각으로 timer를 이어간다 (루프 뒤에서 복원).
             double backfillLastX = -1;
+            // 되채움은 기록 버퍼를 한 번 떠서 모든 변수에 같은 행을 쓴다(계산 중에 행이 늘어도 변수끼리 어긋나지 않게, 2026-10-06).
+            // 되채움이 아니면 0 → 다음 갱신이 지금까지의 기록을 처음부터 그린다(일시정지 뒤 재개도 이어짐).
+            List<double[]> __snap = null; int __snapRows = 0;
+            if (backfill && BaseMWModel is GenericPortDllModel __snapModel) { __snap = new List<double[]>(); __snapRows = __snapModel.CopyRecordedRows(0, __snap); }
+            _drawnRows = __snapRows;
+            var __units = (BaseMWModel as GenericPortDllModel)?.OutputUnits() ?? new Dictionary<string, string>();
 
             string XAxis = "Time";
 
@@ -432,7 +438,7 @@ namespace HoRang2Sea.ViewModels
                     AutoRange = AutoRange.Always,
                     GrowBy = new DoubleRange(1.0, 1.0),   // Y축 여유(데이터 ~33% 차지). 라이브·시뮬후 공통. 값↑=더 여유
                     AxisAlignment = AxisAlignment.Left,
-                    AxisTitle = Chartitem,
+                    AxisTitle = WithUnit(__units, Chartitem),
                     DrawMajorBands = true,
                     BorderThickness = ythick,
                     TextFormatting = "G6", CursorTextFormatting = "G6",
@@ -449,7 +455,7 @@ namespace HoRang2Sea.ViewModels
                 // 시뮬 후/중 임의 변수 표시: 기록 버퍼에서 series 되채움 (실행 시작 시엔 버퍼 비어 no-op)
                 if (backfill && BaseMWModel is GenericPortDllModel recModel)
                 {
-                    var rec = recModel.GetRecordedSeries(Chartitem);
+                    var rec = __snap != null ? SnapSeries(__snap, recModel.RecordedColumn(Chartitem)) : recModel.GetRecordedSeries(Chartitem);
                     double ymin = double.MaxValue, ymax = double.MinValue; int cnt = 0;
                     foreach (var pt in rec)
                     {
@@ -502,6 +508,78 @@ namespace HoRang2Sea.ViewModels
             RebuildChartTabs();
         }
 
+
+        // ---- 실시간 차트 = 계산 객체의 기록 버퍼(2026-10-06) ----
+        // 이전에는 갱신 이벤트(100 step)마다 timer 를 0.1초씩 올리고 그때의 최신 값을 찍어서, 화면이 밀리면 값과 시각이 어긋났다.
+        // 이제 계산 스레드가 RecordStep 으로 남긴 행(step, 출력)을 그대로 그린다 — CSV · Import Data 와 같은 값 · 같은 시각.
+        private int _drawnRows;
+        private readonly List<double[]> _rowBuf = new List<double[]>();
+
+        private string _chartTitleText = "";
+        /// <summary>차트 제목 — 모듈 VM 이 Run 할 때 "레이아웃 · 프로파일"로 넣는다(이전에는 "Monitor Chart" 고정).</summary>
+        public string ChartTitleText
+        {
+            get => _chartTitleText;
+            set { _chartTitleText = value ?? ""; RaisePropertyChanged(nameof(ChartTitleText)); }
+        }
+
+        // 기록 스냅샷에서 변수 하나의 (시각, 값) — 되채움용. 차트는 0.1초 간격까지만(기록 간격이 더 촘촘해도).
+        private static List<(double x, double y)> SnapSeries(List<double[]> rows, int col)
+        {
+            var res = new List<(double x, double y)>();
+            if (rows == null || col <= 0) return res;
+            int iv = GenericPortDllModel.RecordStepInterval < 1 ? 1 : GenericPortDllModel.RecordStepInterval;
+            foreach (var r in rows)
+            {
+                if (col >= r.Length) continue;
+                int step = (int)r[0];
+                if (step % iv != 0) continue;
+                if (iv < 100 && step % 100 != 0) continue;
+                res.Add((step * 0.001, r[col]));
+            }
+            return res;
+        }
+
+        // 축 제목에 단위를 붙인다(이름에 이미 [단위]가 있거나 단위가 없으면 그대로).
+        private static string WithUnit(Dictionary<string, string> units, string name)
+        {
+            if (string.IsNullOrEmpty(name) || units == null || name.TrimEnd().EndsWith("]")) return name;
+            return units.TryGetValue(name, out var u) && !string.IsNullOrWhiteSpace(u) && u.Trim() != "-" ? $"{name} [{u.Trim()}]" : name;
+        }
+
+        private void AppendRecordedRows(GenericPortDllModel rec)
+        {
+            _rowBuf.Clear();
+            int total = rec.CopyRecordedRows(_drawnRows, _rowBuf);
+            if (total < _drawnRows)   // 새 실행이 기록을 비웠다 → 처음부터
+            {
+                foreach (var d in lineData) d?.Clear();
+                _drawnRows = 0;
+                _rowBuf.Clear();
+                total = rec.CopyRecordedRows(0, _rowBuf);
+            }
+            _drawnRows = total;
+            if (_rowBuf.Count == 0) return;
+            var cols = new List<(XyDataSeries<double, double> s, int c)>();
+            foreach (var d in lineData)
+            {
+                if (d == null) continue;
+                int c = rec.RecordedColumn(d.SeriesName);
+                if (c > 0) cols.Add((d, c));
+            }
+            int iv = GenericPortDllModel.RecordStepInterval;
+            double lastX = -1;
+            foreach (var row in _rowBuf)
+            {
+                int step = (int)row[0];
+                if (iv < 100 && step % 100 != 0) continue;   // 차트는 0.1초 간격까지만
+                double x = step * 0.001;
+                foreach (var (s, c) in cols) if (c < row.Length) s.Append(x, row[c]);
+                lastX = x;
+            }
+            if (lastX >= 0) timer = lastX + 0.1;   // 일시정지 저장 · 되채움과 같은 기준
+        }
+
         public void ChartUpdate()
         {
             // RenderableSeries가 없는데 ChartYItems가 있으면 자동으로 ChartSet() 호출
@@ -517,6 +595,9 @@ namespace HoRang2Sea.ViewModels
                 return;
             }
 
+
+            // 계산 객체의 기록 버퍼에서 그린다(2026-10-06). 아래 모델별 분기(timer += 0.1)는 기록이 없는 모델(Nexo)에만 남는다.
+            if (BaseMWModel is GenericPortDllModel __rec) { AppendRecordedRows(__rec); return; }
             try
             {
                 if (ParentViewModel == null || BaseMWModel == null) return;
@@ -695,6 +776,7 @@ namespace HoRang2Sea.ViewModels
 
                 // 3. 타이머 초기화
                 timer = 0;
+                _drawnRows = 0;   // 기록 버퍼를 다시 처음부터 그린다
                 savedTimer = 0;
                 isPausedState = false;
 

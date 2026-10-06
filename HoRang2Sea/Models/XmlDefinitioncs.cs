@@ -148,6 +148,10 @@ namespace HoRang2Sea.Models
         public string Max { get; set; }
         [XmlAttribute("digit")]
         public string Digit { get; set; }
+        /// <summary>앱이 정하는 칸(프로파일 자리 등) — 그리드에서 고칠 수 없게 한다. XML readonly="true" (2026-10-06).</summary>
+        [XmlAttribute("readonly")]
+        [System.ComponentModel.DefaultValue(false)]
+        public bool ReadOnly { get; set; }
         [XmlAttribute("unit")]
         public string Unit { get; set; }
         [XmlIgnore]

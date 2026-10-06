@@ -66,14 +66,27 @@ namespace HoRang2Sea.Views
 
             apply.Click += (s, e) =>
             {
+                // 숫자가 아니거나 Max ≤ Min 인 줄은 알리고 창을 닫지 않는다(이전에는 말없이 건너뛰고 닫혔다, 2026-10-06). 두 칸 다 비우면 그 축은 그대로.
+                var bad = new List<string>();
+                var good = new List<(NumericAxisViewModel axis, double min, double max)>();
                 foreach (var (axis, minBox, maxBox) in rows)
                 {
-                    if (double.TryParse(minBox.Text, out double min) &&
-                        double.TryParse(maxBox.Text, out double max) && max > min)
-                    {
-                        axis.AutoRange = SciChart.Charting.Visuals.Axes.AutoRange.Never;
-                        axis.VisibleRange = new DoubleRange(min, max);
-                    }
+                    if (string.IsNullOrWhiteSpace(minBox.Text) && string.IsNullOrWhiteSpace(maxBox.Text)) continue;
+                    if (double.TryParse(minBox.Text, out double min) && double.TryParse(maxBox.Text, out double max) && max > min)
+                        good.Add((axis, min, max));
+                    else
+                        bad.Add(string.IsNullOrWhiteSpace(axis.AxisTitle?.ToString()) ? axis.Id : axis.AxisTitle.ToString());
+                }
+                if (bad.Count > 0)
+                {
+                    MessageBox.Show(dialog, "Enter numbers with Max greater than Min for:\n\n" + string.Join("\n", bad) +
+                                    "\n\nLeave both boxes empty to keep an axis as it is.", "Axis Ranges", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                foreach (var (axis, min, max) in good)
+                {
+                    axis.AutoRange = SciChart.Charting.Visuals.Axes.AutoRange.Never;
+                    axis.VisibleRange = new DoubleRange(min, max);
                 }
                 dialog.Close();
             };

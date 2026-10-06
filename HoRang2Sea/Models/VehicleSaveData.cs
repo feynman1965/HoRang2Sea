@@ -14,6 +14,20 @@ namespace HoRang2Sea.Models
         public string DriveModePath { get; set; }
         public string DatabaseXml { get; set; }
 
+        /// <summary>History 목록 제목(레이아웃 · 프로파일). Run 할 때 모듈 VM 이 넣는다(2026-10-06).</summary>
+        public string Summary { get; set; }
+
+        /// <summary>저장 파일에서 Summary 만 읽는다(History 목록 제목용). 없거나 읽지 못하면 null.</summary>
+        public static string ReadSummary(string filePath)
+        {
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(filePath, System.Text.Encoding.UTF8));
+                return doc.RootElement.TryGetProperty("Summary", out var s) && s.ValueKind == System.Text.Json.JsonValueKind.String ? s.GetString() : null;
+            }
+            catch { return null; }
+        }
+
         public void Save(string filePath)
         {
             var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });

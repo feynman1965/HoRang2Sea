@@ -88,7 +88,7 @@
                 </dxg:GridControl.Columns>
 
                 <dxg:GridControl.View >
-                    <dxg:TableView BestFitMode="AllRows">
+                    <dxg:TableView BestFitMode="AllRows" ShowingEditor="TableView_ShowingEditor">
                         <dxmvvm:Interaction.Behaviors>
                             <dxmvvm:EventToCommand EventName="CellValueChanged"
                                                Command="{Binding CellValueRefreshCommand}"
@@ -132,7 +132,7 @@
                 </dxg:GridControl.Columns>
 
                 <dxg:GridControl.View >
-                    <dxg:TableView BestFitMode="AllRows">
+                    <dxg:TableView BestFitMode="AllRows" ShowingEditor="TableView_ShowingEditor">
                         <dxmvvm:Interaction.Behaviors>
                             <dxmvvm:EventToCommand EventName="CellValueChanged"
                                                Command="{Binding CellValueRefreshCommand}"

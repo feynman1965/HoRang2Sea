@@ -107,6 +107,18 @@ namespace HoRang2Sea.Views
                 UseShellExecute = true
             });
         }
+        // About · HELP (2026-10-06 — 이전에는 눌러도 아무 동작이 없었다). Manual · Contact us · Account · News 는 숨겼다.
+        private void BarButtonItem_Click_About(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            string ver = "";
+            try { ver = App.Container.GetInstance<HoRang2Sea.ViewModels.MainViewModel>().AppVersionText; } catch { }
+            System.Windows.MessageBox.Show(System.Windows.Application.Current?.MainWindow, "HoRang2 Sea\n" + ver + "\n\nhttps://www.horang2.kr", "About",
+                                           System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+        }
+        private void BarButtonItem_Click_Help(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+            MainView.Current?.ShowHelp();
+        }
         private void BarButtonItem_Click_Profile(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
         {
 

@@ -474,6 +474,7 @@ namespace HoRang2Sea.Models
             }
 
             // 앱이 DLL 에 쓴 값 · DLL 에 없는 포트를 남긴다(속도 프로파일은 port 64 에 매 step)
+            LogOutputs = OutputPortMap.Where(kv => kv.Key < FishingBoatMWOuts.Count).OrderBy(kv => kv.Key).Select(kv => (kv.Value, FishingBoatMWOuts[kv.Key].Name)).ToList();   // HR2Tester 가 앱과 같은 출력을 본다(2026-10-06)
             EndInputLog("HoRang2Sea", "FishingBoat", $"Design {DesignLayout} / Control {ControlLayout} ({_loadedDll})",
                         OutputPortMap.Values, 64, _driveModes);
 

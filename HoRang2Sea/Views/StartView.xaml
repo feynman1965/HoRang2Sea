@@ -22,12 +22,12 @@
                            RibbonStyle="Office2019" ToolbarShowMode="Default" IsSimplified="True">
             <dxr:RibbonPage Caption="Start">
                 <dxr:RibbonPageGroup Caption="Links">
-                    <dxb:BarButtonItem Content="About" Glyph="{dx:DXImage 'SvgImages/Outlook Inspired/About.svg'}" RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Content="About" Glyph="{dx:DXImage 'SvgImages/Outlook Inspired/About.svg'}" RibbonStyle="SmallWithText" ItemClick="BarButtonItem_Click_About"/>
                     <dxb:BarButtonItem Content="HoRang2 Page" Glyph="{dx:DXImage 'SvgImages/Icon Builder/Actions_Home.svg'}" RibbonStyle="SmallWithText" ItemClick="BarButtonItem_Click_Horang2"/>
                     <dxb:BarButtonItem Content="Profile Download" Glyph="{dx:DXImage 'SvgImages/Icon Builder/Actions_Home.svg'}" RibbonStyle="SmallWithText" ItemClick="BarButtonItem_Click_Profile"/>
-                    <dxb:BarButtonItem Content="Manual" Glyph="{dx:DXImage 'SvgImages/RichEdit/DocumentStatistics.svg'}" RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Content="HELP" Glyph="{dx:DXImage 'SvgImages/DiagramIcons/BindingEditorHelpIcon.svg'}" RibbonStyle="SmallWithText" />
-                    <dxb:BarButtonItem Content="Contact us" Glyph="{dx:DXImage 'SvgImages/Business Objects/BO_Contact.svg'}" RibbonStyle="SmallWithText" />
+                    <dxb:BarButtonItem Content="Manual" Glyph="{dx:DXImage 'SvgImages/RichEdit/DocumentStatistics.svg'}" RibbonStyle="SmallWithText" IsVisible="False"/>
+                    <dxb:BarButtonItem Content="HELP" Glyph="{dx:DXImage 'SvgImages/DiagramIcons/BindingEditorHelpIcon.svg'}" RibbonStyle="SmallWithText" ItemClick="BarButtonItem_Click_Help"/>
+                    <dxb:BarButtonItem Content="Contact us" Glyph="{dx:DXImage 'SvgImages/Business Objects/BO_Contact.svg'}" RibbonStyle="SmallWithText" IsVisible="False"/>
                 </dxr:RibbonPageGroup>
             </dxr:RibbonPage>
         </dxr:RibbonControl>
@@ -48,7 +48,7 @@
                 <Image Source="/Resource/startpage.png" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="None"/>
                 <Image Source="/Resource/path153647-3.png" Margin="25,80,25,0" Width="120" Stretch="Uniform" VerticalAlignment="Top"/>
 
-                <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,40">
+                <StackPanel Visibility="Collapsed" Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,40">
                     <Image Source="{iconPacks:CodiconsImage Kind=Account,Brush=White}" Opacity="0.7" HorizontalAlignment="Center" Width="22"/>
                     <Label Content="Account" HorizontalAlignment="Center" Foreground="LightGray" FontSize="12"/>
                     <Label Content="Login | New ID" HorizontalAlignment="Center" Foreground="Gray" FontSize="11"/>
@@ -103,7 +103,7 @@
                         </StackPanel>
 
                         <!-- News + links -->
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Width="180" Margin="16,0,0,0">
+                        <StackPanel Visibility="Collapsed" Grid.Column="2" VerticalAlignment="Center" Width="180" Margin="16,0,0,0">
                             <TextBlock Text="News" FontSize="14" FontWeight="SemiBold" Foreground="#444444" Margin="0,0,0,6"/>
                             <Border Height="80" CornerRadius="6" ClipToBounds="True" Margin="0,0,0,10">
                                 <dx:DXImage Source="/Resource/Renault-Scenic-Vision-Concept-car-28.png" Stretch="UniformToFill"/>

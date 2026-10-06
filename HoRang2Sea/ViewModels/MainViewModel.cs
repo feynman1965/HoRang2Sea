@@ -437,7 +437,8 @@ namespace HoRang2Sea.ViewModels
                     {
                         entries.Add(new SavedConfigEntry
                         {
-                            Title = Path.GetFileNameWithoutExtension(f),
+                            Title = (history && !string.IsNullOrWhiteSpace(HoRang2Sea.Models.VehicleSaveData.ReadSummary(f)))   // History 는 레이아웃 · 프로파일(2026-10-06)
+                                    ? HoRang2Sea.Models.VehicleSaveData.ReadSummary(f) : Path.GetFileNameWithoutExtension(f),
                             VehicleType = type.ToString(),
                             FilePath = f,
                             SavedDate = File.GetLastWriteTime(f).ToString("yyyy-MM-dd HH:mm")

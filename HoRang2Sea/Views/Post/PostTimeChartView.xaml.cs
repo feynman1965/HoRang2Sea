@@ -34,7 +34,7 @@ namespace HoRang2Sea.Views
             var chartView = new PostTimeChartView { DataContext = this.DataContext };
             var window = new Window
             {
-                Title = "Monitor Chart - Large View (Zoom: wheel/drag, Reset: double-click)",
+                Title = "Chart - Large View (Zoom: wheel/drag, Reset: double-click)",
                 Width = 1400,
                 Height = 800,
                 Content = chartView,

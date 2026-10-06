@@ -87,7 +87,7 @@
                                    s:VisualXcceleratorEngine.IsEnabled="True"
                                    PreviewMouseDown="Chart_UserInteractDown"
                                    PreviewMouseWheel="Chart_UserInteractWheel"
-                                   ChartTitle="Monitor Chart" Margin="0,10,0,10"
+                                   ChartTitle="{Binding ChartTitleText}" Margin="0,10,0,10"
                                    Background="White" >
 
                 <s:SciChartSurface.ChartModifier>

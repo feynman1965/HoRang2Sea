@@ -4,7 +4,7 @@
     <TableDefinition Name="TrainingShipProfile" PositionX="1850" PositionY="650">
       <Columns>
         <ColumnDefinition TableName="TrainingShipProfile" Name="Propeller Pitch" Init="4.5" min="4.5" max="20" digit="1" unit="m"/>
-        <ColumnDefinition TableName="TrainingShipProfile" Name="Speed Profile" Init="0.01" min="0" max="1" digit="2" unit="-"/>
+        <ColumnDefinition TableName="TrainingShipProfile" Name="Speed Profile" Init="0.01" min="0" max="1" digit="2" unit="- (from profile)" readonly="true"/>
       </Columns>
     </TableDefinition>
     <TableDefinition Name="Stack" PositionX="650" PositionY="700" >

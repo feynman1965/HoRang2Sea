@@ -477,23 +477,35 @@ namespace HoRang2Sea.ViewModels
         {
             Name = name;
             SubName = subName;
-            Value = Max = Min = value;
+            Value = value;   // Min · Max 는 실행 값이 들어올 때부터 센다(2026-10-06 — 이전에는 처음 값 0 이 Min 이 됐다)
             Unit = unit;
             RaisePropertyChanged("");
         }
         public string Name { get; private set; }
         public string SubName { get; private set; }
         public double Value { get; private set; }
-        public double Max { get; private set; }
-        public double Min { get; private set; }
+        public double? Max { get; private set; }
+        public double? Min { get; private set; }
         public string Unit { get; private set; }
 
+
+        /// <summary>새 실행을 시작할 때 Min · Max 를 비운다(2026-10-06).</summary>
+        public void ResetStats()
+        {
+            Max = null;
+            Min = null;
+            RaisePropertyChanged(nameof(Max));
+            RaisePropertyChanged(nameof(Min));
+        }
 
         public void UpdateInternal(double value)
         {
             Value = value;
-            Max = Math.Max(Max, Value);
-            Min = Math.Min(Min, Value);
+            if (!double.IsNaN(value) && !double.IsInfinity(value))
+            {
+                Max = Max.HasValue ? Math.Max(Max.Value, value) : value;
+                Min = Min.HasValue ? Math.Min(Min.Value, value) : value;
+            }
             RaisePropertyChanged("");
         }
     }

@@ -96,6 +96,52 @@ namespace HoRang2Sea.Models
             return result;
         }
 
+        /// <summary>기록 버퍼의 행(= [step, 출력…])을 from 번째부터 dest 에 담고 지금 행 수를 돌려준다(2026-10-06).
+        /// 실시간 차트가 이 행으로 그린다 — 화면과 CSV 가 같은 값 · 같은 시각. 행 배열은 기록한 뒤 바뀌지 않아 그대로 넘긴다.</summary>
+        public int CopyRecordedRows(int from, List<double[]> dest)
+        {
+            lock (_csvLock)
+            {
+                int n = _csvResults.Count;
+                for (int i = Math.Max(0, from); i < n; i++) dest.Add(_csvResults[i]);
+                return n;
+            }
+        }
+
+        /// <summary>기록 머리에서 변수 열 위치(0 = Step). 없으면 -1.</summary>
+        public int RecordedColumn(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return -1;
+            lock (_csvLock) { return _csvHeaders.IndexOf(name); }
+        }
+
+        /// <summary>출력 이름 → 단위(모델의 …MWOuts 목록에서 읽음). 차트 축 제목에 단위를 붙일 때 쓴다(2026-10-06).</summary>
+        public Dictionary<string, string> OutputUnits()
+        {
+            var map = new Dictionary<string, string>();
+            try
+            {
+                const System.Reflection.BindingFlags bf = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+                var lists = new List<object>();
+                foreach (var f in GetType().GetFields(bf)) if (f.Name.EndsWith("MWOuts")) lists.Add(f.GetValue(this));
+                foreach (var p in GetType().GetProperties(bf)) if (p.Name.EndsWith("MWOuts") && p.GetIndexParameters().Length == 0) lists.Add(p.GetValue(this));
+                foreach (var l in lists)
+                {
+                    if (!(l is System.Collections.IEnumerable items)) continue;
+                    foreach (var o in items)
+                    {
+                        var t = o?.GetType();
+                        if (t == null) continue;
+                        var n = t.GetProperty("Name")?.GetValue(o) as string;
+                        var u = t.GetProperty("Unit")?.GetValue(o) as string;
+                        if (!string.IsNullOrEmpty(n) && !map.ContainsKey(n)) map[n] = u ?? "";
+                    }
+                }
+            }
+            catch { }
+            return map;
+        }
+
         // CSV 저장 다이얼로그의 마지막 사용 폴더 (기본값 = 문서 폴더 — 설치 폴더(Program Files)는 쓰기가 막힐 수 있다). Export 성공 시 갱신.
         public static string LastExportDirectory = HoRang2Sea.Services.AppPaths.DefaultExportDir;
 
@@ -238,6 +284,12 @@ namespace HoRang2Sea.Models
 
         /// <summary>B그룹 작업 rpm · torque 처럼 속도 외에 매 step 넣는 프로파일의 출처(포트 → 파일 이름). VM 이 Calculate 전에 넣는다.</summary>
         public Dictionary<int, string> ExtraProfileSources { get; } = new();
+        /// <summary>프로파일 파일 전체 경로(기본 프로파일이면 null). 실행 입력 기록에 남겨 HR2Tester 가 같은 파일을 다시 읽는다(2026-10-06).</summary>
+        public string ProfileSourcePath { get; set; }
+        /// <summary>B그룹 작업 rpm · torque 파일 전체 경로(포트 → 경로, 2026-10-06).</summary>
+        public Dictionary<int, string> ExtraProfilePaths { get; } = new();
+        /// <summary>앱이 읽는 출력(포트 · 이름) — 모델이 EndInputLog 전에 넣는다. HR2Tester 가 같은 출력으로 NaN 을 본다(2026-10-06).</summary>
+        protected List<(int Port, string Name)> LogOutputs;
 
         /// <summary>InitValue 끝에서 부른다. 앱이 DLL 에 쓴 값과 DLL 에 없는 포트를 파일로 남기고,
         /// 없는 포트(0이 아닌 값을 쓰려던 입력, 읽으려는 출력)가 있으면 DLL 마다 한 번 알린다.
@@ -247,16 +299,17 @@ namespace HoRang2Sea.Models
         {
             var written = _logInputs ?? new Dictionary<int, double>();
             _logInputs = null;
-            var profiles = new List<HoRang2Sea.Services.RunInputLog.Profile> { new(profilePort, profile, ProfileSource) };
+            var profiles = new List<HoRang2Sea.Services.RunInputLog.Profile> { new(profilePort, profile, ProfileSource, ProfileSourcePath) };
             foreach (var x in extraProfiles)
-                profiles.Add(new(x.Port, x.Values, ExtraProfileSources.TryGetValue(x.Port, out var src) ? src : "-"));
+                profiles.Add(new(x.Port, x.Values, ExtraProfileSources.TryGetValue(x.Port, out var src) ? src : "-",
+                                 ExtraProfilePaths.TryGetValue(x.Port, out var pth) ? pth : null));
             var missIn = written.Where(kv => !_inputPorts.ContainsKey(kv.Key) && kv.Value != 0).Select(kv => kv.Key).ToList();
             foreach (var p in profiles)
                 if (p.Port > 0 && p.Values != null && p.Values.Any(v => v != 0) && !_inputPorts.ContainsKey(p.Port)) missIn.Add(p.Port);
             missIn = missIn.Distinct().OrderBy(p => p).ToList();
             var missOut = outputPortsUsed.Distinct().Where(p => !_outputPorts.ContainsKey(p)).OrderBy(p => p).ToList();
             LastRunInputFile = HoRang2Sea.Services.RunInputLog.Write(appName, model, _dllFileName, _functionPrefix, layout,
-                                                                     written, missIn, missOut, profiles);
+                                                                     written, missIn, missOut, profiles, LogOutputs);
             if ((missIn.Count > 0 || missOut.Count > 0) && _missingPortWarned.Add(_dllFileName ?? model))
             {
                 System.Windows.MessageBox.Show(
