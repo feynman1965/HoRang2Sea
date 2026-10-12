@@ -73,15 +73,15 @@ namespace HoRang2Sea.Views
             FontSize = 11,
             Foreground = Frozen(Color.FromRgb(0x90, 0xA4, 0xAE)),
             HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Margin = new Thickness(0, 0, 8, 4),
+            Margin = new Thickness(8, 1, 8, 2),
             IsHitTestVisible = false,
         };
+        private readonly Border _hintBar = new Border();   // 그림 아래 띠(안내 글이 그림에 겹치지 않게)
         private readonly StackPanel _offList = new StackPanel
         {
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Bottom,
-            Margin = new Thickness(8, 0, 0, 22),
+            Margin = new Thickness(8, 0, 0, 8),
             IsHitTestVisible = false,
         };
 
@@ -101,7 +101,6 @@ namespace HoRang2Sea.Views
             _viewport.Children.Add(_viewbox);
             _viewport.Children.Add(_missing);
             _viewport.Children.Add(_offList);
-            _viewport.Children.Add(_hint);
 
             var top = new Border
             {
@@ -111,8 +110,14 @@ namespace HoRang2Sea.Views
                 Child = _chips,
             };
             DockPanel.SetDock(top, Dock.Top);
+            _hintBar.Background = Frozen(Color.FromRgb(0xF8, 0xF9, 0xFA));
+            _hintBar.BorderBrush = Frozen(Color.FromRgb(0xE0, 0xE0, 0xE0));
+            _hintBar.BorderThickness = new Thickness(0, 1, 0, 0);
+            _hintBar.Child = _hint;
+            DockPanel.SetDock(_hintBar, Dock.Bottom);
             var root = new DockPanel { LastChildFill = true };
             root.Children.Add(top);
+            root.Children.Add(_hintBar);
             root.Children.Add(_viewport);
             Content = root;
 
@@ -205,9 +210,11 @@ namespace HoRang2Sea.Views
 
         private string ModelName()
         {
-            var n = _vm?.GetType().Name;
+            // 실행 중 뷰모델은 DevExpress 가 만든 하위 클래스(CarnivalModuleViewModel_<guid>)라 상위 클래스에서 찾는다
             const string suffix = "ModuleViewModel";
-            return n != null && n.EndsWith(suffix) ? n.Substring(0, n.Length - suffix.Length) : n;
+            for (var t = _vm?.GetType(); t != null; t = t.BaseType)
+                if (t.Name.EndsWith(suffix)) return t.Name.Substring(0, t.Name.Length - suffix.Length);
+            return null;
         }
 
         private TableDefinition FindTable(string name)
@@ -256,13 +263,13 @@ namespace HoRang2Sea.Views
             {
                 _layout = null;
                 _viewbox.Visibility = Visibility.Collapsed;
-                _hint.Visibility = Visibility.Collapsed;
+                _hintBar.Visibility = Visibility.Collapsed;
                 _missing.Visibility = _vm == null ? Visibility.Collapsed : Visibility.Visible;
             }
             else
             {
                 _viewbox.Visibility = Visibility.Visible;
-                _hint.Visibility = Visibility.Visible;
+                _hintBar.Visibility = Visibility.Visible;
                 _missing.Visibility = Visibility.Collapsed;
                 _canvas.Width = _mapW;
                 _canvas.Height = _mapH;
@@ -344,8 +351,8 @@ namespace HoRang2Sea.Views
                     Tag = t.Name,
                     CornerRadius = new CornerRadius(3),
                     BorderThickness = new Thickness(1),
-                    Padding = new Thickness(8, 1, 8, 2),
-                    Margin = new Thickness(2),
+                    Padding = new Thickness(7, 0, 7, 1),
+                    Margin = new Thickness(2, 1, 2, 1),
                     Cursor = Cursors.Hand,
                     ToolTip = onDrawing ? t.Name : t.Name + " (not in this drawing)",
                     Child = new TextBlock { Text = t.Name, FontSize = 11, FontStyle = onDrawing ? FontStyles.Normal : FontStyles.Italic },
