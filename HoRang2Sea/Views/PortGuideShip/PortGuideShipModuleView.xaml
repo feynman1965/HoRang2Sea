@@ -362,7 +362,9 @@
             <dxdo:LayoutGroup Margin="0" Orientation="Horizontal">
                 <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="*">
                     <dxdo:DocumentPanel x:Name="diagramPanel">
-                        <dxdiag:DiagramControl Name="diagramControl"
+                        <!-- 대학 P&ID 그림(PidView)으로 바꿈(2026-10-13). 예전 부품 상자 다이어그램은 숨겨 둠 -->
+                        <Grid>
+                        <dxdiag:DiagramControl Name="diagramControl" Visibility="Collapsed"
                            LineJumpPlacement="HorizontalLines"
                            AllowCollapseContainers="True"
                            IsReadOnly="True"
@@ -463,6 +465,8 @@
 
                             </dxmvvm:Interaction.Behaviors>
                         </dxdiag:DiagramControl>
+                        <local:PidView/>
+                        </Grid>
                     </dxdo:DocumentPanel>
                     <dxdo:DocumentPanel x:Name="velocityProfilePanel" Caption="Profile" Loaded="VelocityProfilePanel_Loaded"
                         Visibility="{Binding IsVelocityProfileVisible, Converter={StaticResource BoolToVisConverter}}">

@@ -1,0 +1,1328 @@
+{
+ "w": 2400,
+ "h": 1350,
+ "models": {
+  "FishingBoat": {
+   "D0C0": {
+    "img": "FishingBoat_S03.png",
+    "slide": 3,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      976,
+      69,
+      295,
+      126
+     ],
+     [
+      "Blower",
+      521,
+      65,
+      111,
+      146
+     ],
+     [
+      "Intercooler",
+      724,
+      84,
+      168,
+      131
+     ],
+     [
+      "Converter",
+      1175,
+      387,
+      217,
+      210
+     ],
+     [
+      "Converter",
+      1477,
+      427,
+      380,
+      183
+     ],
+     [
+      "Battery",
+      1732,
+      427,
+      125,
+      166
+     ],
+     [
+      "Stack",
+      938,
+      428,
+      185,
+      185
+     ],
+     [
+      "Fresh Water Pump",
+      336,
+      656,
+      300,
+      170
+     ],
+     [
+      "FishingBoatProfile",
+      1753,
+      650,
+      134,
+      156
+     ],
+     [
+      "Induction Motor",
+      1574,
+      673,
+      107,
+      127
+     ],
+     [
+      "FishingBoatProfile",
+      1950,
+      662,
+      114,
+      147
+     ],
+     [
+      "Heat Exchanger",
+      677,
+      853,
+      197,
+      191
+     ],
+     [
+      "Valve",
+      958,
+      910,
+      247,
+      118
+     ],
+     [
+      "Sea Water Pump",
+      822,
+      1189,
+      253,
+      161
+     ]
+    ]
+   },
+   "D1C0": {
+    "img": "FishingBoat_S04.png",
+    "slide": 4,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      976,
+      69,
+      295,
+      126
+     ],
+     [
+      "Blower",
+      521,
+      65,
+      111,
+      146
+     ],
+     [
+      "Intercooler",
+      724,
+      84,
+      168,
+      131
+     ],
+     [
+      "Converter",
+      1175,
+      387,
+      217,
+      210
+     ],
+     [
+      "Converter",
+      1477,
+      427,
+      380,
+      183
+     ],
+     [
+      "Battery",
+      1732,
+      427,
+      125,
+      166
+     ],
+     [
+      "Stack",
+      938,
+      433,
+      185,
+      185
+     ],
+     [
+      "Fresh Water Pump",
+      336,
+      656,
+      300,
+      170
+     ],
+     [
+      "FishingBoatProfile",
+      1753,
+      654,
+      134,
+      156
+     ],
+     [
+      "Induction Motor",
+      1574,
+      678,
+      107,
+      127
+     ],
+     [
+      "FishingBoatProfile",
+      1950,
+      667,
+      114,
+      146
+     ],
+     [
+      "Heat Exchanger",
+      677,
+      853,
+      197,
+      191
+     ],
+     [
+      "Valve",
+      958,
+      910,
+      247,
+      118
+     ],
+     [
+      "Sea Water Pump",
+      822,
+      1189,
+      253,
+      161
+     ]
+    ]
+   },
+   "D0C1": {
+    "img": "FishingBoat_S05.png",
+    "slide": 5,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      976,
+      69,
+      273,
+      126
+     ],
+     [
+      "Intercooler",
+      716,
+      84,
+      176,
+      149
+     ],
+     [
+      "Blower",
+      469,
+      57,
+      180,
+      181
+     ],
+     [
+      "Converter",
+      1170,
+      380,
+      218,
+      218
+     ],
+     [
+      "Converter",
+      1473,
+      427,
+      384,
+      171
+     ],
+     [
+      "Battery",
+      1732,
+      427,
+      125,
+      141
+     ],
+     [
+      "Stack",
+      934,
+      434,
+      186,
+      185
+     ],
+     [
+      "FishingBoatProfile",
+      1950,
+      673,
+      114,
+      113
+     ],
+     [
+      "Fresh Water Pump",
+      336,
+      656,
+      304,
+      170
+     ],
+     [
+      "FishingBoatProfile",
+      1753,
+      661,
+      134,
+      131
+     ],
+     [
+      "Induction Motor",
+      1574,
+      684,
+      107,
+      110
+     ],
+     [
+      "Heat Exchanger",
+      685,
+      869,
+      197,
+      175
+     ],
+     [
+      "Valve",
+      958,
+      910,
+      259,
+      118
+     ],
+     [
+      "Sea Water Pump",
+      822,
+      1189,
+      277,
+      161
+     ]
+    ]
+   },
+   "D1C1": {
+    "img": "FishingBoat_S06.png",
+    "slide": 6,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      976,
+      69,
+      295,
+      126
+     ],
+     [
+      "Blower",
+      521,
+      65,
+      111,
+      146
+     ],
+     [
+      "Intercooler",
+      724,
+      84,
+      168,
+      131
+     ],
+     [
+      "Converter",
+      1175,
+      387,
+      217,
+      210
+     ],
+     [
+      "Converter",
+      1477,
+      427,
+      380,
+      183
+     ],
+     [
+      "Battery",
+      1732,
+      427,
+      125,
+      166
+     ],
+     [
+      "Stack",
+      938,
+      433,
+      185,
+      185
+     ],
+     [
+      "Fresh Water Pump",
+      336,
+      656,
+      300,
+      170
+     ],
+     [
+      "FishingBoatProfile",
+      1753,
+      652,
+      134,
+      155
+     ],
+     [
+      "Induction Motor",
+      1574,
+      675,
+      107,
+      127
+     ],
+     [
+      "FishingBoatProfile",
+      1950,
+      664,
+      114,
+      146
+     ],
+     [
+      "Heat Exchanger",
+      677,
+      853,
+      197,
+      191
+     ],
+     [
+      "Valve",
+      958,
+      910,
+      247,
+      118
+     ],
+     [
+      "Sea Water Pump",
+      822,
+      1189,
+      253,
+      161
+     ]
+    ]
+   }
+  },
+  "PortGuideShip": {
+   "D0C0": {
+    "img": "PortGuideShip_S08.png",
+    "slide": 8,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1005,
+      67,
+      300,
+      128
+     ],
+     [
+      "Blower",
+      549,
+      66,
+      112,
+      146
+     ],
+     [
+      "Intercooler",
+      749,
+      83,
+      170,
+      132
+     ],
+     [
+      "Converter",
+      1207,
+      392,
+      221,
+      212
+     ],
+     [
+      "Converter",
+      1515,
+      431,
+      386,
+      186
+     ],
+     [
+      "Battery",
+      1774,
+      431,
+      127,
+      168
+     ],
+     [
+      "Stack",
+      966,
+      434,
+      188,
+      186
+     ],
+     [
+      "Fresh Water Pump",
+      401,
+      666,
+      300,
+      171
+     ],
+     [
+      "PortGuideShipProfile",
+      1794,
+      688,
+      135,
+      158
+     ],
+     [
+      "Induction Motor",
+      1612,
+      712,
+      108,
+      128
+     ],
+     [
+      "PortGuideShipProfile",
+      1994,
+      700,
+      115,
+      149
+     ],
+     [
+      "Heat Exchanger",
+      708,
+      863,
+      200,
+      195
+     ],
+     [
+      "Valve",
+      987,
+      922,
+      250,
+      119
+     ],
+     [
+      "Heat Exchanger",
+      707,
+      1079,
+      199,
+      196
+     ],
+     [
+      "Sea Water Pump",
+      1361,
+      1105,
+      137,
+      240
+     ]
+    ]
+   },
+   "D1C0": {
+    "img": "PortGuideShip_S09.png",
+    "slide": 9,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1004,
+      67,
+      300,
+      128
+     ],
+     [
+      "Blower",
+      548,
+      66,
+      112,
+      146
+     ],
+     [
+      "Intercooler",
+      749,
+      83,
+      170,
+      132
+     ],
+     [
+      "Converter",
+      1207,
+      392,
+      220,
+      212
+     ],
+     [
+      "Converter",
+      1514,
+      431,
+      385,
+      186
+     ],
+     [
+      "Battery",
+      1772,
+      431,
+      127,
+      168
+     ],
+     [
+      "Stack",
+      966,
+      439,
+      188,
+      186
+     ],
+     [
+      "Fresh Water Pump",
+      401,
+      666,
+      300,
+      171
+     ],
+     [
+      "PortGuideShipProfile",
+      1794,
+      659,
+      135,
+      158
+     ],
+     [
+      "Induction Motor",
+      1613,
+      682,
+      107,
+      129
+     ],
+     [
+      "PortGuideShipProfile",
+      1994,
+      671,
+      116,
+      149
+     ],
+     [
+      "Heat Exchanger",
+      708,
+      863,
+      200,
+      195
+     ],
+     [
+      "Valve",
+      986,
+      922,
+      251,
+      119
+     ],
+     [
+      "Heat Exchanger",
+      706,
+      1079,
+      200,
+      196
+     ],
+     [
+      "Sea Water Pump",
+      1360,
+      1105,
+      137,
+      240
+     ]
+    ]
+   },
+   "D0C1": {
+    "img": "PortGuideShip_S10.png",
+    "slide": 10,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1004,
+      67,
+      299,
+      128
+     ],
+     [
+      "Blower",
+      547,
+      66,
+      112,
+      146
+     ],
+     [
+      "Intercooler",
+      748,
+      83,
+      170,
+      132
+     ],
+     [
+      "Converter",
+      1206,
+      393,
+      221,
+      211
+     ],
+     [
+      "Converter",
+      1513,
+      431,
+      386,
+      186
+     ],
+     [
+      "Battery",
+      1772,
+      431,
+      127,
+      168
+     ],
+     [
+      "Stack",
+      965,
+      434,
+      188,
+      185
+     ],
+     [
+      "Fresh Water Pump",
+      400,
+      666,
+      300,
+      172
+     ],
+     [
+      "PortGuideShipProfile",
+      1795,
+      662,
+      135,
+      158
+     ],
+     [
+      "Induction Motor",
+      1614,
+      686,
+      107,
+      129
+     ],
+     [
+      "PortGuideShipProfile",
+      1995,
+      675,
+      116,
+      148
+     ],
+     [
+      "Heat Exchanger",
+      707,
+      863,
+      200,
+      195
+     ],
+     [
+      "Valve",
+      985,
+      921,
+      251,
+      120
+     ],
+     [
+      "Heat Exchanger",
+      705,
+      1078,
+      200,
+      197
+     ],
+     [
+      "Sea Water Pump",
+      1359,
+      1105,
+      137,
+      240
+     ]
+    ]
+   },
+   "D1C1": {
+    "img": "PortGuideShip_S11.png",
+    "slide": 11,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1005,
+      67,
+      300,
+      128
+     ],
+     [
+      "Blower",
+      549,
+      66,
+      112,
+      146
+     ],
+     [
+      "Intercooler",
+      749,
+      83,
+      170,
+      132
+     ],
+     [
+      "Converter",
+      1207,
+      392,
+      221,
+      212
+     ],
+     [
+      "Converter",
+      1515,
+      431,
+      386,
+      186
+     ],
+     [
+      "Battery",
+      1774,
+      431,
+      127,
+      168
+     ],
+     [
+      "Stack",
+      966,
+      439,
+      188,
+      186
+     ],
+     [
+      "Fresh Water Pump",
+      401,
+      666,
+      300,
+      171
+     ],
+     [
+      "PortGuideShipProfile",
+      1794,
+      677,
+      135,
+      158
+     ],
+     [
+      "Induction Motor",
+      1612,
+      701,
+      108,
+      129
+     ],
+     [
+      "PortGuideShipProfile",
+      1994,
+      690,
+      116,
+      148
+     ],
+     [
+      "Heat Exchanger",
+      708,
+      863,
+      200,
+      195
+     ],
+     [
+      "Valve",
+      987,
+      922,
+      250,
+      119
+     ],
+     [
+      "Heat Exchanger",
+      707,
+      1079,
+      199,
+      196
+     ],
+     [
+      "Sea Water Pump",
+      1361,
+      1105,
+      137,
+      240
+     ]
+    ]
+   }
+  },
+  "TrainingShip": {
+   "D0C0": {
+    "img": "TrainingShip_S13.png",
+    "slide": 13,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1041,
+      64,
+      277,
+      124
+     ],
+     [
+      "Intercooler",
+      795,
+      79,
+      165,
+      136
+     ],
+     [
+      "Blower",
+      596,
+      63,
+      115,
+      154
+     ],
+     [
+      "Converter",
+      1233,
+      367,
+      214,
+      213
+     ],
+     [
+      "Converter",
+      1529,
+      414,
+      375,
+      171
+     ],
+     [
+      "Battery",
+      1780,
+      414,
+      124,
+      147
+     ],
+     [
+      "Stack",
+      1002,
+      414,
+      182,
+      184
+     ],
+     [
+      "Fresh Water Pump",
+      503,
+      636,
+      291,
+      166
+     ],
+     [
+      "TrainingShipProfile",
+      1803,
+      652,
+      132,
+      138
+     ],
+     [
+      "TrainingShipProfile",
+      1996,
+      664,
+      112,
+      125
+     ],
+     [
+      "Induction Motor",
+      1629,
+      676,
+      105,
+      113
+     ],
+     [
+      "Heat Exchanger",
+      747,
+      835,
+      193,
+      181
+     ],
+     [
+      "Valve",
+      1022,
+      884,
+      237,
+      117
+     ],
+     [
+      "Heat Exchanger",
+      752,
+      1034,
+      195,
+      197
+     ],
+     [
+      "Sea Water Pump",
+      1375,
+      977,
+      132,
+      363
+     ]
+    ]
+   },
+   "D1C0": {
+    "img": "TrainingShip_S14.png",
+    "slide": 14,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1044,
+      64,
+      277,
+      124
+     ],
+     [
+      "Intercooler",
+      798,
+      79,
+      165,
+      136
+     ],
+     [
+      "Blower",
+      598,
+      63,
+      115,
+      154
+     ],
+     [
+      "Converter",
+      1236,
+      367,
+      213,
+      213
+     ],
+     [
+      "Converter",
+      1532,
+      414,
+      375,
+      171
+     ],
+     [
+      "Battery",
+      1783,
+      414,
+      124,
+      147
+     ],
+     [
+      "Stack",
+      1004,
+      418,
+      183,
+      185
+     ],
+     [
+      "Fresh Water Pump",
+      505,
+      636,
+      291,
+      166
+     ],
+     [
+      "TrainingShipProfile",
+      1801,
+      652,
+      132,
+      138
+     ],
+     [
+      "TrainingShipProfile",
+      1994,
+      664,
+      112,
+      125
+     ],
+     [
+      "Induction Motor",
+      1627,
+      675,
+      105,
+      114
+     ],
+     [
+      "Heat Exchanger",
+      750,
+      835,
+      193,
+      180
+     ],
+     [
+      "Valve",
+      1013,
+      883,
+      249,
+      116
+     ],
+     [
+      "Heat Exchanger",
+      754,
+      1034,
+      195,
+      196
+     ],
+     [
+      "Sea Water Pump",
+      1377,
+      977,
+      133,
+      363
+     ]
+    ]
+   },
+   "D0C1": {
+    "img": "TrainingShip_S15.png",
+    "slide": 15,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1043,
+      64,
+      266,
+      124
+     ],
+     [
+      "Intercooler",
+      787,
+      79,
+      165,
+      144
+     ],
+     [
+      "Blower",
+      544,
+      48,
+      180,
+      180
+     ],
+     [
+      "Converter",
+      1232,
+      362,
+      213,
+      217
+     ],
+     [
+      "Converter",
+      1528,
+      414,
+      377,
+      165
+     ],
+     [
+      "Battery",
+      1782,
+      414,
+      123,
+      134
+     ],
+     [
+      "Stack",
+      1001,
+      416,
+      182,
+      184
+     ],
+     [
+      "TrainingShipProfile",
+      1996,
+      650,
+      111,
+      108
+     ],
+     [
+      "TrainingShipProfile",
+      1803,
+      638,
+      130,
+      125
+     ],
+     [
+      "Fresh Water Pump",
+      504,
+      636,
+      292,
+      166
+     ],
+     [
+      "Induction Motor",
+      1628,
+      661,
+      104,
+      105
+     ],
+     [
+      "Heat Exchanger",
+      752,
+      842,
+      193,
+      173
+     ],
+     [
+      "Valve",
+      1012,
+      883,
+      254,
+      116
+     ],
+     [
+      "Heat Exchanger",
+      753,
+      1034,
+      205,
+      202
+     ],
+     [
+      "Sea Water Pump",
+      1381,
+      977,
+      140,
+      358
+     ]
+    ]
+   },
+   "D1C1": {
+    "img": "TrainingShip_S16.png",
+    "slide": 16,
+    "uni": "해양대",
+    "spots": [
+     [
+      "Air Humidifier",
+      1043,
+      64,
+      289,
+      124
+     ],
+     [
+      "Blower",
+      604,
+      63,
+      108,
+      141
+     ],
+     [
+      "Intercooler",
+      797,
+      79,
+      155,
+      128
+     ],
+     [
+      "Converter",
+      1237,
+      372,
+      213,
+      209
+     ],
+     [
+      "Converter",
+      1533,
+      414,
+      372,
+      179
+     ],
+     [
+      "Battery",
+      1782,
+      414,
+      123,
+      163
+     ],
+     [
+      "Stack",
+      1006,
+      416,
+      181,
+      185
+     ],
+     [
+      "Fresh Water Pump",
+      504,
+      636,
+      290,
+      166
+     ],
+     [
+      "TrainingShipProfile",
+      1803,
+      632,
+      131,
+      153
+     ],
+     [
+      "Induction Motor",
+      1628,
+      655,
+      104,
+      125
+     ],
+     [
+      "TrainingShipProfile",
+      1995,
+      644,
+      112,
+      144
+     ],
+     [
+      "Heat Exchanger",
+      745,
+      827,
+      193,
+      188
+     ],
+     [
+      "Valve",
+      1012,
+      883,
+      242,
+      116
+     ],
+     [
+      "Heat Exchanger",
+      743,
+      1034,
+      193,
+      190
+     ],
+     [
+      "Sea Water Pump",
+      1362,
+      977,
+      143,
+      369
+     ]
+    ]
+   }
+  }
+ }
+}
