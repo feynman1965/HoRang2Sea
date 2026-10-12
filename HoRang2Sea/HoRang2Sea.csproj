@@ -257,4 +257,30 @@
 			<Analyzer Include="@(FilteredAnalyzer)" />
 		</ItemGroup>
 	</Target>
+
+  <!-- Property 창 부품 상세 그림(2026-10-13, 배포자료/03_기획문서/부품상세그림_1013) -->
+  <ItemGroup>
+    <None Remove="Resource\Detail\BlowerDetail.svg" />
+    <None Remove="Resource\Detail\ConverterDetail.svg" />
+    <None Remove="Resource\Detail\FishingBoatProfileDetail.svg" />
+    <None Remove="Resource\Detail\Fresh Water PumpDetail.svg" />
+    <None Remove="Resource\Detail\Heat ExchangerDetail.svg" />
+    <None Remove="Resource\Detail\Hydrogen HumidifierDetail.svg" />
+    <None Remove="Resource\Detail\Induction MotorDetail.svg" />
+    <None Remove="Resource\Detail\PortGuideShipProfileDetail.svg" />
+    <None Remove="Resource\Detail\Sea Water PumpDetail.svg" />
+    <None Remove="Resource\Detail\StackDetail.svg" />
+    <None Remove="Resource\Detail\TrainingShipProfileDetail.svg" />
+    <Resource Include="Resource\Detail\BlowerDetail.svg" />
+    <Resource Include="Resource\Detail\ConverterDetail.svg" />
+    <Resource Include="Resource\Detail\FishingBoatProfileDetail.svg" />
+    <Resource Include="Resource\Detail\Fresh Water PumpDetail.svg" />
+    <Resource Include="Resource\Detail\Heat ExchangerDetail.svg" />
+    <Resource Include="Resource\Detail\Hydrogen HumidifierDetail.svg" />
+    <Resource Include="Resource\Detail\Induction MotorDetail.svg" />
+    <Resource Include="Resource\Detail\PortGuideShipProfileDetail.svg" />
+    <Resource Include="Resource\Detail\Sea Water PumpDetail.svg" />
+    <Resource Include="Resource\Detail\StackDetail.svg" />
+    <Resource Include="Resource\Detail\TrainingShipProfileDetail.svg" />
+  </ItemGroup>
 </Project>
