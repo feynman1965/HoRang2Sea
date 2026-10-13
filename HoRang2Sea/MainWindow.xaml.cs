@@ -26,10 +26,12 @@ namespace HoRang2Sea
             InitializeComponent();
             Closing += MainWindow_Closing;
 
-            // 작은 화면 · 높은 배율(예: 1920×1080 · 150%)에서 아래 상태줄이 화면 밖으로 나가지 않게 작업 영역에 맞춘다(2026-10-05)
+            // 처음 창은 16:9(XAML 1600×900 — 입력 화면 배치를 1920×1080 화면에 맞춤, 2026-10-13).
+            // 작은 화면 · 높은 배율(예: 1920×1080 · 150%)에서는 비율을 지키며 작업 영역 안으로 줄인다(아래 상태줄이 화면 밖으로 나가지 않게, 2026-10-05)
             var wa = SystemParameters.WorkArea;
-            if (Height > wa.Height) Height = wa.Height;
-            if (Width > wa.Width) Width = wa.Width;
+            double fit = Math.Min(1, Math.Min(wa.Width / Width, wa.Height / Height));
+            Width *= fit;
+            Height *= fit;
             MinWidth = Math.Min(800, wa.Width);
             MinHeight = Math.Min(560, wa.Height);
         }

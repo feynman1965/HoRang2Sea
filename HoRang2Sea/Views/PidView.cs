@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using HoRang2Sea.Models;
 using ColumnDefinition = HoRang2Sea.Models.ColumnDefinition;   // System.Windows.Controls.ColumnDefinition 과 이름이 같음
 
@@ -25,6 +26,7 @@ namespace HoRang2Sea.Views
     /// - 찾는 키: 모델(뷰모델 이름에서 "ModuleViewModel" 뺀 것) → 레이아웃 D{DesignLayout}C{ControlLayout}
     /// - 부품을 누르면 예전 다이어그램 클릭과 같이 Property 패널(Data · OutputData · PropertyImagePath)을 채운다.
     /// - 그림에 없는 부품은 위쪽 버튼으로 고른다. Property 의 Show 로 켠 값은 그림의 부품 아래에 표시한다.
+    /// - 그림은 흰 여백을 뺀 칸(pid_map.json "crop", 모델마다 하나)만 보여 주고, 모듈 뷰의 P&ID 칸(diagramPanel) 너비를 그 비율에 맞춘다.
     /// 뷰모델은 차종마다 다른 클래스라 공통 속성(Database · Data · OutputData · PropertyImagePath · DesignLayout · ControlLayout)을 이름으로 읽는다.
     /// </summary>
     public class PidView : UserControl
@@ -38,6 +40,7 @@ namespace HoRang2Sea.Views
         private sealed class PidLayout
         {
             public string Image;
+            public Rect Crop;      // 보일 칸(흰 여백 뺌, add_pid_crop.py) — 없으면 그림 전체
             public List<PidSpot> Spots = new List<PidSpot>();
         }
 
@@ -54,7 +57,7 @@ namespace HoRang2Sea.Views
         private readonly WrapPanel _chips = new WrapPanel { Margin = new Thickness(4, 3, 4, 3) };
         private readonly Grid _viewport = new Grid { ClipToBounds = true, Background = Brushes.White };
         private readonly Viewbox _viewbox = new Viewbox { Stretch = Stretch.Uniform };
-        private readonly Canvas _canvas = new Canvas();
+        private readonly Canvas _canvas = new Canvas { ClipToBounds = true };
         private readonly ScaleTransform _scale = new ScaleTransform(1, 1);
         private readonly TranslateTransform _shift = new TranslateTransform(0, 0);
         private readonly TextBlock _missing = new TextBlock
@@ -94,6 +97,14 @@ namespace HoRang2Sea.Views
         private Vector _downShift;
         private bool _pressed, _dragged;
 
+        // 입력 화면 P&ID 칸 너비 = 그림 높이 × 그림 비율(2026-10-13). 오른쪽(Property · Velocity Profile)에는 FitRightMin 을 남긴다
+        // (610 = Property 입력 표 Show · Value · Unit · Min · Max 가 가로 스크롤 없이 들어가는 너비).
+        private const double FitRightMin = 610, FitPidMin = 360;
+        private DevExpress.Xpf.Docking.BaseLayoutItem _host;
+        private FrameworkElement _hostManager;
+        private double _fitWidth = double.NaN;     // 마지막으로 넣은 너비 — 사용자가 칸 경계를 끌어 바꿨는지 알아보려고
+        private bool _userSized, _fitQueued, _fitForce;
+
         public PidView()
         {
             _viewbox.Child = _canvas;
@@ -126,6 +137,10 @@ namespace HoRang2Sea.Views
             _viewport.PreviewMouseMove += OnMove;
             _viewport.PreviewMouseLeftButtonUp += OnUp;
             DataContextChanged += (s, e) => { Attach(e.NewValue); Refresh(); };
+            Loaded += (s, e) => AttachHost();
+            Unloaded += (s, e) => DetachHost();
+            // 그림 자리 높이(버튼 줄이 몇 줄로 접히는지에 따라서도 바뀜)가 바뀌면 다시 맞춤
+            _viewport.SizeChanged += (s, e) => { if (e.HeightChanged) QueueFit(false); };
         }
 
         private static Brush Frozen(Color c)
@@ -157,7 +172,9 @@ namespace HoRang2Sea.Views
                             var layouts = new Dictionary<string, PidLayout>(StringComparer.OrdinalIgnoreCase);
                             foreach (var lay in model.Value.EnumerateObject())
                             {
-                                var pl = new PidLayout { Image = lay.Value.GetProperty("img").GetString() };
+                                var pl = new PidLayout { Image = lay.Value.GetProperty("img").GetString(), Crop = new Rect(0, 0, _mapW, _mapH) };
+                                if (lay.Value.TryGetProperty("crop", out var cr))
+                                    pl.Crop = new Rect(cr[0].GetDouble(), cr[1].GetDouble(), cr[2].GetDouble(), cr[3].GetDouble());
                                 foreach (var s in lay.Value.GetProperty("spots").EnumerateArray())
                                     pl.Spots.Add(new PidSpot
                                     {
@@ -271,9 +288,14 @@ namespace HoRang2Sea.Views
                 _viewbox.Visibility = Visibility.Visible;
                 _hintBar.Visibility = Visibility.Visible;
                 _missing.Visibility = Visibility.Collapsed;
-                _canvas.Width = _mapW;
-                _canvas.Height = _mapH;
-                _canvas.Children.Add(new Image { Source = img, Width = _mapW, Height = _mapH, IsHitTestVisible = false });
+                // 캔버스 = 보일 칸 크기. 그림 · 영역은 칸 왼쪽 위만큼 옮겨 놓는다(칸 밖은 잘림)
+                var crop = _layout.Crop;
+                _canvas.Width = crop.Width;
+                _canvas.Height = crop.Height;
+                var picture = new Image { Source = img, Width = _mapW, Height = _mapH, IsHitTestVisible = false };
+                Canvas.SetLeft(picture, -crop.X);
+                Canvas.SetTop(picture, -crop.Y);
+                _canvas.Children.Add(picture);
                 // 큰 영역을 먼저 깔고 작은 영역을 위에(겹친 곳은 작은 부품이 눌린다)
                 foreach (var s in _layout.Spots.OrderByDescending(s => s.Box.Width * s.Box.Height))
                 {
@@ -288,8 +310,8 @@ namespace HoRang2Sea.Views
                         Tag = s.Table,
                         ToolTip = s.Table,
                     };
-                    Canvas.SetLeft(b, s.Box.X);
-                    Canvas.SetTop(b, s.Box.Y);
+                    Canvas.SetLeft(b, s.Box.X - crop.X);
+                    Canvas.SetTop(b, s.Box.Y - crop.Y);
                     b.MouseEnter += (o, e) => StyleSpot((Border)o, true);
                     b.MouseLeave += (o, e) => StyleSpot((Border)o, false);
                     b.MouseLeftButtonUp += (o, e) => { if (!_dragged) Select((string)((Border)o).Tag); };
@@ -308,6 +330,7 @@ namespace HoRang2Sea.Views
                     }
             BuildShownValues();
             UpdateSelection();
+            QueueFit(false);
         }
 
         private static BitmapImage LoadImage(string file)
@@ -414,12 +437,13 @@ namespace HoRang2Sea.Views
                         Padding = new Thickness(6, 2, 6, 3),
                         IsHitTestVisible = false,
                     };
-                    // 부품 아래에 두되, 그림 밖으로 나가면 부품 위로
+                    // 부품 아래에 두되, 보일 칸 밖으로 나가면 부품 위로
                     box.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                     var size = box.DesiredSize;
-                    double y = spot.Box.Bottom + 4;
-                    if (y + size.Height > _mapH) y = Math.Max(0, spot.Box.Y - size.Height - 4);
-                    Canvas.SetLeft(box, Math.Max(0, Math.Min(spot.Box.X, _mapW - size.Width)));
+                    var crop = _layout.Crop;
+                    double y = spot.Box.Bottom - crop.Y + 4;
+                    if (y + size.Height > crop.Height) y = Math.Max(0, spot.Box.Y - crop.Y - size.Height - 4);
+                    Canvas.SetLeft(box, Math.Max(0, Math.Min(spot.Box.X - crop.X, crop.Width - size.Width)));
                     Canvas.SetTop(box, y);
                     Panel.SetZIndex(box, 10);
                     _canvas.Children.Add(box);
@@ -454,6 +478,79 @@ namespace HoRang2Sea.Views
                 if (!string.IsNullOrEmpty(o.Unit)) tb.Inlines.Add(new Run(" " + o.Unit) { Foreground = MutedText });
             }
             return tb;
+        }
+
+        // ───────── P&ID 칸 너비를 그림 비율에 ─────────
+        private void AttachHost()
+        {
+            DetachHost();
+            // 모듈 뷰의 diagramPanel(가로 묶음 안) — 다른 곳(시험 창 등)에 붙으면 너비를 건드리지 않는다
+            _host = DevExpress.Xpf.Docking.DockLayoutManager.GetLayoutItem(this);
+            for (DependencyObject d = this; _host == null && d != null; d = LogicalTreeHelper.GetParent(d))
+                _host = d as DevExpress.Xpf.Docking.BaseLayoutItem;
+            _hostManager = DevExpress.Xpf.Docking.DockLayoutManager.GetDockLayoutManager(this);
+            if (_hostManager != null) _hostManager.SizeChanged += OnManagerSized;
+            _userSized = false;
+            QueueFit(true);
+        }
+
+        private void DetachHost()
+        {
+            if (_hostManager != null) _hostManager.SizeChanged -= OnManagerSized;
+            _hostManager = null;
+            _host = null;
+        }
+
+        private void OnManagerSized(object sender, SizeChangedEventArgs e)
+        {
+            _userSized = false;     // 창 크기가 바뀌면 다시 그림 비율로
+            QueueFit(true);
+        }
+
+        private void QueueFit(bool force)
+        {
+            _fitForce |= force;
+            if (_fitQueued) return;
+            _fitQueued = true;
+            Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+            {
+                _fitQueued = false;
+                bool f = _fitForce;
+                _fitForce = false;
+                Fit(f);
+            }));
+        }
+
+        private void Fit(bool force)
+        {
+            if (_host == null || _hostManager == null) return;
+            // diagramPanel 혼자 든 세로 묶음이면 그 묶음의 너비를 바꾼다(모듈 뷰는 왼쪽 묶음 = P&ID 하나)
+            var item = _host;
+            while (item.Parent is DevExpress.Xpf.Docking.LayoutGroup p && p.Orientation == Orientation.Vertical && p.Items.Count == 1) item = p;
+            if (!(item.Parent is DevExpress.Xpf.Docking.LayoutGroup g) || g.Orientation != Orientation.Horizontal) return;
+            var cur = item.ItemWidth;
+            // 사용자가 칸 경계를 끌어 바꿨으면(넣은 값과 다르면) 창 크기가 바뀔 때까지 그대로 둔다
+            if (!force && !double.IsNaN(_fitWidth) && !(cur.IsAbsolute && Math.Abs(cur.Value - _fitWidth) < 1)) _userSized = true;
+            if (_userSized) return;
+            double aspect = FitAspect(), h = _viewport.ActualHeight, total = _hostManager.ActualWidth;
+            if (aspect <= 0 || h < 50 || total < 100) return;
+            double want = h * aspect + Math.Max(0, ActualWidth - _viewport.ActualWidth);
+            want = Math.Round(Math.Max(FitPidMin, Math.Min(Math.Max(FitPidMin, total - FitRightMin), want)));
+            // 4 px 안쪽 차이는 두어 버튼 줄 줄바꿈 ↔ 높이 변화가 맴돌지 않게
+            if (!(cur.IsAbsolute && Math.Abs(cur.Value - want) < 4)) item.ItemWidth = new GridLength(want);
+            _fitWidth = item.ItemWidth.Value;
+        }
+
+        private double FitAspect()
+        {
+            var crop = _layout?.Crop ?? Rect.Empty;
+            if (_layout == null)
+            {
+                // 그림이 아직 없는 레이아웃은 같은 모델의 다른 그림 비율로(칸이 모델마다 하나라 비율도 같음)
+                var model = ModelName();
+                if (model != null && Map.TryGetValue(model, out var layouts) && layouts.Count > 0) crop = layouts.Values.First().Crop;
+            }
+            return crop.IsEmpty || crop.Height <= 0 ? 0 : crop.Width / crop.Height;
         }
 
         // ───────── 확대 · 이동 ─────────

@@ -369,9 +369,9 @@
         <dxdo:DockLayoutManager FloatingMode="Window" ShowFloatWindowsInTaskbar="False" CloseFloatWindowsOnManagerUnloading="True"
                                 Visibility="{Binding IsInputMode, Converter={StaticResource BoolToVisConverter}}">
             <dxdo:LayoutGroup Margin="0" Orientation="Horizontal">
-                <!-- 왼쪽: Diagram + Velocity Profile -->
-                <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="*">
-                    <dxdo:DocumentPanel x:Name="diagramPanel">
+                <!-- 왼쪽: P&ID — 너비는 PidView 가 그림 비율에 맞춤(2026-10-13) -->
+                <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="2*">
+                    <dxdo:DocumentPanel x:Name="diagramPanel" ShowCaption="False">
                         <!-- 대학 P&ID 그림(PidView)으로 바꿈(2026-10-13). 예전 부품 상자 다이어그램은 숨겨 둠 -->
                         <Grid>
                         <dxdiag:DiagramControl Name="diagramControl" Visibility="Collapsed"
@@ -478,22 +478,22 @@
                         <local:PidView/>
                         </Grid>
                     </dxdo:DocumentPanel>
-                    <dxdo:DocumentPanel x:Name="velocityProfilePanel"
-                        Caption="Profile"
-                        Loaded="VelocityProfilePanel_Loaded"
-                        Visibility="{Binding IsVelocityProfileVisible, Converter={StaticResource BoolToVisConverter}}">
-                        <!-- Content will be added via code-behind -->
-                    </dxdo:DocumentPanel>
                 </dxdo:LayoutGroup>
 
-                <!-- 중간: Property -->
+                <!-- 오른쪽: Property 위 + Velocity Profile 아래 -->
                 <dxdo:LayoutGroup Orientation="Vertical" ItemWidth="*">
-                    <dxdo:LayoutPanel Caption="Property"
+                    <dxdo:LayoutPanel Caption="Property" ItemHeight="3*"
                         AllowClose="False"
                         AllowDrag="True"
                         AllowFloat="False">
                         <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource PropertyTemplate}" />
                     </dxdo:LayoutPanel>
+                    <dxdo:DocumentPanel x:Name="velocityProfilePanel" ItemHeight="*"
+                        Caption="Profile"
+                        Loaded="VelocityProfilePanel_Loaded"
+                        Visibility="{Binding IsVelocityProfileVisible, Converter={StaticResource BoolToVisConverter}}">
+                        <!-- Content will be added via code-behind -->
+                    </dxdo:DocumentPanel>
                 </dxdo:LayoutGroup>
 
             </dxdo:LayoutGroup>
