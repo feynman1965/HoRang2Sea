@@ -22,7 +22,7 @@ namespace HoRang2Sea.Views
 {
     /// <summary>
     /// 입력 화면 다이어그램 자리에 대학 P&ID 그림을 보여 준다(2026-10-13).
-    /// - 그림 · 누를 영역: Resource/Pid/pid_map.json + *.png (배포자료/03_기획문서/PID_앱적용_1013/build_pid_assets.py 가 만듦)
+    /// - 그림 · 누를 영역: Resource/Pid/pid_map.json + *.png (배포자료/03_작업/PID_앱적용_1013/_작업/build_pid_assets.py 가 만듦)
     /// - 찾는 키: 모델(뷰모델 이름에서 "ModuleViewModel" 뺀 것) → 레이아웃 D{DesignLayout}C{ControlLayout}
     /// - 부품을 누르면 예전 다이어그램 클릭과 같이 Property 패널(Data · OutputData · PropertyImagePath)을 채운다.
     /// - 그림에 없는 부품은 위쪽 버튼으로 고른다. Property 의 Show 로 켠 값은 그림의 부품 아래에 표시한다.

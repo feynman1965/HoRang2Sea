@@ -258,7 +258,7 @@
 		</ItemGroup>
 	</Target>
 
-  <!-- Property 창 부품 상세 그림(2026-10-13, 배포자료/03_기획문서/부품상세그림_1013) -->
+  <!-- Property 창 부품 상세 그림(2026-10-13, 배포자료/03_작업/부품상세그림_1013) -->
   <ItemGroup>
     <None Remove="Resource\Detail\BlowerDetail.svg" />
     <None Remove="Resource\Detail\ConverterDetail.svg" />
@@ -284,7 +284,7 @@
     <Resource Include="Resource\Detail\TrainingShipProfileDetail.svg" />
   </ItemGroup>
 
-  <!-- 입력 화면 P&ID 그림(2026-10-13, 배포자료/03_기획문서/PID_앱적용_1013) -->
+  <!-- 입력 화면 P&ID 그림(2026-10-13, 배포자료/03_작업/PID_앱적용_1013) -->
   <ItemGroup>
     <None Remove="Resource\Pid\**" />
     <Resource Include="Resource\Pid\**" />
