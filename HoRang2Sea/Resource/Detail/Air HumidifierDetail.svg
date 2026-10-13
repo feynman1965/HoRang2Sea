@@ -2663,4 +2663,4 @@
       <text fill="#1f4e79" font-family="'KoPubWorldDotum Bold', 'KoPubWorldDotum Bold_MSFontService', sans-serif" font-weight="700" font-size="13px" transform="translate(623.53,655)" id="text15470">Length</text>
     </g>
   </g>
-</svg>
+<g id="added_1014"><line x1="115.50" y1="68.80" x2="115.50" y2="95.85" stroke="#ffffff" stroke-width="1.02"/><line x1="115.50" y1="68.80" x2="115.50" y2="95.85" stroke="#1F4E79" stroke-width="0.32"/><polygon points="115.50,68.80 116.13,70.30 114.87,70.30" fill="#1F4E79"/><polygon points="115.50,95.85 114.87,94.35 116.13,94.35" fill="#1F4E79"/><text x="115.50" y="103.10" font-family="'KoPubWorldDotum Bold','Malgun Gothic','Segoe UI',sans-serif" font-weight="700" font-size="3.70" fill="#1F4E79" text-anchor="middle">Shell Diameter</text><line x1="142.50" y1="95.45" x2="142.50" y2="103.70" stroke="#1F4E79" stroke-width="0.32"/><circle cx="142.50" cy="95.45" r="0.55" fill="#1F4E79"/><text x="142.50" y="107.10" font-family="'KoPubWorldDotum Bold','Malgun Gothic','Segoe UI',sans-serif" font-weight="700" font-size="3.70" fill="#1F4E79" text-anchor="middle">Wall Thickness</text></g></svg>
