@@ -89,6 +89,9 @@ namespace HoRang2Sea.Views
         };
 
         private readonly List<Border> _spots = new List<Border>();
+        // 선택 · 지나갈 때 보이는 사각형(누르는 영역과 따로) — 부품 상자보다 SpotPad(그림 픽셀)만큼 바깥에 그려 부품에 딱 붙지 않게(10/15 검수 15)
+        private readonly Dictionary<Border, Border> _halo = new Dictionary<Border, Border>();
+        private static double SpotPad = 20;
         private readonly List<INotifyCollectionChanged> _watched = new List<INotifyCollectionChanged>();
         private object _vm;
         private PidLayout _layout;
@@ -268,6 +271,7 @@ namespace HoRang2Sea.Views
             _watched.Clear();
             _canvas.Children.Clear();
             _spots.Clear();
+            _halo.Clear();
             ResetZoom();
 
             var db = Database;
@@ -299,13 +303,23 @@ namespace HoRang2Sea.Views
                 // 큰 영역을 먼저 깔고 작은 영역을 위에(겹친 곳은 작은 부품이 눌린다)
                 foreach (var s in _layout.Spots.OrderByDescending(s => s.Box.Width * s.Box.Height))
                 {
+                    var h = new Border
+                    {
+                        Width = s.Box.Width + 2 * SpotPad,
+                        Height = s.Box.Height + 2 * SpotPad,
+                        Background = Brushes.Transparent,
+                        BorderBrush = Accent,
+                        CornerRadius = new CornerRadius(10),
+                        IsHitTestVisible = false,
+                    };
+                    Canvas.SetLeft(h, s.Box.X - crop.X - SpotPad);
+                    Canvas.SetTop(h, s.Box.Y - crop.Y - SpotPad);
+                    _canvas.Children.Add(h);
                     var b = new Border
                     {
                         Width = s.Box.Width,
                         Height = s.Box.Height,
                         Background = Brushes.Transparent,
-                        BorderBrush = Accent,
-                        CornerRadius = new CornerRadius(8),
                         Cursor = Cursors.Hand,
                         Tag = s.Table,
                         ToolTip = s.Table,
@@ -317,6 +331,7 @@ namespace HoRang2Sea.Views
                     b.MouseLeftButtonUp += (o, e) => { if (!_dragged) Select((string)((Border)o).Tag); };
                     _canvas.Children.Add(b);
                     _spots.Add(b);
+                    _halo[b] = h;
                 }
             }
 
@@ -388,8 +403,9 @@ namespace HoRang2Sea.Views
         private void StyleSpot(Border b, bool hover)
         {
             bool sel = string.Equals((string)b.Tag, _selected, StringComparison.OrdinalIgnoreCase);
-            b.Background = sel ? SelectedFill : hover ? HoverFill : Brushes.Transparent;
-            b.BorderThickness = new Thickness(sel ? 8 : hover ? 5 : 0);
+            var h = _halo.TryGetValue(b, out var halo) ? halo : b;   // 누르는 영역(b)은 투명 그대로, 보이는 사각형(h)만 칠함
+            h.Background = sel ? SelectedFill : hover ? HoverFill : Brushes.Transparent;
+            h.BorderThickness = new Thickness(sel ? 8 : hover ? 5 : 0);
         }
 
         private void UpdateSelection()
