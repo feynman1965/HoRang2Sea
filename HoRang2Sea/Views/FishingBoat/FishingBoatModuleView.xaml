@@ -157,6 +157,37 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
 
         <!-- Segmented Toggle Button Style -->
+        <!-- Input/Graph 모드 토글 — 차트 토글보다 조금 크고, 선택된 쪽은 한 단계 진한 틴트 + 굵은 진한 글자(10/15 검수 14 B안) -->
+        <Style x:Key="ModeToggleStyle" TargetType="RadioButton">
+            <Setter Property="Padding" Value="18,5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="3,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="border" Background="White" BorderBrush="#CFD8DC"
+                                BorderThickness="1" CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter x:Name="cp" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              TextElement.Foreground="#546E7A"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#90A4AE"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#CFD8DC"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#78909C"/>
+                                <Setter TargetName="cp" Property="TextElement.Foreground" Value="#263238"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="SegmentedFirstStyle" TargetType="RadioButton">
             <Setter Property="Padding" Value="14,4"/>
             <Setter Property="FontSize" Value="12"/>
@@ -169,14 +200,14 @@
                         <Border x:Name="border" Background="White" BorderBrush="#CFD8DC"
                                 BorderThickness="1" CornerRadius="4"
                                 Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <ContentPresenter x:Name="cp" HorizontalAlignment="Center" VerticalAlignment="Center"
                                               TextElement.Foreground="#546E7A"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#E1E7EA"/>
                                 <Setter TargetName="border" Property="BorderBrush" Value="#90A4AE"/>
-                                <Setter Property="Foreground" Value="#263238"/>
+                                <Setter TargetName="cp" Property="TextElement.Foreground" Value="#263238"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="#90A4AE"/>
@@ -193,14 +224,14 @@
                         <Border x:Name="border" Background="White" BorderBrush="#CFD8DC"
                                 BorderThickness="1" CornerRadius="4"
                                 Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <ContentPresenter x:Name="cp" HorizontalAlignment="Center" VerticalAlignment="Center"
                                               TextElement.Foreground="#546E7A"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#E1E7EA"/>
                                 <Setter TargetName="border" Property="BorderBrush" Value="#90A4AE"/>
-                                <Setter Property="Foreground" Value="#263238"/>
+                                <Setter TargetName="cp" Property="TextElement.Foreground" Value="#263238"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="#90A4AE"/>
@@ -318,10 +349,10 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="12,0,0,0">
                 <RadioButton Content="Input"
                              IsChecked="{Binding IsInputMode, Mode=TwoWay}"
-                             Style="{StaticResource SegmentedFirstStyle}"/>
+                             Style="{StaticResource ModeToggleStyle}"/>
                 <RadioButton Content="Graph"
                              IsChecked="{Binding IsGraphMode, Mode=TwoWay}"
-                             Style="{StaticResource SegmentedLastStyle}"/>
+                             Style="{StaticResource ModeToggleStyle}"/>
             </StackPanel>
         </Border>
 

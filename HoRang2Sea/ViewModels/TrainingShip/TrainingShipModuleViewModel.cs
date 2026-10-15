@@ -865,6 +865,7 @@ namespace HoRang2Sea.ViewModels
 
                     TrainingShipMW.manualEvent.Set();
                     TrainingShipMW.IsPause = false;
+                    IsGraphMode = true;   // 재개할 때도 그래프 화면으로
                     MainViewModel.Status = "Calculation Resumed";
                     return;
                 }
@@ -873,6 +874,7 @@ namespace HoRang2Sea.ViewModels
                 if (TrainingShipMW.CalculateThread != null && TrainingShipMW.CalculateThread.IsAlive)
                 {
                     Debug.WriteLine("TrainingShip: 이미 계산 실행 중");
+                    IsGraphMode = true;   // 계산이 도는 중에 Run 을 다시 눌러도 그래프 화면으로
                     MainViewModel.Status = "Calculation already running";
                     return;
                 }
@@ -967,6 +969,7 @@ namespace HoRang2Sea.ViewModels
                 }
                 catch { }
                 SaveConfigToHistory();   // 실제로 실행을 시작할 때만 History 에 남긴다(직전과 같으면 건너뜀)
+                IsGraphMode = true;   // Run 할 때마다 그래프 화면으로(입력 칸 오류로 멈출 때는 입력 화면에 남음)
                 TrainingShipMW.Calculate();
                 StartSimMonitor();
             }
