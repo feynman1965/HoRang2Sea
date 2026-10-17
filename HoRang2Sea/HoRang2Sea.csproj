@@ -15,7 +15,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <!-- About 에 보이는 버전. SDK 가 빌드한 커밋을 + 뒤에 붙인다(InformationalVersion). -->
-    <Version>2.11.0</Version>
+    <Version>2.12.0</Version>
     <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
