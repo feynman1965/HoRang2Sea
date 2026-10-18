@@ -303,17 +303,21 @@ namespace HoRang2Sea.Views
                 // 큰 영역을 먼저 깔고 작은 영역을 위에(겹친 곳은 작은 부품이 눌린다)
                 foreach (var s in _layout.Spots.OrderByDescending(s => s.Box.Width * s.Box.Height))
                 {
+                    // 그림 칸(_canvas, ClipToBounds) 밖으로 나가면 테두리 한 변이 잘리므로 칸 안까지만(가장자리 부품, 10/18)
+                    var hr = new Rect(s.Box.X - crop.X - SpotPad, s.Box.Y - crop.Y - SpotPad, s.Box.Width + 2 * SpotPad, s.Box.Height + 2 * SpotPad);
+                    hr.Intersect(new Rect(0, 0, crop.Width, crop.Height));
+                    if (hr.IsEmpty) hr = new Rect(s.Box.X - crop.X, s.Box.Y - crop.Y, s.Box.Width, s.Box.Height);
                     var h = new Border
                     {
-                        Width = s.Box.Width + 2 * SpotPad,
-                        Height = s.Box.Height + 2 * SpotPad,
+                        Width = hr.Width,
+                        Height = hr.Height,
                         Background = Brushes.Transparent,
                         BorderBrush = Accent,
                         CornerRadius = new CornerRadius(10),
                         IsHitTestVisible = false,
                     };
-                    Canvas.SetLeft(h, s.Box.X - crop.X - SpotPad);
-                    Canvas.SetTop(h, s.Box.Y - crop.Y - SpotPad);
+                    Canvas.SetLeft(h, hr.X);
+                    Canvas.SetTop(h, hr.Y);
                     _canvas.Children.Add(h);
                     var b = new Border
                     {
