@@ -20,13 +20,13 @@
         <ColumnDefinition TableName="Stack" Name="Bipolar Plates Thickness Of Cell" Init="0.003" min="0.001" max="0.010" digit="3" unit="m"/>
         <ColumnDefinition TableName="Stack" Name="Gas Channel Depth Of Cell" Init="0.0010" min="0.0005" max="0.0015" digit="4" unit="m"/>
         <ColumnDefinition TableName="Stack" Name="Gas Channel Width Of Cell" Init="0.0010" min="0.0005" max="0.0015" digit="4" unit="m"/>
-        <ColumnDefinition TableName="Stack" Name="Channel Pitch Of Cell" Init="0.0020" min="0.0001" max="0.0030" digit="4" unit="m"/>
-        <ColumnDefinition TableName="Stack" Name="Channel Thickness Of Cell" Init="0.0010" min="0.0005" max="0.0020" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Channel Pitch Of Cell" Init="0.0020" min="0.002" max="0.002" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Stack" Name="Channel Thickness Of Cell" Init="0.0010" min="0.001" max="0.001" digit="4" unit="m"/>
         <ColumnDefinition TableName="Stack" Name="Channel Number Of Cell" Init="32" min="1" max="100" digit="0" unit="-"/>
         <ColumnDefinition TableName="Stack" Name="Active Area Of Cell" Init="380" min="100" max="1600" digit="0" unit="cm2"/>
         <ColumnDefinition TableName="Stack" Name="Number Of Cell" Init="404" min="1" max="1000" digit="0" unit="-"/>
         <ColumnDefinition TableName="Stack" Name="Anode Stoichiometry" Init="1.5" min="0.5" max="3.0" digit="1" unit="-"/>
-        <ColumnDefinition TableName="Stack" Name="Cathode Stoichiometry" Init="2.5" min="0.5" max="3.0" digit="1" unit="-"/>
+        <ColumnDefinition TableName="Stack" Name="Cathode Stoichiometry" Init="2.5" min="2.5" max="2.5" digit="1" unit="-"/>
       </Columns>
     </TableDefinition>
 
@@ -34,8 +34,8 @@
       <Columns>
         <ColumnDefinition TableName="Blower" Name="Inducer Tip Inlet Diameter" Init="0.0415" min="0.0370" max="0.0450" digit="4" unit="m"/>
         <ColumnDefinition TableName="Blower" Name="Hub Inlet Diameter" Init="0.0165" min="0.0145" max="0.0181" digit="4" unit="m"/>
-        <ColumnDefinition TableName="Blower" Name="Impeller Inlet Width" Init="0.0145" min="0.0130" max="0.0160" digit="4" unit="m"/>
-        <ColumnDefinition TableName="Blower" Name="Impeller Inlet Tip Diameter" Init="0.0173" min="0.0155" max="0.0200" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller Inlet Width" Init="0.0145" min="0.0145" max="0.0145" digit="4" unit="m"/>
+        <ColumnDefinition TableName="Blower" Name="Impeller Inlet Tip Diameter" Init="0.0173" min="0.0173" max="0.0173" digit="4" unit="m"/>
         <ColumnDefinition TableName="Blower" Name="Roughness" Init="0.000050" min="0.000045" max="0.000055" digit="6" unit="m"/>
         <ColumnDefinition TableName="Blower" Name="Blade Inlet Angle" Init="28" min="25" max="31" digit="0" unit="deg"/>
         <ColumnDefinition TableName="Blower" Name="Blade Exit Angle" Init="40" min="36" max="44" digit="0" unit="deg"/>

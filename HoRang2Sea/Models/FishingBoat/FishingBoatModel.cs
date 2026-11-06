@@ -45,10 +45,10 @@ namespace HoRang2Sea.Models
         //   Control 0=연비 우선(EffControl)   / 1=출력 우선(PowerControl)
         private static readonly Dictionary<(int Design, int Control), (string Dll, string Prefix)> LayoutDlls = new()
         {
-            { (0, 0), ("FS_260910_Base_win64.dll", "FS_260910_Base") },
-            { (1, 0), ("FS_260910_Design_win64.dll", "FS_260910_Design") },
-            { (0, 1), ("FS_260910_Control_win64.dll", "FS_260910_Control") },
-            { (1, 1), ("FS_260910_Integrated_win64.dll", "FS_260910_Integrated") },
+            { (0, 0), ("FS_261030_Base_win64.dll", "FS_261030_Base") },
+            { (1, 0), ("FS_261030_Design_win64.dll", "FS_261030_Design") },
+            { (0, 1), ("FS_261030_Control_win64.dll", "FS_261030_Control") },
+            { (1, 1), ("FS_261030_Integrated_win64.dll", "FS_261030_Integrated") },
         };
 
         private const int MAX_INPUT_PORT = 64;   // 260825판에서 In65(DM_Control_mode) 제거
