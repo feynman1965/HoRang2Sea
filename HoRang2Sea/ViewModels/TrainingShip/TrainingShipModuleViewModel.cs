@@ -87,7 +87,7 @@ namespace HoRang2Sea.ViewModels
 
         private int LinesLength = 4000000;
         private double maxVelocity = 1.0;   // 기본 프로파일 파일이 없을 때만 쓰는 예비 사다리꼴(속도 비율 0 ~ 1). 이전 100 은 범위 밖이었다
-        private const string DefaultProfileFile = "TrainingShip_Step.txt";   // 프로파일을 고르지 않으면 이 기본 항해 프로파일을 쓴다(2026-10-05)
+        private const string DefaultProfileFile = "TrainingShip_Raw_div20.txt";   // 프로파일을 고르지 않으면 이 기본 항해 프로파일을 쓴다. 2026-11-23 해양대 답: 실습선 Step 부하는 임시였고 보낸 실습선 work profile(실항)로 바꿈
         private string ProfileSourceLabel => _lastDriveModePath != null ? System.IO.Path.GetFileName(_lastDriveModePath) : $"{DefaultProfileFile} (default)";
 
         // -------------------------------
