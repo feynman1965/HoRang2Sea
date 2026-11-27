@@ -10,7 +10,7 @@ namespace HoRang2Sea.ViewModels
             { "Air humidifier outlet relative humidity", "AH" },
             { "Anode gas temperature", "HH" },
             { "Anode gas total pressure", "HH" },
-            { "Anode inlet mass flow rate", "HH" },
+            { "Total mass flow rate(hydrogen)", "HH" },
             { "Battery SOC(State Of Charge)", "BAT" },
             { "Battery output current", "BAT" },
             { "Battery output power", "BAT" },

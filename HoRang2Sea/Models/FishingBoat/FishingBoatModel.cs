@@ -206,7 +206,7 @@ namespace HoRang2Sea.Models
             new("Air humidifier outlet relative humidity", "-", "Air Humidifier"),
 
             //Hydrogen Humidifier  ( 개수 : 4 )
-            new("Anode inlet mass flow rate", "kg/s", "Hydrogen Humidifier"),
+            new("Total mass flow rate(hydrogen)", "kg/s", "Hydrogen Humidifier"),   // 해양대 11/25 확인표 답 2번(전: Anode inlet mass flow rate)
             new("Hydrogen humidifier water mole fraction", "-", "Hydrogen Humidifier"),
             new("Anode gas temperature", "K", "Hydrogen Humidifier"),
             new("Anode gas total pressure", "Pa", "Hydrogen Humidifier"),
